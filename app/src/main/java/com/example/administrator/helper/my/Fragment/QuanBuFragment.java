@@ -1,0 +1,657 @@
+package com.example.administrator.helper.my.Fragment;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+
+import android.support.annotation.Nullable;
+
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+
+import com.example.administrator.helper.BaseFragment;
+import com.example.administrator.helper.MyApplication;
+import com.example.administrator.helper.R;
+import com.example.administrator.helper.entity.OrderStaus;
+import com.example.administrator.helper.entity.Orders;
+import com.example.administrator.helper.my.Activity.XianShiGerenXinxi;
+import com.example.administrator.helper.my.util.CommonAdapter;
+import com.example.administrator.helper.my.util.ViewHolder;
+import com.example.administrator.helper.utils.RefreshListView;
+import com.example.administrator.helper.utils.UrlUtils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.xutils.common.Callback;
+import org.xutils.ex.HttpException;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.ButterKnife;
+
+
+import butterknife.InjectView;
+
+
+
+/**
+ * Created by Administrator on 2016/10/15 0015.
+ */
+public class QuanBuFragment extends BaseFragment implements RefreshListView.OnRefreshUploadChangeListener {
+
+
+    @InjectView(R.id.lv_goods)
+    RefreshListView lvGoods;
+
+
+    List<Orders> orders=new ArrayList<>();//从服务器获取的订单信息
+    Handler handler=new Handler();
+    CommonAdapter<Orders> orderApater;//适配器
+    public static final Integer REQUSETCODE=1;
+    ImageView imageViewtouxiang;
+    //订单分页
+    int orderFlag=0;
+    int pageNo=1;
+    int pageSize=5;
+
+  int a=1;
+    public static final int UNPAY=1;//代付款
+    public static final int UNACTIVITY=2;//待开始
+    public static final int ACTIVITY=3;//进行中
+    public static final int ACCORD=4;//待评价
+    public static final int CANCEL=5;//已完成
+    public static final int  CLOSE=7;//已关闭
+    public static final int  REFUND=6;//退款中
+   // public static final int DELETE=8;//已删除
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+//        TextView tv=new TextView(getActivity());
+//        tv.setText("全部");
+        //名字不只是在这里写.fragment_quanbu
+          View  v =inflater.inflate(R.layout.fragment_quanbu, null);
+        lvGoods = (RefreshListView) v.findViewById(R.id.lv_goods);
+            //设置listview显示内容
+
+            //1、设置adapter
+      initEvent();
+        initData();
+        initView();
+        ButterKnife.inject(this, v);
+
+        return v;
+
+    }
+
+
+    @Override
+    public void initView() {
+    }
+
+    @Override
+    public void initEvent() {
+        Log.i("QuanBuFragment", "initEvent:  00000"+lvGoods);
+        lvGoods.setOnRefreshUploadChangeListener(this);
+
+    }
+
+    /**
+     * 当界面重新展示时（fragment.show）,调用onrequest刷新界面
+     */
+
+    @Override
+    public void initData() {
+        getOrderData();
+    }
+
+    //获取网络数据
+    public void getOrderData(){
+        Log.i("QuanBuFragment", "getOrderData: 000");
+        RequestParams requestParams=new RequestParams(UrlUtils.MYURL+"OrderQueryServlet");
+        //传参数：user_id,order_id
+        //传参数：user_id,order_id
+
+
+        Log.i("QuanBuFragment", "getOrderData: id 001 "+((MyApplication)(getActivity().getApplication())));
+        requestParams.addQueryStringParameter("userId",((MyApplication)getActivity().getApplication()).getUser().getId()+"");
+
+        requestParams.addQueryStringParameter("orderFlag",orderFlag+"");//排序标记
+        requestParams.addQueryStringParameter("pageNo",pageNo+"");
+        requestParams.addQueryStringParameter("pageSize",pageSize+"");
+        Log.i("QuanBuFragment", "getOrderData: fenye  "+orders+"  " +pageNo+"  "+pageSize);
+       // requestParams.addQueryStringParameter("orderStatusId",1+"");
+        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+             Log.i("QuanBuFragment", "onSuccess:jir过但后期靠你了 "+result);
+                Gson gson=new Gson();
+                Type type=new TypeToken<List<Orders>>(){}.getType();
+                List<Orders> newOrders=gson.fromJson(result,type);
+
+                orders.clear();
+                orders.addAll(newOrders);
+                Log.i("QuanBuFragment", "onSuccess: ygef "+"  "+orders);
+                //设置listview的adapter
+                if(orderApater==null){
+                    orderApater=new CommonAdapter<Orders>(getActivity(),orders,R.layout.frag_allorders_item) {
+                        @Override
+                        public void convert(ViewHolder viewHolder, Orders order, int position) {
+
+                            //设置item中控件的取值
+                            initItemView(viewHolder, order, position);
+                            Log.i("QuanBuFragment", "convert: 控件赋值");
+                            Log.i("QuanBuFragment", "convert: df b"+order.getOrderStaus().getId());
+
+
+                        }
+
+
+                    };
+                    lvGoods.setAdapter(orderApater);
+                }else{
+                    orderApater.notifyDataSetChanged();
+                    Log.i("QuanBuFragment", "onSuccess: 控件值更新");
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+                Log.i("QuanBuFragment", "onError:错误 "+ ex);
+                if(ex instanceof HttpException){  //网络错误
+                    HttpException httpEx = (HttpException) ex;
+                    int responseCode = httpEx.getCode();
+                    String responseMsg = httpEx.getMessage();
+                    String errorResult = httpEx.getResult();
+                    //...
+                }else{
+                    //...其他错误
+                }
+                Log.i("QuanBuFragment", "onError: "+ex.getMessage());
+                Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+                Log.i("QuanBuFragment", "onFinished: 结束00");
+            }
+        });
+    }
+    public void initItemView(ViewHolder viewHolder, Orders order, int position){
+        TextView tvrenwuTime=viewHolder.getViewById(R.id.frag_allorders_item_time);//显示任务订单时间
+        TextView tvOrderState=viewHolder.getViewById(R.id. frag_allorders_item_trade);//显示任务订单状态
+       imageViewtouxiang=viewHolder.getViewById(R.id.order_item_iv_left);//显示发任务用户头像
+        TextView  tvrenwuyaoqiu=viewHolder.getViewById(R.id.order_item_info_yaoqiu);//显示任务要求
+        TextView tvrenwuleixing=viewHolder.getViewById(R.id.order_renwuleixing);//显示任务类型
+        TextView tvTotalMoney=viewHolder.getViewById(R.id.order_item_info_price);//显示任务总价
+        Button btnLian=viewHolder.getViewById(R.id.btn_item_left_lianxi);
+        Button btnLeft=viewHolder.getViewById(R.id.btn_item_left);
+        Button btnRight=viewHolder.getViewById(R.id.btn_item_right);
+
+       // NoScrollListview noScrollListview=viewHolder.getViewById(R.id.frag_allorders_item_listView);
+
+        //控件赋值
+        tvrenwuTime.setText("订单时间："+order.getCreateDate());
+       // Log.i("QuanBuFragment", "initItemView: "+order.getCreateDate());
+        Log.i("QuanBuFragment", "initItemView: "+tvOrderState+"      "+order.getOrderStaus());
+        tvOrderState.setText(order.getOrderStaus().getOrderStaus());
+        Log.i("QuanBuFragment", "initItemView: kj "+order.getOrderStaus().getOrderStaus());
+        Log.i("QuanBuFragment", "initItemView: df nk"+order.getOrderStaus().getId());
+
+         x.image().bind(imageViewtouxiang, UrlUtils.MYURL + "image/" + order.getTask().getSendUser().getImage());
+
+      tvrenwuyaoqiu.setText(order.getTask().getTaskDemand());
+       // Log.i("QuanBuFragment", "initItemView: 气我呀"+order.getTask().getTaskDemand());
+        tvTotalMoney.setText("￥"+order.getPrice());
+       // Log.i("QuanBuFragment", "initItemView: 就和地方"+order.getTask().getMoney());
+        tvrenwuleixing.setText(order.getTask().getTaskType().getTaskType());
+      //  Log.i("QuanBuFragment", "initItemView: 请问"+order.getTask().getTaskType().getTaskType());
+        //设置按钮的初始显示内容
+        btnShow(order.getOrderStaus().getId(),btnLian,btnLeft,btnRight);
+
+        //按钮点击事件
+    btnClick(order,position,btnLian,btnLeft,btnRight);
+
+    }
+
+
+
+
+    //根据订单状态，判断按钮是否显示，按钮的文本，按钮的点击事件
+    public void btnShow(int orderStateId,Button btnLian,Button btnLeft,Button btnRight){
+        Log.i("QuanBuFragment", "btnShow: 显示"+orderStateId);
+        switch (orderStateId){
+            case UNPAY:
+                //代付款
+                btnLian.setVisibility(View.GONE);
+                btnLeft.setVisibility(View.VISIBLE);
+                btnRight.setVisibility(View.VISIBLE);
+              btnLeft.setText("删除任务");
+                btnRight.setText("去付款");
+                break;
+            case UNACTIVITY:
+                //待开始:（取消订单、付款）
+                btnLian.setVisibility(View.GONE);
+               btnLeft.setVisibility(View.GONE);
+                btnRight.setVisibility(View.VISIBLE);
+               // btnLeft.setText("取消订单");
+                btnRight.setText("取消订单");
+                Log.i("QuanBuFragment", "btnShow: 取消订单");
+                break;
+            case ACTIVITY:
+                //进行中:
+                btnLian.setVisibility(View.VISIBLE);
+                btnLeft.setVisibility(View.VISIBLE);//左边按钮消失
+                btnRight.setVisibility(View.VISIBLE);
+                btnLian.setText("联系接单人");
+                btnLeft.setText("举报");
+                btnRight.setText("待评价");
+                //待评价表示接单者已经做完
+                break;
+            case  ACCORD:
+                //待评价
+                btnLian.setVisibility(View.VISIBLE);
+                btnLeft.setVisibility(View.VISIBLE);//左边按钮消失
+                btnRight.setVisibility(View.VISIBLE);
+                btnLian.setText("联系接单人");
+                btnLeft.setText("举报");
+                btnRight.setText("去评价");
+               break;
+            case  CANCEL:
+                //已完成
+                btnLian.setVisibility(View.GONE);
+                btnLeft.setVisibility(View.GONE);//左边按钮消失
+                btnRight.setVisibility(View.VISIBLE);
+               // btnLeft.setText("删除订单");
+              btnRight.setText("确定完成");
+                Log.i("QuanBuFragment", "btnShow: 删除订单");
+                break;
+            case  CLOSE:
+                btnLian.setVisibility(View.GONE);
+                btnLeft.setVisibility(View.GONE);//左边按钮消失
+                btnRight.setVisibility(View.VISIBLE);
+                // btnLeft.setText("删除订单");
+                btnRight.setText("删除订单");
+                break;
+            case REFUND:
+                btnLian.setVisibility(View.GONE);
+                btnLeft.setVisibility(View.GONE);//左边按钮消失
+                btnRight.setVisibility(View.GONE);
+                break;
+
+
+        }
+
+    }
+
+    //按钮点击事件
+    public void btnClick(final Orders order, final int position, Button btnLian, Button btnLeft, final Button btnRight){
+       btnLian.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               switch (order.getOrderStaus().getId()){
+                   case ACTIVITY:
+                Intent intent=new Intent(getActivity(), XianShiGerenXinxi.class);
+                       Log.i("QuanBuFragment", "onClick: 传输局"+order.getReceiveUser().getId());
+                intent.putExtra("JiedanzheId",order.getReceiveUser().getId());
+
+                       startActivityForResult(intent,1);
+                       break;
+                   case  ACCORD:
+                       Intent intent2=new Intent(getActivity(), XianShiGerenXinxi.class);
+                       intent2.putExtra("JiedanzheId",order.getReceiveUser().getId());
+
+                       startActivityForResult(intent2,REQUSETCODE);
+                       break;
+
+               }
+
+           }
+       });
+
+
+
+
+        btnLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("QuanBuFragment", "onClick: yweb"+order.getOrderStaus().getId());
+                //判断订单状态
+                switch (order.getOrderStaus().getId()){
+                    case UNPAY:
+
+//                        changeState(order.getTaskStatus().getId(),DELETE,"删除订单",position);
+//                        Log.i("QuanBuFragment", "onClick: "+ DELETE);
+                        order.getId();
+                        RequestParams requestParams2=new RequestParams(UrlUtils.MYURL+"OrderDeleteServlet");
+                        requestParams2.addBodyParameter("orderId",order.getId()+"");
+                        //更新订单，更新界面
+                        x.http().post(requestParams2, new Callback.CommonCallback<String>() {
+
+                            @Override
+                            public void onSuccess(String result) {
+
+                                //更新界面
+                                //  orders.get(position).
+                                getOrderData();
+                                Log.i("QuanBuFragment", "onSuccess: 按钮后更新界面10");
+
+                            }
+
+                            @Override
+                            public void onError(Throwable ex, boolean isOnCallback) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(CancelledException cex) {
+
+                            }
+
+                            @Override
+                            public void onFinished() {
+
+                            }
+                        });
+
+
+                        break;
+
+                    case ACTIVITY:
+                        final CharSequence[] items = {"没按时完成", "突然说不干了"};//CharSequence是接口，String实现
+
+
+                        new AlertDialog.Builder(getActivity()).setTitle("举报类型").
+                                setItems(items, new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(getContext(),"举报成功",Toast.LENGTH_SHORT).show();
+                                }
+                        }).create().show();
+                        break;
+                    case ACCORD:
+                        final CharSequence[] items2 = {"没按任务要求做", "时间拖时","言语谩骂发单者"};//CharSequence是接口，String实现
+
+
+                        new AlertDialog.Builder(getActivity()).setTitle("举报类型").
+                                setItems(items2, new DialogInterface.OnClickListener(){
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Log.i("QuanBuFragment", "onClick: ghfhg");
+                                        Toast.makeText(getActivity(),"举报成功",Toast.LENGTH_SHORT).show();
+                                    }
+                                }).create().show();
+                        break;
+                }
+
+
+
+                }
+
+
+        });
+
+        btnRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (order.getOrderStaus().getId()){
+                    case UNPAY:
+                        //去付款变成待开始
+                        changeState(order.getId(),UNACTIVITY,"待开始",position);
+
+                        break;
+                    case UNACTIVITY:
+
+                      //订单变成退款中
+                        changeState(order.getId(),REFUND,"退款中",position);
+                        break;
+                    case ACTIVITY:
+                        //待评价就相当于认为任务完成
+                    changeState(order.getId(),ACCORD,"待评价",position);
+                        Log.i("QuanBuFragment", "onClick: "+ACCORD);
+                        break;
+                    case  ACCORD:
+                        //已完成 这个单子的流程走完
+                        changeState(order.getId(),CANCEL,"确认完成",position);
+
+                        break;
+                    case CANCEL:
+                   //已完成
+                        changeState(order.getId(),CLOSE,"关闭订单",position);
+
+
+                        break;
+                    case CLOSE:
+
+                        RequestParams requestParams2=new RequestParams(UrlUtils.MYURL+"OrderDeleteServlet");
+                        requestParams2.addBodyParameter("orderId",order.getId()+"");
+                        //更新订单，更新界面
+                        x.http().post(requestParams2, new Callback.CommonCallback<String>() {
+
+                            @Override
+                            public void onSuccess(String result) {
+
+                                //更新界面
+                                //  orders.get(position).
+                                getOrderData();
+                                Log.i("QuanBuFragment", "onSuccess: 按钮后更新界面10");
+
+                            }
+
+                            @Override
+                            public void onError(Throwable ex, boolean isOnCallback) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(CancelledException cex) {
+
+                            }
+
+                            @Override
+                            public void onFinished() {
+
+                            }
+                        });
+
+
+                        break;
+
+
+                }
+            }
+        });
+
+    }
+
+
+
+    //更新订单状态，更新界面
+    public void changeState(int orderId, final int newStateId, final String newStateName,final int position){
+
+        RequestParams requestParams=new RequestParams(UrlUtils.MYURL+"OrderUpdateServlet");
+        requestParams.addBodyParameter("orderId",orderId+"");
+        requestParams.addBodyParameter("newStateId",newStateId+"");
+        Log.i("QuanBuFragment", "changeState: 刚刚"+orderId+""+"***"+newStateId+"");
+
+
+        //更新订单，更新界面
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+
+            @Override
+            public void onSuccess(String result) {
+                Log.i("QuanBuFragment", "onSuccess: 结果2 "+result);
+                //更新界面
+           orders.get(position).setOrderStaus(new OrderStaus(newStateId,newStateName));
+                orderApater.notifyDataSetChanged();//更新界面
+                getOrderData();
+                Log.i("QuanBuFragment", "onSuccess: 按钮后更新界面");
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+
+
+    }
+
+
+
+
+
+
+    @Override
+    public void onDestroy() { //退出ViewPager会执行该方法，即该Fragment被销毁
+        super.onDestroy();
+        Log.i("QuanBuFragment", "onDestroy: 1554.0");
+        //Log.i("OrderAllFragment", "onDestroy: ");
+    }
+
+
+
+    @Override
+    public void onRefresh() {
+        //更新数据
+        pageNo=1;
+        //重新请求服务器
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.i("MainpageFragment", "runonRefresh()  ");
+                getOrderData();;//停留1秒
+                lvGoods.completeRefresh();//更新数据后重新回到初始状态
+            }
+        },1000);
+    }
+
+    @Override
+    public void onPull() {
+        //加载数据
+        pageNo++;
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.i("MainpageFragment", "runonPull()  ");
+                getPullDate();//原来基础上加载数据
+            }
+        },1000);
+
+    }
+    public void getPullDate(){
+        //xutils获取网络数据
+
+        Log.i("QuanBuFragment", "getOrderData: 000");
+        RequestParams requestParams=new RequestParams(UrlUtils.MYURL+"OrderQueryServlet");
+        //传参数：user_id,order_id
+        //传参数：user_id,order_id
+        Log.i("QuanBuFragment", "getOrderData: id 001 "+((MyApplication)getActivity().getApplication()).getUser().getId());
+        requestParams.addQueryStringParameter("userId",((MyApplication)getActivity().getApplication()).getUser().getId()+"");
+        requestParams.addQueryStringParameter("orderFlag",orderFlag+"");//排序标记
+        requestParams.addQueryStringParameter("pageNo",pageNo+"");
+        requestParams.addQueryStringParameter("pageSize",pageSize+"");
+        Log.i("QuanBuFragment", "getOrderData: fenye  "+orders+"  " +pageNo+"  "+pageSize);
+        // requestParams.addQueryStringParameter("orderStatusId",1+"");
+        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                // Log.i("QuanBuFragment", "onSuccess: "+result);
+                Gson gson=new Gson();
+                Type type=new TypeToken<List<Orders>>(){}.getType();
+                List<Orders> newOrders=gson.fromJson(result,type);
+                if (newOrders.size()==0){
+                    pageNo--;
+                    Toast.makeText(getActivity(),"已经到底了",Toast.LENGTH_SHORT).show();
+                    lvGoods.completeLoad();//加载数据后更新界面
+                    return;
+                }
+                orders.addAll(newOrders);
+                Log.i("QuanBuFragment", "onSuccess: ygef "+"  "+orders);
+                //设置listview的adapter
+                if(orderApater==null){
+                    orderApater=new CommonAdapter<Orders>(getActivity(),orders,R.layout.frag_allorders_item) {
+                        @Override
+                        public void convert(ViewHolder viewHolder, Orders order, int position) {
+
+                            //设置item中控件的取值
+                            initItemView(viewHolder, order, position);
+
+
+
+                        }
+
+
+                    };
+                    lvGoods.setAdapter(orderApater);
+                }else{
+                    orderApater.notifyDataSetChanged();
+                    Log.i("QuanBuFragment", "onSuccess: 控件值更新");
+                }
+                lvGoods.completeLoad();//加载数据后更新界面
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+                Log.i("QuanBuFragment", "onError:错误 "+ ex);
+                if(ex instanceof HttpException){  //网络错误
+                    HttpException httpEx = (HttpException) ex;
+                    int responseCode = httpEx.getCode();
+                    String responseMsg = httpEx.getMessage();
+                    String errorResult = httpEx.getResult();
+                    //...
+                }else{
+                    //...其他错误
+                }
+                Log.i("QuanBuFragment", "onError: "+ex.getMessage());
+                Toast.makeText(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+                Log.i("QuanBuFragment", "onFinished: 结束00");
+            }
+        });
+    }
+}

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.administrator.helper.my.Activity.YuerTixian">
+
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:id="@+id/toobar001"
+        android:background="?attr/colorPrimary"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="提现"
+            android:textSize="25sp"
+            android:layout_alignBottom="@+id/view"
+            android:layout_gravity="center"
+            />
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#DCDCDC"
+        >
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="可提现余额："
+            />
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="6"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:hint="0.0"
+
+             />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="提现金额"
+           />
+        <EditText
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:hint="单笔提现现金金额不超过2000元"
+
+            android:maxLines="2"
+            android:gravity="center_vertical"
+            android:layout_weight="8" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+      android:drawableLeft="@mipmap/qq"
+
+        android:text="单日提现金额累计不超过5000元，4个工作日内到账。如果普通用户订单退款会按原支付方式退还"
+        android:background="#DCDCDC"
+        android:gravity="center_vertical"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="姓名"
+            />
+        <EditText
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:hint="请填写支付宝本人姓名"
+            android:maxLines="2"
+            android:gravity="center_vertical"
+            android:layout_weight="8" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:text="账号"
+                />
+            <EditText
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:hint="请输入支付宝账号"
+                android:id="@+id/EditText_name"
+                android:maxLines="2"
+                android:gravity="center_vertical"
+                android:layout_weight="8" />
+            </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#DCDCDC">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="15dp"
+            android:textSize="15sp"
+            android:layout_marginLeft="12dp"
+            android:text="随手帮暂时只支持支付宝提现"
+            />
+
+        <Button
+            android:layout_width="320dp"
+            android:layout_height="50dp"
+            android:text="确定"
+            android:textSize="25sp"
+            android:id="@+id/button2"
+            android:layout_below="@+id/a2"
+            android:layout_centerHorizontal="true"
+            android:background="#ff00ff"
+            android:layout_marginTop="100dp" />
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.administrator.helper.my.Activity.MainActivity2">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:id="@+id/toobar"
+        android:background="?attr/colorPrimary"
+       >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我的资料"
+            android:id="@+id/textView"
+            android:textSize="25sp"
+            android:layout_alignBottom="@+id/view"
+            android:layout_gravity="center"
+            />
+
+    </android.support.v7.widget.Toolbar>
+
+    <include layout="@layout/item"
+        android:layout_below="@+id/toobar"
+        android:id="@+id/item"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        />
+<include layout="@layout/item1"
+    android:id="@+id/item1"
+    android:layout_below="@+id/item"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"/>
+
+    <include layout="@layout/item2"
+        android:id="@+id/item2"
+        android:layout_below="@+id/item1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+
+    <include layout="@layout/item4"
+        android:id="@+id/item4"
+        android:layout_below="@+id/item2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+    <include layout="@layout/item5"
+        android:id="@+id/item5"
+        android:layout_below="@+id/item4"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+    <include layout="@layout/item6"
+        android:id="@+id/item6"
+        android:layout_below="@+id/item5"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+
+
+</RelativeLayout>

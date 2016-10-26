@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sendBackground"
+    android:orientation="vertical"
+    tools:context="com.example.administrator.helper.send.SendOtherActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="任务要求*："
+            android:textSize="20dp"
+            android:textColor="#000000"
+            android:id="@+id/tv_xuqiu_other"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/tv_xuqiu_other"
+            android:background="@null"
+            android:textSize="18dp"
+            android:hint="请输入您的详细要求"
+            android:id="@+id/et_xuqiu_other"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:layout_below="@+id/tv_xuqiu_other"
+        android:layout_marginTop="6dp"
+        android:background="#dfdfdf"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/rl_city_other"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="限定时间："
+            android:textSize="20dp"
+            android:textColor="#000000"
+            android:id="@+id/tv_time_other"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="18dp"
+            android:id="@+id/tv_show_time_other"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv_time_other" />
+
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/rl_map_all_other1"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="任务地址*："
+            android:textSize="20dp"
+            android:textColor="#000000"
+            android:id="@+id/tv_address_other1"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <RelativeLayout
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:id="@+id/rl_map_other1"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/img_map_other1"
+                android:src="@mipmap/map"
+                />
+            <View
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:background="#eb4f38"
+                android:layout_alignTop="@+id/img_map_other1"
+                android:layout_alignBottom="@+id/img_map_other1" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/img_map_other1"
+                android:layout_centerVertical="true"
+                android:textSize="20dp"
+                android:textStyle="italic"
+                android:text="地图"
+                />
+        </RelativeLayout>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/tv_renwudizhi_other1"
+            android:textSize="18dp"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv_address_other1"
+            android:layout_toLeftOf="@+id/rl_map_other1"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/rl_map_all_other2"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="提交地址："
+            android:textSize="20dp"
+            android:textColor="#000000"
+            android:id="@+id/tv_address_other2"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <RelativeLayout
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:id="@+id/rl_map_other2"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/img_map_other2"
+                android:src="@mipmap/map"
+                />
+            <View
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:background="#eb4f38"
+                android:layout_alignTop="@+id/img_map_other2"
+                android:layout_alignBottom="@+id/img_map_other2" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/img_map_other2"
+                android:layout_centerVertical="true"
+                android:textSize="20dp"
+                android:textStyle="italic"
+                android:text="地图"
+                />
+        </RelativeLayout>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/tv_renwudizhi_other2"
+            android:textSize="18dp"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv_address_other2"
+            android:layout_toLeftOf="@+id/rl_map_other2"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="手机号码*："
+            android:textSize="20dp"
+            android:textColor="#000000"
+            android:id="@+id/tv_phone_other"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="phone"
+            android:ems="10"
+            android:textSize="18dp"
+            android:gravity="center"
+            android:background="@null"
+            android:hint="请输入联系号码"
+            android:id="@+id/et_phone_other"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv_phone_other"
+            android:layout_toEndOf="@+id/tv_phone_other" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/rl_buy_other"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="支付方式："
+            android:textSize="20dp"
+            android:textColor="#000000"
+            android:id="@+id/tv_buyway_other"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="18dp"
+            android:text="支付宝"
+            android:gravity="center"
+            android:id="@+id/tv_buy_other"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/img_buy_way_other"
+            android:layout_toRightOf="@+id/tv_buyway_other" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/img_buy_way_other"
+            android:src="@mipmap/right"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/rl_youhui_other"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择优惠券："
+            android:textSize="20dp"
+            android:textColor="#000000"
+            android:id="@+id/tv_youhui_other"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="18dp"
+            android:text="未选择优惠券"
+            android:gravity="center"
+            android:id="@+id/tv_youhuiquan_other"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/img_youhui_other"
+            android:layout_toRightOf="@+id/tv_youhui_other" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/img_youhui_other"
+            android:src="@mipmap/right"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="6dp"
+        android:background="#dfdfdf"
+        android:layout_weight="0.3"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.5"
+        >
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:inputType="number"
+            android:background="#cfcfcf"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:ems="8"
+            android:id="@+id/et_money_other"
+            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="元"
+            android:textSize="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/et_money_other"
+            android:layout_toEndOf="@+id/et_money_other" />
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="立即发单"
+            android:id="@+id/but_send_other"
+            android:background="@drawable/shape"
+            android:layout_below="@+id/et_money_other"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_marginTop="5dp"
+            android:textColor="#FF7E00"
+            android:id="@+id/tv_tixing_other"
+            android:layout_below="@+id/but_send_other"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+</LinearLayout>

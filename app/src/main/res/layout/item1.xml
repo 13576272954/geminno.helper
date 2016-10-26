@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <TextView
+        android:layout_width="0dip"
+        android:layout_weight="3"
+        android:gravity="center_vertical"
+        android:layout_height="match_parent"
+        android:text="昵称："/>
+    <TextView
+        android:layout_width="0dip"
+        android:layout_weight="5"
+        android:id="@+id/tv_nickname"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:maxLines="2"
+        android:text="我是谁"/>
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:id="@+id/imageView2"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:src="@mipmap/a1"
+        />
+
+</LinearLayout>

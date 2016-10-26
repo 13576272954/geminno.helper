@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.administrator.helper.my.Activity.XiugaiHpone">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:id="@+id/toobar4"
+        android:background="?attr/colorPrimary"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我的资料"
+            android:textSize="25sp"
+            android:layout_alignBottom="@+id/view"
+            android:layout_gravity="center"
+            />
+
+    </android.support.v7.widget.Toolbar>
+
+    <!--<include layout="@layout/xiugaihpone"-->
+        <!--android:id="@+id/xiugaihpone"-->
+        <!--android:layout_below="@+id/toobar4"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"/>-->
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_below="@id/toobar4"
+    android:id="@+id/a4"
+    >
+    <TextView
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:text="电话"
+        android:id="@+id/textView" />
+    <EditText
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:hint="请输入能够联系你的电话"
+
+        android:id="@+id/editText_phoneNumber"
+        android:maxLines="2"
+        android:gravity="center"
+        android:layout_weight="8" />
+</LinearLayout>
+
+
+    <Button
+        android:layout_width="320dp"
+        android:layout_height="50dp"
+        android:text="确定"
+        android:textSize="25sp"
+        android:id="@+id/button4"
+        android:layout_below="@+id/a4"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shape_red"
+        android:layout_marginTop="72dp"
+
+        />
+
+</RelativeLayout>

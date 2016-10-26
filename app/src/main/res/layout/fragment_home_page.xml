@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@mipmap/my_head">-->
+        <!--<ImageView-->
+            <!--android:layout_width="70dp"-->
+            <!--android:layout_height="70dp"-->
+            <!--android:id="@+id/iv_beijing"-->
+            <!--android:src="@mipmap/user"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:layout_centerHorizontal="true" >-->
+        <!--</ImageView>-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+            <!--android:text="你好啊"-->
+            <!--android:id="@+id/tv_name"-->
+            <!--android:layout_below="@+id/iv_beijing"-->
+            <!--android:layout_toLeftOf="@id/iv_credit" />-->
+
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/iv_credit"-->
+            <!--android:src="@mipmap/credit"-->
+            <!--android:layout_alignTop="@+id/tv_name"-->
+            <!--android:layout_toRightOf="@+id/iv_beijing" />-->
+
+
+    <!--</RelativeLayout>-->
+
+
+
+</LinearLayout>

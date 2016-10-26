@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.administrator.helper.my.Activity.Wodeyuer">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:id="@+id/toobar00"
+        android:background="?attr/colorPrimary"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我的余额"
+            android:textSize="25sp"
+            android:layout_alignBottom="@+id/view"
+            android:layout_gravity="center"
+            />
+
+    </android.support.v7.widget.Toolbar>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_below="@+id/toobar00"
+        android:background="#9370DB"
+        >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="账户余额（元）"
+        android:textSize="20sp"
+        android:id="@+id/textView3"
+        android:layout_marginTop="41dp"
+
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="60dp"
+        android:layout_height="25dp"
+        android:text="0.0"
+        android:textSize="15sp"
+        android:id="@+id/textView4"
+        android:layout_marginTop="56dp"
+        android:layout_below="@+id/textView3"
+        android:layout_centerHorizontal="true"
+         />
+    </RelativeLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/linearLayout">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="提现"
+            android:textSize="23sp"
+            android:id="@+id/button_tixian"
+            android:layout_weight="1"
+            android:background="#20B2AA"
+           />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="充值"
+            android:textSize="23sp"
+            android:id="@+id/button_chongzhi"
+            android:layout_weight="1"
+            android:background="#ff0000"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:gravity="center_vertical"
+        android:layout_alignParentLeft="true"
+        android:text="头像" />
+
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/imageView_touxiang"
+        android:src="@mipmap/a3"
+        android:onClick="method"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/imageView2"
+        />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="80dp"
+        android:id="@+id/imageView2"
+        android:gravity="center_vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:src="@mipmap/a1"
+        />
+</RelativeLayout>

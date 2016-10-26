@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+      android:layout_height="52dp">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="52dp"
+    android:orientation="horizontal">
+    <Button
+        android:id="@+id/xuexi_fragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="学习"
+        android:textSize="18sp"
+        android:textColor="#5E5E5E"
+        android:gravity="center"
+        android:background="#BDBDBD"/>
+
+    <Button
+        android:id="@+id/shenghuo_fragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="生活"
+        android:textSize="18sp"
+        android:textColor="#5E5E5E"
+        android:gravity="center"
+        android:background="#ffffff"/>
+
+    <Button
+        android:id="@+id/jieyong_fragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="借用"
+        android:textColor="#5E5E5E"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:background="#ffffff"/>
+
+    <Button
+        android:id="@+id/jianzhi_fragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="兼职"
+        android:textSize="18sp"
+        android:background="#ffffff"
+        android:textColor="#5E5E5E"
+        android:gravity="center"/>
+    <Button
+        android:id="@+id/xiaoshou_fragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="销售"
+        android:textSize="18sp"
+        android:textColor="#5E5E5E"
+        android:background="#ffffff"
+        android:gravity="center"/>
+    <Button
+        android:id="@+id/qita_fragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="其它"
+        android:textColor="#5E5E5E"
+        android:textSize="18sp"
+        android:background="#ffffff"
+        android:gravity="center"/>
+</LinearLayout>
+
+
+
+</LinearLayout>

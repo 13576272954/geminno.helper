@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+ <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:id="@+id/relatlayout"
+    >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/imageView3"
+        android:src="@mipmap/b2"
+      />
+
+    <ImageButton
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/tv_imageButton_geren"
+        android:layout_marginTop="41dp"
+        android:src="@mipmap/a3"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="新手"
+        android:textColor="#00000f"
+        android:textSize="20sp"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/tv_imageButton_geren"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView"
+        android:layout_below="@+id/relatlayout"
+        android:layout_centerHorizontal="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_shenqingpaotui"
+            android:text="申请自由跑腿人"
+            android:textColor="#00000f"
+            android:gravity="center_vertical"
+            android:textSize="22sp"
+            android:drawableLeft="@mipmap/c1"
+            android:drawableRight="@mipmap/a1"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="我的余额"
+            android:id="@+id/tv_wodeyuer"
+            android:textColor="#00000f"
+            android:gravity="center_vertical"
+            android:drawableRight="@mipmap/a1"
+            android:drawableLeft="@mipmap/c2"
+            android:textSize="22sp"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_wodefadan"
+            android:text="我的发单"
+            android:textColor="#00000f"
+            android:gravity="center_vertical"
+            android:drawableLeft="@mipmap/c3"
+            android:drawableRight="@mipmap/a1"
+            android:textSize="22sp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_wodejiedan"
+            android:text="我的接单"
+            android:textColor="#00000f"
+            android:gravity="center_vertical"
+            android:drawableLeft="@mipmap/c30"
+            android:drawableRight="@mipmap/a1"
+            android:textSize="22sp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_yijianfankui"
+            android:text="建议反馈"
+            android:textColor="#00000f"
+            android:gravity="center_vertical"
+            android:drawableLeft="@mipmap/c4"
+            android:drawableRight="@mipmap/a1"
+            android:textSize="22sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/v_changjianwenti"
+            android:text="常见问题"
+            android:textColor="#00000f"
+            android:gravity="center_vertical"
+            android:drawableLeft="@mipmap/c5"
+            android:drawableRight="@mipmap/a1"
+            android:textSize="22sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_wodejifen"
+            android:text="我的积分"
+            android:textColor="#00000f"
+            android:gravity="center_vertical"
+            android:drawableLeft="@mipmap/c6"
+            android:drawableRight="@mipmap/a1"
+            android:textSize="22sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_shezhi"
+            android:text="设置"
+            android:textColor="#00000f"
+            android:gravity="center_vertical"
+            android:drawableLeft="@mipmap/c7"
+            android:drawableRight="@mipmap/a1"
+            android:textSize="22sp"/>
+    </LinearLayout>
+
+    </ScrollView>
+
+
+
+</LinearLayout>

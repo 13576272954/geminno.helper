@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.administrator.helper">
+
+    <!-- Required -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <!-- 允许联网 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 获取GSM（2g）、WCDMA（联通3g）等网络状态的信息 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 获取wifi网络状态的信息 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 保持CPU 运转，屏幕和键盘灯有可能是关闭的,用于文件上传和下载 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- 获取sd卡写的权限，用于文件上传和下载 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 允许读取手机状态 用于创建BmobInstallation -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!-- 这个权限用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 这个权限用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/logo"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <!--百度地图-->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="XVU2DwvNI6SdNVUGP2NQHNZddUWwwuGK" />
+        <!--环信-->
+        <meta-data android:name="EASEMOB_APPKEY"  android:value="1103161022115942#helper" />
+        <!-- 声明SDK所需的service SDK核心功能-->
+
+        <activity android:name=".LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".send.SendStudyActivity" >
+
+        </activity>
+        <activity android:name=".send.SendLifeActivity" />
+        <activity android:name=".send.SendBorrowActivity" />
+        <activity android:name=".send.SendSellActivity" />
+        <activity android:name=".send.SendJobActivity" />
+        <activity android:name=".send.SendOtherActivity" />
+        <activity android:name=".send.GoPayActivity" />
+        <activity android:name=".send.map.getMap" />
+        <activity android:name=".send.chat.TalkingActivity">
+
+        </activity>
+
+        <activity android:name=".receive.DetilsActivity">
+
+        </activity>
+        <activity android:name=".receive.TaskDetilsActivity">
+
+        </activity>
+
+        <activity android:name=".my.Activity.MainActivity2" />
+        <activity android:name=".my.Activity.shezhi"></activity>
+        <activity android:name=".my.Activity.Wodefadan" />
+        <activity android:name=".my.Activity.Wodeyuer" />
+        <activity android:name=".my.Activity.XiugaiHpone" />
+        <activity android:name=".my.Activity.XiugainicActivity" />
+        <activity android:name=".my.Activity.Xiugaiqianm" />
+        <activity android:name=".my.Activity.YuerChongzhi" />
+        <activity android:name=".my.Activity.YuerTixian" />
+        <activity android:name=".my.Activity.WodeJiedan" />
+        <activity android:name=".my.Activity.XianShiGerenXinxi" />
+        <activity android:name=".my.Activity.Main3Activity"></activity>
+        <activity android:name=".my.Activity.zhuce"></activity>
+
+        <activity android:name=".share.ReleaseActivity"/>
+
+        <!--百度地图服务-->
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" />
+
+        <!--环信聊天服务-->
+        <!-- 声明SDK所需的service SDK核心功能-->
+        <service android:name="com.hyphenate.chat.EMChatService" android:exported="true"/>
+        <!-- 声明SDK所需的receiver -->
+        <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+                <data android:scheme="package"/>
+            </intent-filter>
+            <!-- 可选filter -->
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

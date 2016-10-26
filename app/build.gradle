@@ -1,0 +1,59 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "24.0.2"
+
+    defaultConfig {
+        applicationId "com.example.administrator.helper"
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+    }
+
+    sourceSets{
+        main {
+            // 设置Jni so文件路径 如果有jniLibs目录就不需要设置，好像手动创建的 jniLibs目录无效
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+    }
+
+    signingConfigs{
+        debug {
+            storeFile file("../signApk/Helper.jks")
+            storePassword '19951116'
+            keyAlias 'myHelper'
+            keyPassword '19951116'
+        }
+    }
+}
+
+dependencies {
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.jakewharton:butterknife:5.1.1'
+    compile 'org.xutils:xutils:3.3.36'
+    compile 'com.google.code.gson:gson:2.7'
+    compile files('libs/BmobSMS_V1.0.1_20150710.jar')
+    compile files('libs/BmobPay_v3.0.3_160621.jar')
+    compile files('libs/BmobSDK_V3.3.5_0408.jar')
+    compile files('libs/BaiduLBS_Android.jar')
+    compile files('libs/locSDK_6.13.jar')
+    compile 'io.taig.android:parcelable_2.11:3.0.0-BETA1'
+    compile files('libs/hyphenatechat_3.2.0.jar')
+    compile 'com.android.support:design:25.0.0'
+}
