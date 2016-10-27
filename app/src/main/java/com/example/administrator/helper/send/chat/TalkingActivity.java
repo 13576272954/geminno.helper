@@ -22,8 +22,10 @@ import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.entity.Information;
 import com.example.administrator.helper.entity.User;
+import com.example.administrator.helper.utils.TimestampTypeAdapter;
 import com.example.administrator.helper.utils.UrlUtils;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMError;
@@ -302,7 +304,10 @@ public class TalkingActivity extends AppCompatActivity  implements EMMessageList
 
 
     public void saveMsg(Information information){
-        Gson gson = new Gson();
+        GsonBuilder gb=new GsonBuilder();
+        gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
+        gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
+        Gson gson = gb.create();
         String informationStr=gson.toJson(information);
         String url = UrlUtils.MYURL+"SaveInformationServlet";
         RequestParams params = new RequestParams(url);
