@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("userPsd",psd);
                     editor.putBoolean("autoLogin",true);
                     editor.commit();
-//
+                    loginHuanxin(user.getPhoneNumber(),user.getPassword());
                     finish();
                     startActivity(intent);
                 }else {

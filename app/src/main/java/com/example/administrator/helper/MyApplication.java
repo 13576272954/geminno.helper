@@ -3,6 +3,7 @@ package com.example.administrator.helper;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import com.example.administrator.helper.entity.User;
 import com.hyphenate.chat.EMClient;
@@ -26,7 +27,6 @@ public class MyApplication extends Application {
     // 记录是否已经初始化
     private boolean isInit = false;
 
-    private static MyApplication instance;
     private User user;
 
     public User getUser() {
@@ -37,9 +37,6 @@ public class MyApplication extends Application {
         this.user = user;
     }
 
-    public static MyApplication getInstance() {
-        return instance;
-    }
 
     @Override
     public void onCreate() {
@@ -50,12 +47,13 @@ public class MyApplication extends Application {
         BP.init(this, "381e8949cca2851afa738898139f924a");
 
         // 初始化环信SDK
-//        initEasemob();
+        initEasemob();
     }
 
     private void initEasemob() {
         // 获取当前进程 id 并取得进程名
         int pid = android.os.Process.myPid();
+        Log.i("MyApplication", "initEasemob:  "+pid);
         String processAppName = getAppName(pid);
         /**
          * 如果app启用了远程的service，此application:onCreate会被调用2次
@@ -71,7 +69,7 @@ public class MyApplication extends Application {
         }
 
         // 调用初始化方法初始化sdk
-        EMClient.getInstance().init(mContext, initOptions());
+        EMClient.getInstance().init(MyApplication.this, initOptions());
 
         // 设置开启debug模式
         EMClient.getInstance().setDebugMode(true);
@@ -102,7 +100,7 @@ public class MyApplication extends Application {
         // 设置是否根据服务器时间排序，默认是true
         options.setSortMessageByServerTime(false);
         // 收到好友申请是否自动同意，如果是自动同意就不会收到好友请求的回调，因为sdk会自动处理，默认为true
-        options.setAcceptInvitationAlways(false);
+        options.setAcceptInvitationAlways(true);
         // 设置是否自动接收加群邀请，如果设置了当收到群邀请会自动同意加入
         options.setAutoAcceptGroupInvitation(false);
         // 设置（主动或被动）退出群组时，是否删除群聊聊天记录
