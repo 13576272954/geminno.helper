@@ -81,12 +81,12 @@ public class TalkingActivity extends AppCompatActivity  implements EMMessageList
         Gson gson = new Gson();
         otherUser=gson.fromJson(str,User.class);
          thisUser=((MyApplication)getApplication()).getUser();*/
-        otherUser=new User(3,"333","33",null,"男",22,null,null,null,null,null,null,new Timestamp(System.currentTimeMillis()),"333","http://pic.qqtn.com/up/2016-9/2016091811555278855.jpg");
-         thisUser=new User(1,"11","111",11111,"男",20,null,null,null,null,null,null,new Timestamp(System.currentTimeMillis()),"12345","http://pic.qqtn.com/up/2016-9/2016091811555278855.jpg");
+        thisUser =new User(3,"333","33",null,"男",22,null,null,null,null,null,null,new Timestamp(System.currentTimeMillis()),"333","http://pic.qqtn.com/up/2016-9/2016091811555278855.jpg");
+        otherUser =new User(1,"11","111",11111,"男",20,null,null,null,null,null,null,new Timestamp(System.currentTimeMillis()),"12345","http://pic.qqtn.com/up/2016-9/2016091811555278855.jpg");
 
         Log.i("TalkingActivity", "onCreate:  "+EMClient.getInstance());
         //模拟登陆
-        EMClient.getInstance().login("12345", "111", new EMCallBack() {
+        EMClient.getInstance().login("333", "33", new EMCallBack() {
             /**
              * 登陆成功的回调
              */
@@ -266,7 +266,6 @@ public class TalkingActivity extends AppCompatActivity  implements EMMessageList
          * 第三个表示如果会话不存在是否创建
          */
         List<EMMessage> messages;
-        Log.i("TalkingActivity", "initConversation:  22222"+EMClient.getInstance());
         mConversation = EMClient.getInstance().chatManager().getConversation(mChatId, null, true);
         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(mChatId);
         // 设置当前会话未读数为 0
@@ -343,10 +342,15 @@ public class TalkingActivity extends AppCompatActivity  implements EMMessageList
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Gson gson=new Gson();
-                Type type = new TypeToken<ArrayList<Information>>(){}.getType();
-                List<Information> informations = gson.fromJson(result,type);
+                Log.i("TalkingActivity", "onSuccess:  "+result);
+                GsonBuilder gb=new GsonBuilder();
+                gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
+                gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
+                Gson gson = gb.create();
+                List<Information> informations = gson.fromJson(result, new TypeToken<List<Information>>(){}.getType());
+                Log.i("TalkingActivity", "onSuccess:  111111");
                 for (Information information : informations ) {
+                    Log.i("TalkingActivity", "onSuccess:  22222"+information.getId());
                     if (information.getSendUser()==thisUser.getId()){
                         msgList.add(new Msg(information.getValue(),Msg.TYPE_SEND));
                     }else if (information.getReveiveUser()==thisUser.getId()){

@@ -33,9 +33,11 @@ import com.example.administrator.helper.entity.User;
 import com.example.administrator.helper.entity.bean.InsertOrderBean;
 import com.example.administrator.helper.send.map.getMap;
 import com.example.administrator.helper.utils.CommonAdapter;
+import com.example.administrator.helper.utils.TimestampTypeAdapter;
 import com.example.administrator.helper.utils.UrlUtils;
 import com.example.administrator.helper.utils.ViewHolder;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import org.xutils.common.Callback;
@@ -43,11 +45,8 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -351,7 +350,10 @@ public class SendOtherActivity extends AppCompatActivity {
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Gson gson = new Gson();
+                GsonBuilder gb=new GsonBuilder();
+                gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
+                gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
+                Gson gson = gb.create();
                 List<Coupon> list=gson.fromJson(result,new TypeToken<List<Coupon>>(){}.getType());
                 coupons.clear();
                 coupons.addAll(list);
@@ -405,7 +407,10 @@ public class SendOtherActivity extends AppCompatActivity {
     }
 
     public String toJson(Object object) {
-        Gson gson = new Gson();
+        GsonBuilder gb=new GsonBuilder();
+        gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
+        gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
+        Gson gson = gb.create();
         String json = gson.toJson(object);
         return json;
     }

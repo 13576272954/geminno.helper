@@ -46,21 +46,25 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!--百度地图-->
+        <!-- 百度地图 -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="XVU2DwvNI6SdNVUGP2NQHNZddUWwwuGK" />
-        <!--环信-->
-        <meta-data android:name="EASEMOB_APPKEY"  android:value="1103161022115942#helper" />
-        <!-- 声明SDK所需的service SDK核心功能-->
+        <!-- 环信 -->
+        <meta-data
+            android:name="EASEMOB_APPKEY"
+            android:value="1103161022115942#helper" />
+        <!-- 声明SDK所需的service SDK核心功能 -->
 
         <activity android:name=".LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".send.SendStudyActivity" >
-
-        </activity>
+        <activity android:name=".send.SendStudyActivity"></activity>
         <activity android:name=".send.SendLifeActivity" />
         <activity android:name=".send.SendBorrowActivity" />
         <activity android:name=".send.SendSellActivity" />
@@ -69,22 +73,12 @@
         <activity android:name=".send.GoPayActivity" />
         <activity android:name=".send.map.getMap" />
         <activity android:name=".send.chat.TalkingActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".receive.DetilsActivity">
 
         </activity>
-        <activity android:name=".receive.TaskDetilsActivity">
-
-        </activity>
-
+        <activity android:name=".receive.DetilsActivity"></activity>
+        <activity android:name=".receive.TaskDetilsActivity"></activity>
         <activity android:name=".my.Activity.MainActivity2" />
-        <activity android:name=".my.Activity.shezhi"></activity>
+        <activity android:name=".my.Activity.shezhi" />
         <activity android:name=".my.Activity.Wodefadan" />
         <activity android:name=".my.Activity.Wodeyuer" />
         <activity android:name=".my.Activity.XiugaiHpone" />
@@ -94,33 +88,36 @@
         <activity android:name=".my.Activity.YuerTixian" />
         <activity android:name=".my.Activity.WodeJiedan" />
         <activity android:name=".my.Activity.XianShiGerenXinxi" />
-        <activity android:name=".my.Activity.Main3Activity"></activity>
-        <activity android:name=".my.Activity.zhuce"></activity>
+        <activity android:name=".my.Activity.Main3Activity" />
+        <activity android:name=".my.Activity.zhuce" />
+        <activity android:name=".share.ReleaseActivity" />
 
-        <activity android:name=".share.ReleaseActivity"/>
-
-        <!--百度地图服务-->
+        <!-- 百度地图服务 -->
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" />
 
-        <!--环信聊天服务-->
-        <!-- 声明SDK所需的service SDK核心功能-->
-        <service android:name="com.hyphenate.chat.EMChatService" android:exported="true"/>
+        <!-- 环信聊天服务 -->
+        <!-- 声明SDK所需的service SDK核心功能 -->
+        <service
+            android:name="com.hyphenate.chat.EMChatService"
+            android:exported="true" />
         <!-- 声明SDK所需的receiver -->
         <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
-                <data android:scheme="package"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
             </intent-filter>
             <!-- 可选filter -->
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
 
+        <activity android:name=".send.chat.FriendActivity"></activity>
     </application>
 
 </manifest>

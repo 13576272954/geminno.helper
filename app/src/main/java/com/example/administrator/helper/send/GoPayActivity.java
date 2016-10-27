@@ -22,8 +22,10 @@ import com.example.administrator.helper.R;
 import com.example.administrator.helper.entity.Orders;
 import com.example.administrator.helper.entity.Task;
 import com.example.administrator.helper.entity.User;
+import com.example.administrator.helper.utils.TimestampTypeAdapter;
 import com.example.administrator.helper.utils.UrlUtils;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -32,6 +34,7 @@ import org.xutils.x;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.sql.Timestamp;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -73,7 +76,10 @@ public class GoPayActivity extends AppCompatActivity {
         Intent intent =getIntent();
         String taskStr=intent.getStringExtra("task");
         String orderStr=intent.getStringExtra("order");
-        Gson gson=new Gson();
+        GsonBuilder gb=new GsonBuilder();
+        gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
+        gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
+        Gson gson = gb.create();
         task=gson.fromJson(taskStr,Task.class);
         order=gson.fromJson(orderStr,Orders.class);
 

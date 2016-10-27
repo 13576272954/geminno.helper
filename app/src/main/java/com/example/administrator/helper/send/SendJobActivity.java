@@ -8,13 +8,11 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -22,7 +20,6 @@ import android.widget.Toast;
 
 import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
-import com.example.administrator.helper.entity.Coupon;
 import com.example.administrator.helper.entity.OrderStaus;
 import com.example.administrator.helper.entity.Orders;
 import com.example.administrator.helper.entity.Task;
@@ -30,21 +27,17 @@ import com.example.administrator.helper.entity.TaskType;
 import com.example.administrator.helper.entity.User;
 import com.example.administrator.helper.entity.bean.InsertOrderBean;
 import com.example.administrator.helper.send.map.getMap;
-import com.example.administrator.helper.utils.CommonAdapter;
+import com.example.administrator.helper.utils.TimestampTypeAdapter;
 import com.example.administrator.helper.utils.UrlUtils;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -310,7 +303,10 @@ public class SendJobActivity extends AppCompatActivity {
     }
 
     public String toJson(Object object) {
-        Gson gson = new Gson();
+        GsonBuilder gb=new GsonBuilder();
+        gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
+        gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
+        Gson gson = gb.create();
         String json = gson.toJson(object);
         return json;
     }
