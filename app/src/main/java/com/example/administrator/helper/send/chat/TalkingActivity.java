@@ -78,7 +78,10 @@ public class TalkingActivity extends AppCompatActivity  implements EMMessageList
         setContentView(R.layout.talking);
         // 获取当前会话的username(如果是群聊就是群id)
         /** String str = getIntent().getStringExtra("user");
-        Gson gson = new Gson();
+         GsonBuilder gb=new GsonBuilder();
+         gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
+         gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
+         Gson gson = gb.create();
         otherUser=gson.fromJson(str,User.class);
          thisUser=((MyApplication)getApplication()).getUser();*/
         thisUser =new User(3,"333","33",null,"男",22,null,null,null,null,null,null,new Timestamp(System.currentTimeMillis()),"333","http://pic.qqtn.com/up/2016-9/2016091811555278855.jpg");

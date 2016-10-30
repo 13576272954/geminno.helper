@@ -102,8 +102,6 @@ public class LoginActivity extends AppCompatActivity {
         RequestParams params = new RequestParams(url);
         params.addQueryStringParameter("userName",name);
         params.addQueryStringParameter("userPsd",psd);
-//        params.addBodyParameter("userName",name);
-//        params.addBodyParameter("userPsd",psd);
         final SharedPreferences.Editor editor = sp.edit();
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
@@ -112,9 +110,11 @@ public class LoginActivity extends AppCompatActivity {
                 gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
                 gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
                 Gson gson = gb.create();
+//                Gson gson = new Gson();
                 User user=gson.fromJson(result,User.class);
                 if (user!=null){
-                    Intent intent=new Intent(LoginActivity.this,FriendActivity.class);
+                    Log.i("1111111", "onSuccess:  user:"+user);
+
                     MyApplication myApplication= (MyApplication) getApplication();
                     myApplication.setUser(user);
                     Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
@@ -123,9 +123,11 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("userPsd",psd);
                     editor.putBoolean("autoLogin",true);
                     editor.commit();
-                    loginHuanxin(user.getPhoneNumber(),user.getPassword());
+                    Intent intent=new Intent(LoginActivity.this,FriendActivity.class);
                     finish();
                     startActivity(intent);
+//                    loginHuanxin(user.getPhoneNumber(),user.getPassword());
+
                 }else {
                     Toast.makeText(LoginActivity.this, "账号或密码错误", Toast.LENGTH_SHORT).show();
                 }
@@ -159,13 +161,18 @@ public class LoginActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i("1111111", "run:  环信登陆成功");
                         // 加载所有会话到内存
+
                         EMClient.getInstance().chatManager().loadAllConversations();
+                        Log.i("1111111", "run:  环信登陆成功");
+
                         // 加载所有群组到内存，如果使用了群组的话
-                        // EMClient.getInstance().groupManager().loadAllGroups();
+//                         EMClient.getInstance().groupManager().loadAllGroups();
                     }
                 });
+                Intent intent=new Intent(LoginActivity.this,FriendActivity.class);
+                finish();
+                startActivity(intent);
             }
 
             /**
