@@ -16,12 +16,12 @@ import android.widget.TextView;
 import com.example.administrator.helper.BaseFragment;
 import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
+import com.example.administrator.helper.View.NoScrollListview;
 import com.example.administrator.helper.entity.ClickLike;
 import com.example.administrator.helper.entity.ShareEntity;
 import com.example.administrator.helper.share.ReleaseActivity;
 import com.example.administrator.helper.utils.CommonAdapter;
-import com.example.administrator.helper.utils.UrlUtils;
-import com.example.administrator.helper.utils.RefreshListView;
+import com.example.administrator.helper.utils.TimestampTypeAdapter;
 import com.example.administrator.helper.utils.UrlUtils;
 import com.example.administrator.helper.utils.ViewHolder;
 import com.google.gson.Gson;
@@ -49,7 +49,7 @@ import butterknife.ButterKnife;
  */
 public class SharePageFragment extends BaseFragment {
     ImageView imtianjia;
-    RefreshListView lvshare;
+    ListView lvshare;
     int orderFlag = 0;
     int pageNo = 1;
     int pageSize = 5;
@@ -64,7 +64,7 @@ public class SharePageFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_share_page, null);
         imtianjia = (ImageView) v.findViewById(R.id.im_tianjia);
-        lvshare = (RefreshListView) v.findViewById(R.id.listView);
+        lvshare = (ListView) v.findViewById(R.id.listView);
         ButterKnife.inject(this, v);
         return v;
 
@@ -84,21 +84,6 @@ public class SharePageFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
-        lvshare.setOnRefreshUploadChangeListener(new RefreshListView.OnRefreshUploadChangeListener() {
-            @Override
-            public void onRefresh() {
-                pageNo = 1;
-                shareEntities.clear();
-                getData();
-
-            }
-
-            @Override
-            public void onPull() {
-                pageNo++;
-                getData();
-            }
-        });
     }
 
     @Override
@@ -110,7 +95,7 @@ public class SharePageFragment extends BaseFragment {
         //界面初始化数据：listview显示数据
         //xutils获取网络数据
 
-        String url = "http://192.168.23.1:8080/Helper/QueryDynamicServlet";
+        String url = UrlUtils.MYURL+"QueryDynamicServlet";
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("orderFlag", orderFlag + "");//排序标记
         requestParams.addQueryStringParameter("pageNo", pageNo + "");
@@ -213,8 +198,30 @@ public class SharePageFragment extends BaseFragment {
         }
     }
 
+    class CommentAdapter extends CommonAdapter<Comment>{
+
+        public CommentAdapter(Context context, List<Comment> lists, int layoutId) {
+            super(context, lists, layoutId);
+        }
+
+        @Override
+        public void convert(ViewHolder viewHolder, Comment comment, int position) {
+            //找控件赋值
+            TextView sendUser = viewHolder.getViewById(R.id.tv_user_send);
+            TextView huiFu = viewHolder.getViewById(R.id.tv_huifu);
+            TextView receiveUser = viewHolder.getViewById(R.id.tv_user_receive);
+            TextView content = viewHolder.getViewById(R.id.tv_comment_content);
+            content.setText(comment.getCotent());
+            if (comment.getFather()!=null){
+                sendUser.setText(comment.getPublishUser().getName());
+                huiFu.setText("回复");
+
+            }
+        }
+    }
+
     public void insertThumb() {
-        String url = "http://192.168.23.1:8080/Helper/InsertThumbServlet";
+        String url = UrlUtils.MYURL+"InsertThumbServlet";
         RequestParams requestParams1 = new RequestParams(url);
         clickLike=new ClickLike(((MyApplication)getActivity().getApplication()).getUser().getId(),shareId,sentTime);
         Gson gson = new Gson();
@@ -243,7 +250,7 @@ public class SharePageFragment extends BaseFragment {
         });
     }
     public void deleteThumb(){
-        String url="http://192.168.23.1:8080/Helper/DeleteThumbServlet";
+        String url=UrlUtils.MYURL+"DeleteThumbServlet";
         RequestParams requestParams2 = new RequestParams(url);
         clickLike=new ClickLike(((MyApplication)getActivity().getApplication()).getUser().getId(),shareId,sentTime);
         Gson gson = new Gson();
