@@ -39,10 +39,10 @@
         android:layout_marginEnd="25dp" />
 </RelativeLayout>
 
-    <ListView
-        android:layout_width="match_parent"
+    <com.example.administrator.helper.utils.RefreshListView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
+        android:id="@+id/view"
         android:layout_gravity="center_horizontal" />
 
 </LinearLayout>
