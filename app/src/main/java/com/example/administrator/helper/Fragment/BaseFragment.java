@@ -4,9 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-/**
- * Created by dliu on 2016/9/30.
- */
+
 public abstract  class BaseFragment extends Fragment {
 
     //找控件
