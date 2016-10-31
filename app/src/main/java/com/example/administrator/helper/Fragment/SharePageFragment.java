@@ -114,6 +114,7 @@ public class SharePageFragment extends BaseFragment {
                 Type type = new TypeToken<List<ShareEntity>>() {}.getType();
 
                 shareEntities = gson.fromJson(result, type);
+
                 Log.i("SharePageFragment", "onSuccess: shareEntities" + "--" + shareEntities);
                 if (shareAdapter == null) {
                     Log.i("SharePageFragment", "onSuccess:  shareAdapter == null");
@@ -171,17 +172,7 @@ public class SharePageFragment extends BaseFragment {
             final RadioButton imz = viewHolder.getViewById(R.id.im_zan);
             imz.setTag(position);//加标记，保证每个imageview的tag不一样
             imz.setChecked(shareEntity.isCheck());
-            CommentAdapter commentAdapter = null;//子listView适配器
-            List<Comment> comments = new ArrayList<Comment>();
-            NoScrollListview noScrollListview = viewHolder.getViewById(R.id.list_comment);
-            noScrollListview.setTag(position);
-            getComment(shareEntity.getDynamic().getId(),comments);//获取评论信息
-            if ((int)noScrollListview.getTag()==position&&commentAdapter==null){
-                commentAdapter=new CommentAdapter(getActivity(),comments,R.layout.item_comment);
-                noScrollListview.setAdapter(commentAdapter);
-            }else if ((int)noScrollListview.getTag()==position&&commentAdapter!=null){
-                commentAdapter.notifyDataSetChanged();
-            }
+
             imz.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
