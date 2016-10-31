@@ -3,9 +3,7 @@ package com.example.administrator.helper.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.sql.Timestamp;
-
-public class TaskType implements Parcelable{
+public class TaskType implements Parcelable {
 	private Integer id;
 	private String taskType;
 	public TaskType(Integer id, String taskType) {
@@ -47,7 +45,7 @@ public class TaskType implements Parcelable{
 		this.taskType = in.readString();
 	}
 
-	public static final Creator<TaskType> CREATOR = new Creator<TaskType>() {
+	public static final Parcelable.Creator<TaskType> CREATOR = new Parcelable.Creator<TaskType>() {
 		@Override
 		public TaskType createFromParcel(Parcel source) {
 			return new TaskType(source);

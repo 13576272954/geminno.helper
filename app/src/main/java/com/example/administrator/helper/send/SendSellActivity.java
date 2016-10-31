@@ -242,7 +242,7 @@ public class SendSellActivity extends AppCompatActivity {
                 封装对象
                  */
                 //任务
-                Task task = new Task(user,null,time,null,null,phone,new TaskType(5,"销售"),xuqiu,money,1);
+                Task task = new Task(user,null,time,null,null,null,phone,new TaskType(5,"销售"),xuqiu,money,1);
                 final String taskJson = toJson(task);
                 //订单
                 Orders order = new Orders(null,task,coupon,price,buyway,creatTime,null,new OrderStaus(1,"待付款"),null);

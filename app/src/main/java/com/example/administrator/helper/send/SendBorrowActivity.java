@@ -281,12 +281,11 @@ public class SendBorrowActivity extends AppCompatActivity {
                         buyway=false;
                         break;
                 }
-
                 /**
                  封装对象
                  */
                 //任务
-                Task task = new Task(user,creatTime,time,null,null,phone,new TaskType(3,"借用"),xuqiu,money,1);
+                Task task = new Task(user,creatTime,time,null,null,null,phone,new TaskType(3,"借用"),xuqiu,money,1);
                 final String taskJson = toJson(task);
                 //订单
                 Orders order = new Orders(null,task,coupon,price,buyway,new Timestamp(System.currentTimeMillis()),null,new OrderStaus(1,"待付款"),null);

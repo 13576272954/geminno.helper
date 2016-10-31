@@ -205,7 +205,16 @@ public class SharePageFragment extends BaseFragment {
         @Override
         public void convert(ViewHolder viewHolder, Comment comment, int position) {
             //找控件赋值
+            TextView sendUser = viewHolder.getViewById(R.id.tv_user_send);
+            TextView huiFu = viewHolder.getViewById(R.id.tv_huifu);
+            TextView receiveUser = viewHolder.getViewById(R.id.tv_user_receive);
+            TextView content = viewHolder.getViewById(R.id.tv_comment_content);
+            content.setText(comment.getCotent());
+            if (comment.getFather()!=null){
+                sendUser.setText(comment.getPublishUser().getName());
+                huiFu.setText("回复");
 
+            }
         }
     }
 

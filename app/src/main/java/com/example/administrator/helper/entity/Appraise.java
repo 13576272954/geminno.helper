@@ -1,8 +1,5 @@
 package com.example.administrator.helper.entity;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.sql.Timestamp;
 
 /**
@@ -11,7 +8,7 @@ import java.sql.Timestamp;
  * @author Administrator
  *
  */
-public class Appraise implements Parcelable {
+public class Appraise {
 	private Integer id;//评价id
 	private Integer orderID;//订单id
 	private Integer satisfied;//满意度
@@ -104,40 +101,6 @@ public class Appraise implements Parcelable {
 				+ ", picture=" + picture + ", creatTime=" + creatTime + "]";
 	}
 
-
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeValue(this.id);
-		dest.writeValue(this.orderID);
-		dest.writeValue(this.satisfied);
-		dest.writeString(this.appraise);
-		dest.writeString(this.picture);
-		dest.writeSerializable(this.creatTime);
-	}
-
-	protected Appraise(Parcel in) {
-		this.id = (Integer) in.readValue(Integer.class.getClassLoader());
-		this.orderID = (Integer) in.readValue(Integer.class.getClassLoader());
-		this.satisfied = (Integer) in.readValue(Integer.class.getClassLoader());
-		this.appraise = in.readString();
-		this.picture = in.readString();
-		this.creatTime = (Timestamp) in.readSerializable();
-	}
-
-	public static final Parcelable.Creator<Appraise> CREATOR = new Parcelable.Creator<Appraise>() {
-		@Override
-		public Appraise createFromParcel(Parcel source) {
-			return new Appraise(source);
-		}
-
-		@Override
-		public Appraise[] newArray(int size) {
-			return new Appraise[size];
-		}
-	};
+	
+	
 }

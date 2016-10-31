@@ -181,10 +181,12 @@ public class SendStudyActivity extends AppCompatActivity {
                 buyway = false;
                 break;
         }
+        String[] c = (makePlace.split("省"))[1].split("市");
+        String city = c[0]+"市";
         /*
         将赏金、优惠券、支付方式封装成Orders类对象
          */
-        Task task = new Task(user, null, lastTime, makePlace, null, phone, new TaskType(1, "学习"), xiuqiu, money, 1);
+        Task task = new Task(user, null, lastTime,city, makePlace, null, phone, new TaskType(1, "学习"), xiuqiu, money, 1);
         final String taskJson = toJson(task);
         Orders order = new Orders(null, task, coupon, price, buyway, new Timestamp(System.currentTimeMillis()), null, new OrderStaus(1, "待付款"), null);
         final String orderJson = toJson(order);

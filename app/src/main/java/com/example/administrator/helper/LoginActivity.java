@@ -64,8 +64,9 @@ public class LoginActivity extends AppCompatActivity {
         passwordValue = sp.getString("userPsd",null);
         if (choseAutoLogin){
             try {
+                Log.i("LoginActivity", "onCreate:  检测到用户信息，自动登录");
                 getUser(userNameValue,passwordValue);
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -171,9 +172,6 @@ public class LoginActivity extends AppCompatActivity {
 //                         EMClient.getInstance().groupManager().loadAllGroups();
                     }
                 });
-                Intent intent=new Intent(LoginActivity.this,FriendActivity.class);
-                finish();
-                startActivity(intent);
             }
 
             /**

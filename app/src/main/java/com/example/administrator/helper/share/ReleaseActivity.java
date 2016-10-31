@@ -78,7 +78,7 @@ public class ReleaseActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String share1=edtnr.getText().toString();//内容
                 Log.i("ReleaseActivity", "onClick: share1"+"--"+share1);
-                share.setPicture(share1);
+                share.setShare(share1);
                 MyApplication myApplication= (MyApplication) getApplication();
                 int userID=myApplication.getUser().getId();
                 Log.i("ReleaseActivity", "onClick: userID"+"--"+userID);
@@ -91,12 +91,14 @@ public class ReleaseActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 String sharejson = gson.toJson(share);
                 requestParams.addBodyParameter("share", sharejson);
+                Log.i("ReleaseActivity", "onClick:  share"+sharejson);
                requestParams.setMultipart(true);
                requestParams.addBodyParameter("file", file);
                 x.http().post(requestParams, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
                         Log.i("ReleaseActivity", "onSuccess: "+result);
+                        finish();
                     }
 
                     @Override

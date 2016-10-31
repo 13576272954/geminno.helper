@@ -19,7 +19,7 @@ public class User implements Parcelable {
 	private String sex;//性别
 	private Integer age;//年龄
 	private Integer credit;//用户信誉
-	private Integer rank;//信誉等级
+	private  Integer rank;//信誉等级
 	private Integer points;//积分
 	private String school;//学校
 	private String sign;//签名
@@ -27,6 +27,15 @@ public class User implements Parcelable {
 	private Timestamp time;//创建日期
 	private String phoneNumber;//电话号码
 	private String image;//图片
+	
+	public User(String name, String sex, Integer age, String image) {
+		super();
+		this.name = name;
+		this.sex = sex;
+		this.age = age;
+		this.image = image;
+	}
+
 	
 	public User(int id, String name, String password, Integer payPassword, String sex, Integer age,
 			Integer credit, Integer rank, Integer points, String school, String sign, Double balance,
@@ -46,6 +55,28 @@ public class User implements Parcelable {
 		this.sign = sign;
 		this.balance = balance;
 		this.time = time;
+		this.phoneNumber = phoneNumber;
+		this.image = image;
+	}
+
+
+
+	public User(Integer id, String name, String password, Integer payPassword, String sex, Integer age, Integer credit,
+			Integer rank, Integer points, String school, String sign, Double balance, String phoneNumber,
+			String image) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.password = password;
+		this.payPassword = payPassword;
+		this.sex = sex;
+		this.age = age;
+		this.credit = credit;
+		this.rank = rank;
+		this.points = points;
+		this.school = school;
+		this.sign = sign;
+		this.balance = balance;
 		this.phoneNumber = phoneNumber;
 		this.image = image;
 	}
