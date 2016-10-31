@@ -57,7 +57,11 @@
         <!-- 声明SDK所需的service SDK核心功能 -->
 
         <activity android:name=".LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".send.SendStudyActivity"></activity>
@@ -72,11 +76,7 @@
 
         </activity>
         <activity android:name=".send.chat.FriendActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity android:name=".receive.DetilsActivity"></activity>

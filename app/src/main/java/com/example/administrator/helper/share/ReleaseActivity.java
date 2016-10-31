@@ -19,6 +19,7 @@ import com.example.administrator.helper.MyApplication;
 
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.entity.Share;
+import com.example.administrator.helper.utils.UrlUtils;
 import com.google.gson.Gson;
 import com.google.gson.internal.Streams;
 
@@ -77,7 +78,7 @@ public class ReleaseActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String share1=edtnr.getText().toString();//内容
                 Log.i("ReleaseActivity", "onClick: share1"+"--"+share1);
-                share.setPicture(share1);
+                share.setShare(share1);
                 MyApplication myApplication= (MyApplication) getApplication();
                 int userID=myApplication.getUser().getId();
                 Log.i("ReleaseActivity", "onClick: userID"+"--"+userID);
@@ -85,17 +86,19 @@ public class ReleaseActivity extends AppCompatActivity {
                 Timestamp sentTime = new Timestamp(System.currentTimeMillis());//创建时间
                 Log.i("ReleaseActivity", "onClick: sentTime"+"--"+sentTime);
                 share.setSendTim(sentTime);
-                String url = "http://192.168.23.1:8080/Helper/InsertShareServlet";
+                String url = UrlUtils.MYURL+"InsertShareServlet";
                 RequestParams requestParams = new RequestParams(url);
                 Gson gson = new Gson();
                 String sharejson = gson.toJson(share);
                 requestParams.addBodyParameter("share", sharejson);
+                Log.i("ReleaseActivity", "onClick:  share"+sharejson);
                requestParams.setMultipart(true);
                requestParams.addBodyParameter("file", file);
                 x.http().post(requestParams, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
                         Log.i("ReleaseActivity", "onSuccess: "+result);
+                        finish();
                     }
 
                     @Override

@@ -282,12 +282,13 @@ public class SendOtherActivity extends AppCompatActivity {
                         buyway=false;
                         break;
                 }
-
+                String[] c = (makePlace.split("省"))[1].split("市");
+                String city = c[0]+"市";
                 /**
                  封装对象
                  */
                 //任务
-                Task task = new Task(user,null,time,makePlace,submitPlace,phone,new TaskType(6,"其他"),xuqiu,money,1);
+                Task task = new Task(user,null,time,city,makePlace,submitPlace,phone,new TaskType(6,"其他"),xuqiu,money,1);
                 final String taskJson = toJson(task);
                 //订单
                 Orders order = new Orders(null,task,coupon,price,buyway,creatTime,null,new OrderStaus(1,"待付款"),null);

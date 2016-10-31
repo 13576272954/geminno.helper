@@ -249,14 +249,13 @@ public class SendJobActivity extends AppCompatActivity {
                         buyway=false;
                         break;
                 }
-
-
-
+                String[] c = (makePlace.split("省"))[1].split("市");
+                String city = c[0]+"市";
                 /**
                  封装对象
                  */
                 //任务
-                Task task = new Task(user,creatTime,time,makePlace,null,phone,new TaskType(4,"兼职"),xuqiu,money,1);
+                Task task = new Task(user,creatTime,time,city,makePlace,null,phone,new TaskType(4,"兼职"),xuqiu,money,1);
                 final String taskJson = toJson(task);
                 //订单
                 Orders order = new Orders(null,task,null,money,buyway,new Timestamp(System.currentTimeMillis()),null,new OrderStaus(1,"待付款"),null);
