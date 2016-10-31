@@ -123,10 +123,8 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("userPsd",psd);
                     editor.putBoolean("autoLogin",true);
                     editor.commit();
-                    Intent intent=new Intent(LoginActivity.this,FriendActivity.class);
-                    finish();
-                    startActivity(intent);
-//                    loginHuanxin(user.getPhoneNumber(),user.getPassword());
+
+                    loginHuanxin(user.getPhoneNumber(),user.getPassword());
 
                 }else {
                     Toast.makeText(LoginActivity.this, "账号或密码错误", Toast.LENGTH_SHORT).show();
@@ -164,6 +162,9 @@ public class LoginActivity extends AppCompatActivity {
                         // 加载所有会话到内存
 
                         EMClient.getInstance().chatManager().loadAllConversations();
+                        Intent intent=new Intent(LoginActivity.this,MainActivity.class);
+                        finish();
+                        startActivity(intent);
                         Log.i("1111111", "run:  环信登陆成功");
 
                         // 加载所有群组到内存，如果使用了群组的话

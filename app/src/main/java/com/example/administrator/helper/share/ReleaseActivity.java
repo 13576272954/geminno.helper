@@ -19,6 +19,7 @@ import com.example.administrator.helper.MyApplication;
 
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.entity.Share;
+import com.example.administrator.helper.utils.UrlUtils;
 import com.google.gson.Gson;
 import com.google.gson.internal.Streams;
 
@@ -85,7 +86,7 @@ public class ReleaseActivity extends AppCompatActivity {
                 Timestamp sentTime = new Timestamp(System.currentTimeMillis());//创建时间
                 Log.i("ReleaseActivity", "onClick: sentTime"+"--"+sentTime);
                 share.setSendTim(sentTime);
-                String url = "http://192.168.23.1:8080/Helper/InsertShareServlet";
+                String url = UrlUtils.MYURL+"InsertShareServlet";
                 RequestParams requestParams = new RequestParams(url);
                 Gson gson = new Gson();
                 String sharejson = gson.toJson(share);
