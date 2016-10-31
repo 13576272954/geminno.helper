@@ -8,5 +8,5 @@ import java.util.Stack;
 public final class UrlUtils {
     public static final String MYURL = "http://10.30.6.44:8080/Helper/";
 //    public static final String MYURL = "http://loaclhost:8080/Helper/";
-//    public static final String MYURL = "http://10.58.73.81:8080/Helper/";
+//    public static final String MYURL = "http://10.53.239.48:8080/Helper/";
 }

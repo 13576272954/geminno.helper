@@ -160,7 +160,15 @@ public class ShenghuoFragment extends BaseFragment implements RefreshListView.On
 //            }
 //        });
     }
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        Log.i("setUserVisibleHint", "setUserVisibleHint: "+isVisibleToUser);
+        if (isVisibleToUser){
+            getData();
+        }
 
+        super.setUserVisibleHint(isVisibleToUser);
+    }
 
     public void initData() {
         getData();//获取网络数据，显示在listview上

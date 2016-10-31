@@ -12,12 +12,19 @@ import com.example.administrator.helper.MainActivity;
 import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.entity.Task;
+import com.example.administrator.helper.entity.User;
+import com.example.administrator.helper.send.chat.FriendActivity;
 import com.example.administrator.helper.send.chat.TalkingActivity;
+import com.example.administrator.helper.utils.TimestampTypeAdapter;
 import com.example.administrator.helper.utils.UrlUtils;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
+
+import java.sql.Timestamp;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -43,15 +50,16 @@ public class TaskDetilsActivity extends AppCompatActivity {
     Task task;
     int taskId;
 
-
+    User user;
     MyApplication myApplication = (MyApplication) getApplication();
-    int receiveUserId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detils);
         ButterKnife.inject(this);
+        user=myApplication.getUser();
 
         initView();
         initData();
@@ -124,6 +132,12 @@ public class TaskDetilsActivity extends AppCompatActivity {
                 break;
             case R.id.iv_xiaoxi:
                 Intent intent1=new Intent(this, TalkingActivity.class);
+                GsonBuilder gb=new GsonBuilder();
+                gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
+                gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
+                Gson gson = gb.create();
+                String userStr=gson.toJson(task.getSendUser());
+                intent1.putExtra("user",userStr);
                 startActivity(intent1);
                 break;
             case R.id.tv_jieDan:

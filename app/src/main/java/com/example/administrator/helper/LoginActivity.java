@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,8 +15,11 @@ import android.widget.Toast;
 
 import com.example.administrator.helper.entity.User;
 import com.example.administrator.helper.send.GoPayActivity;
+import com.example.administrator.helper.send.chat.FriendActivity;
+import com.example.administrator.helper.utils.TimestampTypeAdapter;
 import com.example.administrator.helper.utils.UrlUtils;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
@@ -25,6 +27,8 @@ import com.hyphenate.chat.EMClient;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
+
+import java.sql.Timestamp;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -98,27 +102,32 @@ public class LoginActivity extends AppCompatActivity {
         RequestParams params = new RequestParams(url);
         params.addQueryStringParameter("userName",name);
         params.addQueryStringParameter("userPsd",psd);
-//        params.addBodyParameter("userName",name);
-//        params.addBodyParameter("userPsd",psd);
-        Log.i("LoginActivity", "getUser:  11111"+params);
         final SharedPreferences.Editor editor = sp.edit();
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Gson gson=new Gson();
+                GsonBuilder gb=new GsonBuilder();
+                gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
+                gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
+                Gson gson = gb.create();
+//                Gson gson = new Gson();
                 User user=gson.fromJson(result,User.class);
                 if (user!=null){
-                    Intent intent=new Intent(LoginActivity.this,MainActivity.class);
+                    Log.i("1111111", "onSuccess:  user:"+user);
+
                     MyApplication myApplication= (MyApplication) getApplication();
                     myApplication.setUser(user);
                     Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                    Log.i("LoginActivity", "onSuccess:  登陆账户"+name);
                     editor.putString("userName",name);
                     editor.putString("userPsd",psd);
                     editor.putBoolean("autoLogin",true);
                     editor.commit();
-//
+                    Intent intent=new Intent(LoginActivity.this,FriendActivity.class);
                     finish();
                     startActivity(intent);
+//                    loginHuanxin(user.getPhoneNumber(),user.getPassword());
+
                 }else {
                     Toast.makeText(LoginActivity.this, "账号或密码错误", Toast.LENGTH_SHORT).show();
                 }
@@ -153,11 +162,17 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         // 加载所有会话到内存
+
                         EMClient.getInstance().chatManager().loadAllConversations();
+                        Log.i("1111111", "run:  环信登陆成功");
+
                         // 加载所有群组到内存，如果使用了群组的话
-                        // EMClient.getInstance().groupManager().loadAllGroups();
+//                         EMClient.getInstance().groupManager().loadAllGroups();
                     }
                 });
+                Intent intent=new Intent(LoginActivity.this,FriendActivity.class);
+                finish();
+                startActivity(intent);
             }
 
             /**
@@ -170,7 +185,7 @@ public class LoginActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i("lzan13", "登录失败 Error code:" + i + ", message:" + s);
+                        Log.i("1111111", "登录失败 Error code:" + i + ", message:" + s);
                         /**
                          * 关于错误码可以参考官方api详细说明
                          * http://www.easemob.com/apidoc/android/chat3.0/classcom_1_1hyphenate_1_1_e_m_error.html

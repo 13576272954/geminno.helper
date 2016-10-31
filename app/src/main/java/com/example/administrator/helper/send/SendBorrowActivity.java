@@ -32,9 +32,11 @@ import com.example.administrator.helper.entity.TaskType;
 import com.example.administrator.helper.entity.User;
 import com.example.administrator.helper.entity.bean.InsertOrderBean;
 import com.example.administrator.helper.utils.CommonAdapter;
+import com.example.administrator.helper.utils.TimestampTypeAdapter;
 import com.example.administrator.helper.utils.UrlUtils;
 import com.example.administrator.helper.utils.ViewHolder;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import org.xutils.common.Callback;
@@ -348,7 +350,10 @@ public class SendBorrowActivity extends AppCompatActivity {
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Gson gson = new Gson();
+                GsonBuilder gb=new GsonBuilder();
+                gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
+                gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
+                Gson gson = gb.create();
                 List<Coupon> list=gson.fromJson(result,new TypeToken<List<Coupon>>(){}.getType());
                 coupons.clear();
                 coupons.addAll(list);

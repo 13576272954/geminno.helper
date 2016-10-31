@@ -22,8 +22,10 @@ import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.entity.Information;
 import com.example.administrator.helper.entity.User;
+import com.example.administrator.helper.utils.TimestampTypeAdapter;
 import com.example.administrator.helper.utils.UrlUtils;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMError;
@@ -76,14 +78,18 @@ public class TalkingActivity extends AppCompatActivity  implements EMMessageList
         setContentView(R.layout.talking);
         // 获取当前会话的username(如果是群聊就是群id)
         /** String str = getIntent().getStringExtra("user");
-        Gson gson = new Gson();
+         GsonBuilder gb=new GsonBuilder();
+         gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
+         gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
+         Gson gson = gb.create();
         otherUser=gson.fromJson(str,User.class);
          thisUser=((MyApplication)getApplication()).getUser();*/
-        otherUser=new User(3,"333","33",null,"男",22,null,null,null,null,null,null,new Timestamp(System.currentTimeMillis()),"333","http://pic.qqtn.com/up/2016-9/2016091811555278855.jpg");
-        thisUser=new User(1,"11","111",11111,"男",20,null,null,null,null,null,null,new Timestamp(System.currentTimeMillis()),"12345","http://pic.qqtn.com/up/2016-9/2016091811555278855.jpg");
+        thisUser =new User(3,"333","33",null,"男",22,null,null,null,null,null,null,new Timestamp(System.currentTimeMillis()),"333","http://pic.qqtn.com/up/2016-9/2016091811555278855.jpg");
+        otherUser =new User(1,"11","111",11111,"男",20,null,null,null,null,null,null,new Timestamp(System.currentTimeMillis()),"12345","http://pic.qqtn.com/up/2016-9/2016091811555278855.jpg");
 
         Log.i("TalkingActivity", "onCreate:  "+EMClient.getInstance());
-        EMClient.getInstance().login("12345", "111", new EMCallBack() {
+        //模拟登陆
+        EMClient.getInstance().login("333", "33", new EMCallBack() {
             /**
              * 登陆成功的回调
              */
@@ -172,7 +178,6 @@ public class TalkingActivity extends AppCompatActivity  implements EMMessageList
 
         mMessageListener = this;
 
-//        setContentView(R.layout.talking);
 
         initView();
         initConversation();
@@ -238,6 +243,7 @@ public class TalkingActivity extends AppCompatActivity  implements EMMessageList
                             msgList.remove(mMsg);
                             adapter.notifyDataSetChanged();
                             msgListView.setSelection(msgList.size());
+                            Toast.makeText(TalkingActivity.this,"消息发送失败",Toast.LENGTH_SHORT);
                         }
 
                         @Override
@@ -263,8 +269,6 @@ public class TalkingActivity extends AppCompatActivity  implements EMMessageList
          * 第三个表示如果会话不存在是否创建
          */
         List<EMMessage> messages;
-        Log.i("TalkingActivity", "initConversation:  11111"+mConversation);
-        Log.i("TalkingActivity", "initConversation:  22222"+EMClient.getInstance());
         mConversation = EMClient.getInstance().chatManager().getConversation(mChatId, null, true);
         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(mChatId);
         // 设置当前会话未读数为 0
@@ -277,42 +281,7 @@ public class TalkingActivity extends AppCompatActivity  implements EMMessageList
             messages = conversation.loadMoreMsgFromDB(msgId, 20);
         }
         // 打开聊天界面获取最后一条消息内容并显示
-        String url = UrlUtils.MYURL+"GetInformationServlet";
-        RequestParams params = new RequestParams(url);
-        params.addQueryStringParameter("thisUserId",thisUser.getId()+"");
-        params.addQueryStringParameter("friendUserId",otherUser.getId()+"");
-        x.http().get(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                Gson gson=new Gson();
-                Type type = new TypeToken<ArrayList<Information>>(){}.getType();
-                List<Information> informations = gson.fromJson(result,type);
-                for (Information information : informations ) {
-                    if (information.getSendUser()==thisUser.getId()){
-                        msgList.add(new Msg(information.getValue(),Msg.TYPE_SEND));
-                    }else if (information.getReveiveUser()==thisUser.getId()){
-                        msgList.add(new Msg(information.getValue(),Msg.TYPE_RECEIVED));
-                    }
-                }
-                adapter.notifyDataSetChanged();
-                msgListView.setSelection(msgList.size());
-            }
 
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                Log.i("TalkingActivity", "onError:  失败:"+ex.getMessage());
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-                Log.i("TalkingActivity", "onFinished:  ");
-            }
-        });
     }
 
     /**
@@ -337,7 +306,10 @@ public class TalkingActivity extends AppCompatActivity  implements EMMessageList
 
 
     public void saveMsg(Information information){
-        Gson gson = new Gson();
+        GsonBuilder gb=new GsonBuilder();
+        gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
+        gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
+        Gson gson = gb.create();
         String informationStr=gson.toJson(information);
         String url = UrlUtils.MYURL+"SaveInformationServlet";
         RequestParams params = new RequestParams(url);
@@ -366,12 +338,47 @@ public class TalkingActivity extends AppCompatActivity  implements EMMessageList
     }
 
     private void initMsgs() {
-        Msg msg1 = new Msg("Hello, how are you?", Msg.TYPE_RECEIVED);
-        msgList.add(msg1);
-        Msg msg2 = new Msg("Fine, thank you, and you?", Msg.TYPE_SEND);
-        msgList.add(msg2);
-        Msg msg3 = new Msg("I am fine, too!", Msg.TYPE_RECEIVED);
-        msgList.add(msg3);
+        String url = UrlUtils.MYURL+"GetInformationServlet";
+        RequestParams params = new RequestParams(url);
+        params.addQueryStringParameter("thisUserId",thisUser.getId()+"");
+        params.addQueryStringParameter("friendUserId",otherUser.getId()+"");
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.i("TalkingActivity", "onSuccess:  "+result);
+                GsonBuilder gb=new GsonBuilder();
+                gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
+                gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
+                Gson gson = gb.create();
+                List<Information> informations = gson.fromJson(result, new TypeToken<List<Information>>(){}.getType());
+                Log.i("TalkingActivity", "onSuccess:  111111");
+                for (Information information : informations ) {
+                    Log.i("TalkingActivity", "onSuccess:  22222"+information.getId());
+                    if (information.getSendUser()==thisUser.getId()){
+                        msgList.add(new Msg(information.getValue(),Msg.TYPE_SEND));
+                    }else if (information.getReveiveUser()==thisUser.getId()){
+                        msgList.add(new Msg(information.getValue(),Msg.TYPE_RECEIVED));
+                    }
+                }
+                adapter.notifyDataSetChanged();
+                msgListView.setSelection(msgList.size());
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                Log.i("TalkingActivity", "onError:  失败:"+ex.getMessage());
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                Log.i("TalkingActivity", "onFinished:  ");
+            }
+        });
     }
 
 
