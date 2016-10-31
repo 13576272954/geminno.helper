@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.example.administrator.helper.BaseFragment;
 import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.entity.ClickLike;
@@ -48,7 +49,7 @@ import butterknife.ButterKnife;
  */
 public class SharePageFragment extends BaseFragment {
     ImageView imtianjia;
-    ListView lvshare;
+    RefreshListView lvshare;
     int orderFlag = 0;
     int pageNo = 1;
     int pageSize = 5;
@@ -63,7 +64,7 @@ public class SharePageFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_share_page, null);
         imtianjia = (ImageView) v.findViewById(R.id.im_tianjia);
-        lvshare = (ListView) v.findViewById(R.id.listView);
+        lvshare = (RefreshListView) v.findViewById(R.id.listView);
         ButterKnife.inject(this, v);
         return v;
 
@@ -81,6 +82,21 @@ public class SharePageFragment extends BaseFragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ReleaseActivity.class);
                 startActivity(intent);
+            }
+        });
+        lvshare.setOnRefreshUploadChangeListener(new RefreshListView.OnRefreshUploadChangeListener() {
+            @Override
+            public void onRefresh() {
+                pageNo = 1;
+                shareEntities.clear();
+                getData();
+
+            }
+
+            @Override
+            public void onPull() {
+                pageNo++;
+                getData();
             }
         });
     }
