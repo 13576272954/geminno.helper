@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 public class Comment {
 	private Integer id;//评论id
 	private User publishUser;//发表用户
-	private Integer father;//父级评论id
+	private Comment father;//父级评论id
 	private Integer share;//分享
 	private String cotent;//评论内容
 	private Timestamp sendTime;//评论时间
@@ -24,7 +24,7 @@ public class Comment {
 	
 	
 
-	public Comment(User publishUser, Integer father, Integer share, String cotent, Timestamp sendTime, boolean isLast) {
+	public Comment(User publishUser, Comment father, Integer share, String cotent, Timestamp sendTime, boolean isLast) {
 		super();
 		this.publishUser = publishUser;
 		this.father = father;
@@ -36,7 +36,7 @@ public class Comment {
 
 
 
-	public Comment(Integer id, User publishUser, Integer father, Integer share, String cotent, Timestamp sendTime,
+	public Comment(Integer id, User publishUser, Comment father, Integer share, String cotent, Timestamp sendTime,
 			boolean isLast) {
 		super();
 		this.id = id;
@@ -69,10 +69,10 @@ public class Comment {
 	public void setPublishUser(User publishUser) {
 		this.publishUser = publishUser;
 	}
-	public Integer getFather() {
+	public Comment getFather() {
 		return father;
 	}
-	public void setFather(Integer father) {
+	public void setFather(Comment father) {
 		this.father = father;
 	}
 	public Integer getShare() {
