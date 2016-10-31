@@ -58,6 +58,8 @@ public class SharePageFragment extends BaseFragment {
     SshaeAdapter shareAdapter;
 
 
+    Map<Integer , List<Comment>> comments = new HashMap<Integer , List<Comment>>(); //评论的集合    key:分享id，value:评论集合
+
     int shareId;
     Timestamp sentTime;
     ClickLike clickLike;
@@ -114,16 +116,11 @@ public class SharePageFragment extends BaseFragment {
                 Type type = new TypeToken<List<ShareEntity>>() {}.getType();
 
                 shareEntities = gson.fromJson(result, type);
-
-                Log.i("SharePageFragment", "onSuccess: shareEntities" + "--" + shareEntities);
-                if (shareAdapter == null) {
-                    Log.i("SharePageFragment", "onSuccess:  shareAdapter == null");
-                    shareAdapter = new SshaeAdapter(getActivity(), shareEntities, R.layout.share_item);
-                    lvshare.setAdapter(shareAdapter);
-                } else {
-                    Log.i("SharePageFragment", "onSuccess:  shareAdapter != null");
-                    shareAdapter.notifyDataSetChanged();
+                for (ShareEntity shareEntity:shareEntities) {
+                    Log.i("aaaaaaaaaa", "onSuccess:  "+shareEntity.getDynamic().getId());
+                    getComment(shareEntity.getDynamic().getId());
                 }
+
             }
 
             @Override
@@ -172,7 +169,16 @@ public class SharePageFragment extends BaseFragment {
             final RadioButton imz = viewHolder.getViewById(R.id.im_zan);
             imz.setTag(position);//加标记，保证每个imageview的tag不一样
             imz.setChecked(shareEntity.isCheck());
-
+            NoScrollListview noScrollListview = viewHolder.getViewById(R.id.list_comment);
+            noScrollListview.setDividerHeight(0);
+            noScrollListview.setTag(position);
+            CommentAdapter commentAdapter = null;//子listView适配器
+            if (commentAdapter==null){
+                commentAdapter=new CommentAdapter(getActivity(),comments.get(shareEntity.getDynamic().getId()),R.layout.item_comment);
+                noScrollListview.setAdapter(commentAdapter);
+            }else {
+                commentAdapter.notifyDataSetChanged();
+            }
             imz.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -205,6 +211,9 @@ public class SharePageFragment extends BaseFragment {
         }
     }
 
+    /**
+     * 不可滑动的listView的适配器
+     */
     class CommentAdapter extends CommonAdapter<Comment>{
 
         public CommentAdapter(Context context, List<Comment> lists, int layoutId) {
@@ -230,7 +239,12 @@ public class SharePageFragment extends BaseFragment {
             }
         }
     }
-    private void getComment(int shareId, final List<Comment> comments){
+
+    /**
+     * 获取评论
+     * @param shareId
+     */
+    private void getComment(final int shareId){
         String url = UrlUtils.MYURL+"GetCommentServlet";
         RequestParams params = new RequestParams(url);
         params.addQueryStringParameter("shareId",shareId+"");
@@ -248,9 +262,23 @@ public class SharePageFragment extends BaseFragment {
                     Type type = new TypeToken<List<Comment>>() {
                     }.getType();
                     comm = gson.fromJson(result, type);
-                    comments.clear();
-                    Log.i("SharePageFragment", "onSuccess:  size "+comm.size());
-                    comments.addAll(comm);
+                    if (comm.size()>0) {
+                        comments.put(shareId, comm);
+                    }else {
+                        comments.put(shareId,null);
+                    }
+                    if (comments.size()==shareEntities.size()){
+                        Log.i("aaaaaaaaaa", "onSuccess:  "+comments);
+
+                        if (shareAdapter == null) {
+                            Log.i("SharePageFragment", "onSuccess:  shareAdapter == null");
+                            shareAdapter = new SshaeAdapter(getActivity(), shareEntities, R.layout.share_item);
+                            lvshare.setAdapter(shareAdapter);
+                        } else {
+                            Log.i("SharePageFragment", "onSuccess:  shareAdapter != null");
+                            shareAdapter.notifyDataSetChanged();
+                        }
+                    }
                 }
             }
 
