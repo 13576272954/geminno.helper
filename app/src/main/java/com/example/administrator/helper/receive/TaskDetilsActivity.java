@@ -59,7 +59,7 @@ public class TaskDetilsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detils);
         ButterKnife.inject(this);
-        user=myApplication.getUser();
+        user=((MyApplication)getApplication()).getUser();
 
         initView();
         initData();
