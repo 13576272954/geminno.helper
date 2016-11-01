@@ -18,6 +18,7 @@ import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.View.NoScrollListview;
 import com.example.administrator.helper.entity.ClickLike;
+import com.example.administrator.helper.entity.Comment;
 import com.example.administrator.helper.entity.ShareEntity;
 import com.example.administrator.helper.share.ReleaseActivity;
 import com.example.administrator.helper.utils.CommonAdapter;
