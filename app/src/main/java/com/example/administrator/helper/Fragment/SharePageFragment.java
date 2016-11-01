@@ -57,6 +57,9 @@ public class SharePageFragment extends BaseFragment {
     List<ShareEntity> shareEntities = new ArrayList<>();
     SshaeAdapter shareAdapter;
 
+
+    Map<Integer , List<Comment>> comments = new HashMap<Integer , List<Comment>>(); //评论的集合    key:分享id，value:评论集合
+
     int shareId;
     Timestamp sentTime;
     ClickLike clickLike;
@@ -95,29 +98,32 @@ public class SharePageFragment extends BaseFragment {
     public void getData() {
         //界面初始化数据：listview显示数据
         //xutils获取网络数据
-
+        Log.i("SharePageFragment", "getData:  ");
         String url = UrlUtils.MYURL+"QueryDynamicServlet";
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("orderFlag", orderFlag + "");//排序标记
         requestParams.addQueryStringParameter("pageNo", pageNo + "");
         requestParams.addQueryStringParameter("pageSize", pageSize + "");
         requestParams.addQueryStringParameter("thisuser",((MyApplication)getActivity().getApplication()).getUser().getId()+"");
+        Log.i("SharePageFragment", "getData:  访问网络");
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.i("------->", "onSuccess: result" + result);
+                Log.i("SharePageFragment", "onSuccess: result" + result);
                 //gson解析list<Dynamic>
 
                 Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-                Type type = new TypeToken<List<ShareEntity>>() {
-                }.getType();
+                Type type = new TypeToken<List<ShareEntity>>() {}.getType();
 
                 shareEntities = gson.fromJson(result, type);
+
                 Log.i("SharePageFragment", "onSuccess: shareEntities" + "--" + shareEntities);
                 if (shareAdapter == null) {
+                    Log.i("SharePageFragment", "onSuccess:  shareAdapter == null");
                     shareAdapter = new SshaeAdapter(getActivity(), shareEntities, R.layout.share_item);
                     lvshare.setAdapter(shareAdapter);
                 } else {
+                    Log.i("SharePageFragment", "onSuccess:  shareAdapter != null");
                     shareAdapter.notifyDataSetChanged();
                 }
             }
@@ -156,6 +162,7 @@ public class SharePageFragment extends BaseFragment {
 
         @Override
         public void convert(ViewHolder viewHolder, final ShareEntity shareEntity, final int position) {
+            Log.i("SharePageFragment", "convert:  share");
             TextView tvmc = viewHolder.getViewById(R.id.tv_mncheng);
             tvmc.setText(shareEntity.getDynamic().getUser().getName());
             TextView tvsj = viewHolder.getViewById(R.id.tv_shijian);
@@ -167,6 +174,7 @@ public class SharePageFragment extends BaseFragment {
             final RadioButton imz = viewHolder.getViewById(R.id.im_zan);
             imz.setTag(position);//加标记，保证每个imageview的tag不一样
             imz.setChecked(shareEntity.isCheck());
+
             imz.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -178,11 +186,11 @@ public class SharePageFragment extends BaseFragment {
                         shareId=shareEntities.get(position).getDynamic().getId();
                         sentTime=shareEntities.get(position).getDynamic().getSentTime();
                         count--;
-                        shareEntity.getDynamic().setCount(count);;
+                        shareEntity.getDynamic().setCount(count);
                         tvcount.setText(count +"");
                         deleteThumb();
                     }else if ((int)imz.getTag()==position && !shareEntity.isCheck()){
-                        Log.i("SshaeAdapter", "onClick: !isCheck"+position);
+                        Log.i("SharePageFragment", "onClick: !isCheck"+position);
                         imz.setChecked(true);
                         shareEntity.setCheck(true);
                         shareId=shareEntities.get(position).getDynamic().getId();
@@ -216,9 +224,53 @@ public class SharePageFragment extends BaseFragment {
             if (comment.getFather()!=null){
                 sendUser.setText(comment.getPublishUser().getName());
                 huiFu.setText("回复");
-
+                receiveUser.setText(comment.getFather().getPublishUser().getName()+":");
+            }else {
+                sendUser.setText(comment.getPublishUser().getName()+":");
+                huiFu.setText("");
+                receiveUser.setText("");
             }
         }
+    }
+    private void getComment(int shareId, final List<Comment> comments){
+        String url = UrlUtils.MYURL+"GetCommentServlet";
+        RequestParams params = new RequestParams(url);
+        params.addQueryStringParameter("shareId",shareId+"");
+        Log.i("SharePageFragment", "getComment:  shareId"+shareId);
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            List<Comment> comm = new ArrayList<Comment>();
+            @Override
+            public void onSuccess(String result) {
+                Log.i("SharePageFragment", "onSuccess:  comment"+result);
+                if (result!=null) {
+                    GsonBuilder gb = new GsonBuilder();
+                    gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
+                    gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
+                    Gson gson = gb.create();
+                    Type type = new TypeToken<List<Comment>>() {
+                    }.getType();
+                    comm = gson.fromJson(result, type);
+                    comments.clear();
+                    Log.i("SharePageFragment", "onSuccess:  size "+comm.size());
+                    comments.addAll(comm);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                Log.i("SharePageFragment", "onError:  评论获取失败");
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                Log.i("SharePageFragment", "onFinished:  ");
+            }
+        });
     }
 
     public void insertThumb() {
