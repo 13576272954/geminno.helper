@@ -5,8 +5,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.administrator.helper.my.Activity.YuerTixian">
-
+    >
+    <!--tools:context="com.example.administrator.helper.my.Activity.YuerTixian"-->
 
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"

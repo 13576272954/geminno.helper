@@ -45,6 +45,8 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -156,7 +158,8 @@ public class SendOtherActivity extends AppCompatActivity {
 //                                String timeStr = sdf.format(date);
 //                                Timestamp timestamp;
 //                                timestamp = Timestamp.valueOf(timeStr);
-                                tvShowTimeOther.setText(timestamp.toString());
+                                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                tvShowTimeOther.setText(format.format(timestamp));
                             }
                         },calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),true).show();
                     }

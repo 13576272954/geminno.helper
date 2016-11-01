@@ -26,7 +26,7 @@
         android:id="@+id/imageView2"
         android:gravity="center"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:src="@mipmap/a1"
         />
 

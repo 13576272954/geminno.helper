@@ -84,12 +84,9 @@
         <activity android:name=".my.Activity.MainActivity2" />
         <activity android:name=".my.Activity.shezhi" />
         <activity android:name=".my.Activity.Wodefadan" />
-        <activity android:name=".my.Activity.Wodeyuer" />
         <activity android:name=".my.Activity.XiugaiHpone" />
         <activity android:name=".my.Activity.XiugainicActivity" />
         <activity android:name=".my.Activity.Xiugaiqianm" />
-        <activity android:name=".my.Activity.YuerChongzhi" />
-        <activity android:name=".my.Activity.YuerTixian" />
         <activity android:name=".my.Activity.WodeJiedan" />
         <activity android:name=".my.Activity.XianShiGerenXinxi" />
         <activity android:name=".my.Activity.Main3Activity" />

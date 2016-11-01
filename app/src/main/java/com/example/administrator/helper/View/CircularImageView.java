@@ -41,19 +41,22 @@ public class CircularImageView extends ImageView{
      */
     @Override
     protected void onDraw(Canvas canvas) {
+
         Drawable drawable = getDrawable();
+
         if (drawable == null) {
             return;
         }
 
-        //必要步骤，避免由于初始化之前导致的异常错误
         if (getWidth() == 0 || getHeight() == 0) {
             return;
         }
-        if (!(drawable instanceof BitmapDrawable)) {
-            return;
+
+        Bitmap b = null;
+
+        if (drawable instanceof BitmapDrawable) {
+            b = ((BitmapDrawable) drawable).getBitmap();
         }
-        Bitmap b = ((BitmapDrawable) drawable).getBitmap();
 
         if (null == b) {
             return;
@@ -61,32 +64,30 @@ public class CircularImageView extends ImageView{
 
         Bitmap bitmap = b.copy(Bitmap.Config.ARGB_8888, true);
 
-        int w = getHeight();
+        int w = getWidth(), h = getHeight();
 
-        //根据高度裁剪圆形图片
-        Bitmap roundBitmap = getCircleBitmap(bitmap, w);
+        Bitmap roundBitmap = getCircleBitmap(bitmap, h);
         canvas.drawBitmap(roundBitmap, 0, 0, null);
-
 
     }
 
     /**
      * 初始Bitmap对象的缩放裁剪过程
-     * @param bitmap  初始Bitmap对象
-     * @param pixels   圆形图片直径大小
+     * @param bmp  初始Bitmap对象
+     * @param radius   圆形图片直径大小
      * @return Bitmap   返回一个圆形的缩放裁剪过后的Bitmap对象
      */
-    private Bitmap getCircleBitmap(Bitmap bitmap, int pixels) {
+    private Bitmap getCircleBitmap(Bitmap bmp, int radius) {
         Bitmap sbmp;
-        //比较初始Bitmap宽高和给定的圆形直径，判断是否需要缩放裁剪Bitmap对象
-        if (bitmap.getWidth() != pixels || bitmap.getHeight() != pixels)
-            sbmp = Bitmap.createScaledBitmap(bitmap, pixels, pixels, false);
+        if (bmp.getWidth() != radius || bmp.getHeight() != radius)
+            sbmp = Bitmap.createScaledBitmap(bmp, radius, radius, false);
         else
-            sbmp = bitmap;
+            sbmp = bmp;
         Bitmap output = Bitmap.createBitmap(sbmp.getWidth(), sbmp.getHeight(),
                 Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
 
+        final int color = 0xffa19774;
         final Paint paint = new Paint();
         final Rect rect = new Rect(0, 0, sbmp.getWidth(), sbmp.getHeight());
 
@@ -97,7 +98,6 @@ public class CircularImageView extends ImageView{
         paint.setColor(Color.parseColor("#BAB399"));
         canvas.drawCircle(sbmp.getWidth() / 2 + 0.7f,
                 sbmp.getHeight() / 2 + 0.7f, sbmp.getWidth() / 2 + 0.1f, paint);
-        //核心部分，设置两张图片的相交模式，在这里就是上面绘制的Circle和下面绘制的Bitmap
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(sbmp, rect, rect, paint);
 

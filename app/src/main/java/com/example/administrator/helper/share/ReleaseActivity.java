@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.administrator.helper.MyApplication;
 
@@ -98,6 +99,7 @@ public class ReleaseActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(String result) {
                         Log.i("ReleaseActivity", "onSuccess: "+result);
+                        Toast.makeText(ReleaseActivity.this,"发布成功",Toast.LENGTH_SHORT);
                         finish();
                     }
 

@@ -18,10 +18,10 @@ import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.entity.Orders;
 import com.example.administrator.helper.my.Activity.XianShiGerenXinxi;
-import com.example.administrator.helper.my.util.CommonAdapter;
-import com.example.administrator.helper.my.util.ViewHolder;
+import com.example.administrator.helper.utils.CommonAdapter;
 import com.example.administrator.helper.utils.RefreshListView;
 import com.example.administrator.helper.utils.UrlUtils;
+import com.example.administrator.helper.utils.ViewHolder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

@@ -19,15 +19,16 @@ import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.entity.OrderStaus;
 import com.example.administrator.helper.entity.Orders;
-import com.example.administrator.helper.my.util.CommonAdapter;
-import com.example.administrator.helper.my.util.ViewHolder;
+import com.example.administrator.helper.utils.CommonAdapter;
 import com.example.administrator.helper.utils.RefreshListView;
 import com.example.administrator.helper.utils.UrlUtils;
+import com.example.administrator.helper.utils.ViewHolder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
+import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.lang.reflect.Type;
@@ -166,11 +167,13 @@ public class DaiFuKuanFragment extends BaseFragment implements RefreshListView.O
         tvOrderState.setText(order.getOrderStaus().getOrderStaus());
         Log.i("QuanBuFragment", "initItemView: kj "+order.getOrderStaus().getOrderStaus());
         Log.i("DaiFuKuanFragment", "initItemView: kj"+order.getOrderStaus().getOrderStaus());
-        x.image().bind(imageViewtouxiang, UrlUtils.MYURL + "image/" + order.getTask().getSendUser().getImage());
+        ImageOptions imageOptions1=new ImageOptions.Builder().setAutoRotate(true).build();
+        x.image().bind(imageViewtouxiang,order.getTask().getSendUser().getImage(),imageOptions1);
+//        x.image().bind(imageViewtouxiang, UrlUtils.MYURL + "image/" + order.getTask().getSendUser().getImage());
         tvrenwuyaoqiu.setText(order.getTask().getTaskDemand());
         // Log.i("QuanBuFragment", "initItemView: 气我呀"+order.getTask().getTaskDemand());
         tvTotalMoney.setText("￥"+order.getTask().getMoney());
-        // Log.i("QuanBuFragment", "initItemView: 就和地方"+order.getTask().getMoney());
+         Log.i("QuanBuFragment", "initItemView: 就和地方"+tvrenwuleixing);
         tvrenwuleixing.setText(order.getTask().getTaskType().getTaskType());
         //  Log.i("QuanBuFragment", "initItemView: 请问"+order.getTask().getTaskType().getTaskType());
         //设置按钮的初始显示内容

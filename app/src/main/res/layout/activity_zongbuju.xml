@@ -10,21 +10,17 @@
     android:layout_width="match_parent"
     android:layout_height="200dp"
     android:id="@+id/relatlayout"
+     android:background="@mipmap/my_backgroudd"
     >
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:id="@+id/imageView3"
-        android:src="@mipmap/b2"
-      />
 
-    <ImageButton
+
+    <com.example.administrator.helper.View.CircularImage
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:id="@+id/tv_imageButton_geren"
         android:layout_marginTop="41dp"
-        android:src="@mipmap/a3"
+        android:src="@mipmap/head"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
     <TextView
@@ -62,18 +58,6 @@
             android:textSize="22sp"
             android:drawableLeft="@mipmap/c1"
             android:drawableRight="@mipmap/a1"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="我的余额"
-            android:id="@+id/tv_wodeyuer"
-            android:textColor="#00000f"
-            android:gravity="center_vertical"
-            android:drawableRight="@mipmap/a1"
-            android:drawableLeft="@mipmap/c2"
-            android:textSize="22sp"
-            />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -13,7 +13,7 @@
     </style>
 
     <style name="mystyle" parent="AppTheme">
-        <item name="android:textColor">#ff0000</item>
+        <item name="android:textColor">#FF7E00</item>
         <item name="android:textSize">20dp</item>
     </style>
     <style name="myApplication" parent="AppTheme">

@@ -21,11 +21,7 @@
         />
     </android.support.v7.widget.Toolbar>
 
-    <!--<include layout="@layout/xiugaizhiye"-->
-        <!--android:id="@+id/xiugaizhiye"-->
-        <!--android:layout_below="@+id/toobar3"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="50dp"/>-->
+    
 
     <LinearLayout
         android:layout_width="match_parent"
