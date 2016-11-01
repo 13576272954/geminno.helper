@@ -15,7 +15,7 @@
 
 
 
-    <com.example.administrator.helper.View.CircularImage
+    <ImageView
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:id="@+id/tv_imageButton_geren"

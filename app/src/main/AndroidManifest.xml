@@ -57,13 +57,15 @@
         <!-- 声明SDK所需的service SDK核心功能 -->
 
         <activity android:name=".LoginActivity">
+
+        </activity>
+        <activity android:name=".MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
         <activity android:name=".send.SendStudyActivity"></activity>
         <activity android:name=".send.SendLifeActivity" />
         <activity android:name=".send.SendBorrowActivity" />
