@@ -9,7 +9,7 @@
         android:layout_height="75dp"
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
-        android:src="@mipmap/b2"/>
+        android:src="@mipmap/my_backgroudd"/>
     <RelativeLayout
         android:id="@+id/rl_item_friend"
         android:layout_width="0dp"

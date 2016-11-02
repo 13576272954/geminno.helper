@@ -44,6 +44,7 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -137,7 +138,8 @@ public class SendBorrowActivity extends AppCompatActivity {
 //                                String timeStr = sdf.format(date);
 //                                Timestamp timestamp;
 //                                timestamp = Timestamp.valueOf(timeStr);
-                                tvShowTimeBorrow1.setText(timestamp.toString());
+                                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                tvShowTimeBorrow1.setText(format.format(timestamp));
                             }
                         },calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),true).show();
                     }
@@ -166,7 +168,8 @@ public class SendBorrowActivity extends AppCompatActivity {
 //                                String timeStr = sdf.format(date);
 //                                Timestamp timestamp;
 //                                timestamp = Timestamp.valueOf(timeStr);
-                                tvShowTimeBorrow2.setText(timestamp.toString());
+                                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                tvShowTimeBorrow2.setText(format.format(timestamp));
                             }
                         },calendar2.get(Calendar.HOUR_OF_DAY),calendar2.get(Calendar.MINUTE),true).show();
                     }
@@ -222,14 +225,14 @@ public class SendBorrowActivity extends AppCompatActivity {
                 Integer money=null;//任务赏金
 
                 //需求
-                if (etXuqiuBorrow.getText().toString() == null||"".equals(etXuqiuBorrow.getText().toString())) {
+                if ("".equals(etXuqiuBorrow.getText().toString())) {
                     tvTixingBorrow.setText("请输入具体需求");
                     return;
                 }else{
                     xuqiu=etXuqiuBorrow.getText().toString();
                 }
                 //借用时间
-                if(tvShowTimeBorrow1.getText().toString()==null||"".equals(tvShowTimeBorrow1.getText().toString())){
+                if("".equals(tvShowTimeBorrow1.getText().toString())){
                     tvTixingBorrow.setText("请选择兼职开始时间");
                     return;
                 }else{
@@ -237,7 +240,7 @@ public class SendBorrowActivity extends AppCompatActivity {
                         creatTime=Timestamp.valueOf(timeStr);
                 }
                 //联系电话
-                if (etPhoneBorrow.getText().toString()==null||"".equals(etPhoneBorrow.getText().toString())){
+                if ("".equals(etPhoneBorrow.getText().toString())){
                     tvTixingBorrow.setText("请输入联系电话");
                     return;
                 } else if( Integer.parseInt(etMoneyBorrow.getText().toString())<8){
@@ -249,8 +252,11 @@ public class SendBorrowActivity extends AppCompatActivity {
 //                if (coupon==null)
 //                    coupon=new Coupon(-1, null, 0, null, null, null);
                 //赏金
-                if (etMoneyBorrow.getText().toString()==null){
+                if ("".equals(etMoneyBorrow.getText().toString())){
                     tvTixingBorrow.setText("请输入你预期的赏金");
+                    return;
+                } else if( Integer.parseInt(etMoneyBorrow.getText().toString())<8){
+                    tvTixingBorrow.setText("亲,赏金至少为8元哦~");
                     return;
                 }else {
                     money=Integer.parseInt(etMoneyBorrow.getText().toString());
@@ -266,6 +272,7 @@ public class SendBorrowActivity extends AppCompatActivity {
 
                 //归还时间
                 String timeStr=tvShowTimeBorrow2.getText().toString();
+                Log.i("SendBorrowActivity", "onClick:  11111"+timeStr);
                 if (timeStr.equals("")){
                     time=null;
                 }else {
@@ -287,6 +294,7 @@ public class SendBorrowActivity extends AppCompatActivity {
                 //任务
                 Task task = new Task(user,creatTime,time,null,null,null,phone,new TaskType(3,"借用"),xuqiu,money,1);
                 final String taskJson = toJson(task);
+                Log.i("SendBorrowActivity", "onSuccess:  11111"+task);
                 //订单
                 Orders order = new Orders(null,task,coupon,price,buyway,new Timestamp(System.currentTimeMillis()),null,new OrderStaus(1,"待付款"),null);
                 final String orderJson = toJson(order);
@@ -312,6 +320,7 @@ public class SendBorrowActivity extends AppCompatActivity {
                         final Intent intent = new Intent(SendBorrowActivity.this, GoPayActivity.class);
                         intent.putExtra("task", taskJson);
                         intent.putExtra("order", orderJson);
+                        Log.i("SendBorrowActivity", "onSuccess:  11111"+taskJson);
                         startActivity(intent);
                     }
 
@@ -406,7 +415,10 @@ public class SendBorrowActivity extends AppCompatActivity {
     }
 
     public String toJson(Object object) {
-        Gson gson = new Gson();
+        GsonBuilder gb=new GsonBuilder();
+        gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
+        gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
+        Gson gson = gb.create();
         String json = gson.toJson(object);
         return json;
     }

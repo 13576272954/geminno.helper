@@ -46,16 +46,20 @@
         android:layout_below="@+id/item2"
         android:layout_width="match_parent"
         android:layout_height="50dp"/>
-    <include layout="@layout/item5"
-        android:id="@+id/item5"
+    <include layout="@layout/item6"
+        android:id="@+id/item6"
         android:layout_below="@+id/item4"
         android:layout_width="match_parent"
         android:layout_height="50dp"/>
-    <include layout="@layout/item6"
-        android:id="@+id/item6"
-        android:layout_below="@+id/item5"
+
+    <Button
+        android:id="@+id/but_login_out"
         android:layout_width="match_parent"
-        android:layout_height="50dp"/>
-
-
+        android:layout_height="50dp"
+        android:text="退出登录"
+        android:textSize="20dp"
+        android:textColor="#ffffff"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/shape_login_out"
+        android:layout_below="@+id/item6"/>
 </RelativeLayout>

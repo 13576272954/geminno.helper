@@ -5,30 +5,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.administrator.helper.LoginActivity;
 import com.example.administrator.helper.R;
-import com.example.administrator.helper.entity.Orders;
 import com.example.administrator.helper.entity.User;
-import com.example.administrator.helper.my.util.CommonAdapter;
-import com.example.administrator.helper.my.util.ViewHolder;
 import com.example.administrator.helper.utils.UrlUtils;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.xutils.common.Callback;
-import org.xutils.ex.HttpException;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
-
-import java.lang.reflect.Type;
-import java.util.List;
-
-import butterknife.ButterKnife;
 
 public class XianShiGerenXinxi extends AppCompatActivity {
   Toolbar toolbar;

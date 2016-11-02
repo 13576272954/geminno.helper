@@ -2,9 +2,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="52dp"></FrameLayout>
+        android:background="@null"
+        android:layout_height="52dp">
+        <RelativeLayout
+            android:id="@+id/rl_shouye_city"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:text="北京市"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                />
+        </RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="随手帮"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:textSize="25dp"
+            android:textColor="@color/top_bar_normal_bg"
+            />
+    </RelativeLayout>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -12,12 +37,10 @@
         >
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin">
+            android:layout_height="wrap_content">
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="200dp"
                 android:id="@+id/frameLayout">
 
                 <android.support.v4.view.ViewPager
@@ -90,80 +113,173 @@
             android:layout_weight="1"
             android:background="@color/sendBackground">
 
-            <Button
+
+            <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="学习"
-                android:textSize="18dp"
-                android:id="@+id/but_xuexi"
-                android:background="@drawable/shape"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_weight="1"/>
-            <Button
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/life"
+                    android:layout_centerVertical="true"
+                    android:layout_alignTop="@+id/but_shenghuo"
+                    android:layout_alignBottom="@+id/but_shenghuo"
+                    android:layout_toLeftOf="@+id/but_shenghuo"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="生活"
+                    android:textSize="18dp"
+                    android:id="@+id/but_shenghuo"
+                    android:background="@drawable/shape"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+            <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="生活"
-                android:textSize="18dp"
-                android:id="@+id/but_shenghuo"
-                android:background="@drawable/shape"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_weight="1"/>
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="借用"
-                android:textSize="18dp"
-                android:id="@+id/but_jieyong"
-                android:background="@drawable/shape"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_weight="1"/>
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/borrow"
+                    android:layout_centerVertical="true"
+                    android:layout_alignTop="@+id/but_jieyong"
+                    android:layout_alignBottom="@+id/but_jieyong"
+                    android:layout_toLeftOf="@+id/but_jieyong"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="借用"
+                    android:textSize="18dp"
+                    android:id="@+id/but_jieyong"
+                    android:background="@drawable/shape"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@color/sendBackground">
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="销售"
-                android:textSize="18dp"
-                android:id="@+id/but_xiaoshou"
-                android:background="@drawable/shape"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_weight="1"/>
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="兼职"
-                android:textSize="18dp"
-                android:id="@+id/but_jianzhi"
-                android:background="@drawable/shape"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_weight="1"/>
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="其他"
-                android:textSize="18dp"
-                android:id="@+id/but_qita"
-                android:background="@drawable/shape"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_weight="1"/>
-        </LinearLayout>
 
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/job"
+                    android:layout_centerVertical="true"
+                    android:layout_alignTop="@+id/but_jianzhi"
+                    android:layout_alignBottom="@+id/but_jianzhi"
+                    android:layout_toLeftOf="@+id/but_jianzhi"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="兼职"
+                    android:textSize="18dp"
+                    android:id="@+id/but_jianzhi"
+                    android:background="@drawable/shape"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/sell"
+                    android:layout_centerVertical="true"
+                    android:layout_alignTop="@+id/but_xiaoshou"
+                    android:layout_alignBottom="@+id/but_xiaoshou"
+                    android:layout_toLeftOf="@+id/but_xiaoshou"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="销售"
+                    android:textSize="18dp"
+                    android:id="@+id/but_xiaoshou"
+                    android:background="@drawable/shape"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/sendBackground">
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/study"
+                    android:layout_centerVertical="true"
+                    android:layout_alignTop="@+id/but_xuexi"
+                    android:layout_alignBottom="@+id/but_xuexi"
+                    android:layout_toLeftOf="@+id/but_xuexi"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="学习"
+                    android:textSize="18dp"
+                    android:id="@+id/but_xuexi"
+                    android:background="@drawable/shape"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_alignParentRight="true"
+                    />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/other"
+                    android:layout_centerVertical="true"
+                    android:layout_alignTop="@+id/but_qita"
+                    android:layout_alignBottom="@+id/but_qita"
+                    android:layout_toLeftOf="@+id/but_qita"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="其他"
+                    android:textSize="18dp"
+                    android:id="@+id/but_qita"
+                    android:background="@drawable/shape"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>

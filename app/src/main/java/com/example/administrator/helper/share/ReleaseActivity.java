@@ -1,6 +1,13 @@
 package com.example.administrator.helper.share;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -8,19 +15,25 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.administrator.helper.MyApplication;
+
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.entity.Share;
 import com.example.administrator.helper.utils.CommonAdapter;
 import com.example.administrator.helper.utils.MyGridView;
 import com.example.administrator.helper.utils.ViewHolder;
 import com.google.gson.Gson;
+import com.google.gson.internal.Streams;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,19 +44,28 @@ public class ReleaseActivity extends AppCompatActivity {
     TextView tvqx;
     TextView tvfb;
     EditText edtnr;
+    ImageView imtuku;
     ImageView imtupian;
-    MyGridView gridrelase;
-    public static final int MYREQUESECODE = 1;
-    Integer count=0;
-    List<String> fileList=new ArrayList<>();
-    CommonAdapter<String> adapter;
 
+    String items[] = {"相册选择", "拍照"};
+    public static final int SELECT_PIC = 11;
+    public static final int TAKE_PHOTO = 12;
+    public static final int CROP = 13;
+    private File file;
+    private Uri imageUri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_release);
         super.onCreate(savedInstanceState);
 
         initDate();
+
+        //判断sd卡
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),getPhotoFileName());
+            imageUri = Uri.fromFile(file);
+            Log.i("ReleaseActivity", "onCreate: imageUri"+"---"+imageUri);
+        }
 
 
         //点击事件
@@ -54,17 +76,6 @@ public class ReleaseActivity extends AppCompatActivity {
               finish();
             }
         });
-
-        imtupian.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ReleaseActivity.this,ImageListActivity.class);
-                Log.i("TianJiaTieziActivit", "onClick: 跳转到添加图片");
-                startActivityForResult(intent,MYREQUESECODE);
-
-            }
-        });
-
         //发表
         tvfb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,83 +83,146 @@ public class ReleaseActivity extends AppCompatActivity {
                 String share1=edtnr.getText().toString();//内容
                 Log.i("ReleaseActivity", "onClick: share1"+"--"+share1);
                 share.setShare(share1);
-                MyApplication myApplication=new MyApplication();
+                MyApplication myApplication= (MyApplication) getApplication();
                 int userID=myApplication.getUser().getId();
                 Log.i("ReleaseActivity", "onClick: userID"+"--"+userID);
                 share.setUserID(userID);//用户id
                 Timestamp sentTime = new Timestamp(System.currentTimeMillis());//创建时间
                 Log.i("ReleaseActivity", "onClick: sentTime"+"--"+sentTime);
                 share.setSendTim(sentTime);
-                share.setCount(count);
-                String url = "http://192.168.23.1:8080/Helper/InsertShareServlet";
+                String url = UrlUtils.MYURL+"InsertShareServlet";
                 RequestParams requestParams = new RequestParams(url);
                 Gson gson = new Gson();
                 String sharejson = gson.toJson(share);
                 requestParams.addBodyParameter("share", sharejson);
-                requestParams.setMultipart(true);
-                Log.i("ReleaseActivity", "onClick: requestParams=="+requestParams);
+                Log.i("ReleaseActivity", "onClick:  share"+sharejson);
+               requestParams.setMultipart(true);
+               requestParams.addBodyParameter("file", file);
                 x.http().post(requestParams, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
-                        Log.i("ReleaseActivity", "onClick: --------" + result);
+                        Log.i("ReleaseActivity", "onSuccess: "+result);
+                        finish();
                     }
 
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
-                        Log.i("ReleaseActivity", "onError: -----------------.." + ex);
+                        Log.i("ReleaseActivity", "onError: "+ex);
                     }
 
                     @Override
                     public void onCancelled(CancelledException cex) {
-
+                        Log.i("ReleaseActivity", "onCancelled: "+cex);
                     }
 
                     @Override
                     public void onFinished() {
-                        Log.i("ReleaseActivity", "onFinished: ");
+                        Log.i("ReleaseActivity", "onFinished: --------");
                     }
                 });
             }
         });
 
-    }
-    //shipeiqi
-    public void gridviewSetadapter(){
-        if (adapter==null){
-            adapter=new CommonAdapter<String>(this,fileList, R.layout.gridview_item) {
-                @Override
-                public void convert(ViewHolder viewHolder, String s, int position) {
-                    ImageView imtupian=viewHolder.getViewById(R.id.image);
-                    x.image().bind(imtupian,s);
-                }
-            };
-            gridrelase.setAdapter(adapter);
-        }else {
-            adapter.notifyDataSetChanged();
-        }
-    }
 
 
+        //选择图片
+        imtuku.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(ReleaseActivity.this).setTitle("选择").setItems(items, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // TODO Auto-generated method stub
+
+                        switch (which) {
+                            case 0:
+                                Intent intent = new Intent(Intent.ACTION_PICK, null);
+                                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                                startActivityForResult(intent, SELECT_PIC);
+                                break;
+
+
+                            case 1:
+                                Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                intent2.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+                                startActivityForResult(intent2, TAKE_PHOTO);
+                                break;
+                        }
+                    }
+
+                }).show();
+            }
+
+        });
+
+    }
 //找控件
     public void initDate(){
         tvqx= (TextView) findViewById(R.id.tv_quxiao);
         tvfb= (TextView) findViewById(R.id.tv_fabiao);
         edtnr= (EditText) findViewById(R.id.edt_nr);
-        imtupian= (ImageView) findViewById(R.id.im_tupian1);
-        gridrelase= (MyGridView) findViewById(R.id.grideview_release);
+        imtuku= (ImageView) findViewById(R.id.im_tuku);
+        imtupian= (ImageView) findViewById(R.id.im_tupian);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==MYREQUESECODE&&resultCode==RESULT_OK){
-        List<String> newlist=new ArrayList<>();
-            newlist=data.getStringArrayListExtra("image");
-            fileList.clear();
-            fileList.addAll(newlist);
-            if (fileList!=null){
-                gridviewSetadapter();
-            }
+
+        switch (requestCode) {
+            case SELECT_PIC:
+                if (data != null) {
+                    crop(data.getData());
+                }
+                break;
+            case TAKE_PHOTO:
+                crop(Uri.fromFile(file));
+                break;
+            case CROP:
+                if (data != null) {
+                    Bundle extras = data.getExtras();
+                    if (extras != null) {
+
+                        Bitmap bitmap = extras.getParcelable("data");
+                        showImage(bitmap);
+
+                    }
+                    super.onActivityResult(requestCode, resultCode, data);
+                }
         }
+    }
+    //拍照
+    private String getPhotoFileName() {
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        return sdf.format(date) + ".png";
+    }
+//编辑图片
+    public void crop(Uri uri) {
+        //  intent.setType("image/*");
+        //裁剪
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX",100);
+        intent.putExtra("outputY", 100);
+        intent.putExtra("return-data", true);
+        startActivityForResult(intent, CROP);
+    }
+    public void showImage(Bitmap bitmap) {
+        imtupian.setImageBitmap(bitmap);//iv显示图片
+        saveImage(bitmap);//保存图片
+    }
+    public void saveImage(Bitmap bitmap) {
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Log.i("ReleaseActivity", "saveImage: "+fos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
     }
 }

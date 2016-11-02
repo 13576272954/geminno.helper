@@ -102,8 +102,12 @@ public class Task implements Parcelable {
 	}
 
 	public String getCity() {
-		String[] c = (this.city.split("省"))[1].split("市");
-		return c[0]+"市";
+		if (this.makePlace!=null) {
+			String[] c = (this.makePlace.split("省"))[1].split("市");
+			return c[0]+"市";
+		}else {
+			return null;
+		}
 	}
 
 	public void setCity(String city) {

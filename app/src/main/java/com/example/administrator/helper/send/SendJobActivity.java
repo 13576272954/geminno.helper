@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
+import com.example.administrator.helper.entity.Coupon;
 import com.example.administrator.helper.entity.OrderStaus;
 import com.example.administrator.helper.entity.Orders;
 import com.example.administrator.helper.entity.Task;
@@ -37,6 +38,8 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import butterknife.ButterKnife;
@@ -120,7 +123,8 @@ public class SendJobActivity extends AppCompatActivity {
 //                                String timeStr = sdf.format(date);
 //                                Timestamp timestamp;
 //                                timestamp = Timestamp.valueOf(timeStr);
-                                tvShowTimeJob1.setText(timestamp.toString());
+                                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                tvShowTimeJob1.setText(format.format(timestamp));
                             }
                         },calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),true).show();
                     }
@@ -149,7 +153,8 @@ public class SendJobActivity extends AppCompatActivity {
 //                                String timeStr = sdf.format(date);
 //                                Timestamp timestamp;
 //                                timestamp = Timestamp.valueOf(timeStr);
-                                tvShowTimeJob2.setText(timestamp.toString());
+                                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                tvShowTimeJob2.setText(format.format(timestamp));
                             }
                         },calendar2.get(Calendar.HOUR_OF_DAY),calendar2.get(Calendar.MINUTE),true).show();
                     }
@@ -258,7 +263,7 @@ public class SendJobActivity extends AppCompatActivity {
                 Task task = new Task(user,creatTime,time,city,makePlace,null,phone,new TaskType(4,"兼职"),xuqiu,money,1);
                 final String taskJson = toJson(task);
                 //订单
-                Orders order = new Orders(null,task,null,money,buyway,new Timestamp(System.currentTimeMillis()),null,new OrderStaus(1,"待付款"),null);
+                Orders order = new Orders(null,task,new Coupon(-1, null, 0, null, null, null),money,buyway,new Timestamp(System.currentTimeMillis()),null,new OrderStaus(1,"待付款"),null);
                 final String orderJson = toJson(order);
                 InsertOrderBean insertOrderBean = new InsertOrderBean(-1, money,buyway,1);
                 String insertOrderBeanJson = toJson(insertOrderBean);

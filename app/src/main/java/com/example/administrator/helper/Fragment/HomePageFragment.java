@@ -18,7 +18,6 @@ import com.example.administrator.helper.R;
 import com.example.administrator.helper.my.Activity.MainActivity2;
 import com.example.administrator.helper.my.Activity.WodeJiedan;
 import com.example.administrator.helper.my.Activity.Wodefadan;
-import com.example.administrator.helper.my.Activity.Wodeyuer;
 import com.example.administrator.helper.my.Activity.shezhi;
 
 import butterknife.ButterKnife;
@@ -31,18 +30,14 @@ import butterknife.OnClick;
  */
 public class HomePageFragment extends Fragment {
     public static final int REQUECT = 1;
-    @InjectView(R.id.imageView3)
-    ImageView imageView3;
     @InjectView(R.id.tv_imageButton_geren)
-    ImageButton tvImageButtonGeren;
+    ImageView tvImageButtonGeren;
     @InjectView(R.id.textView2)
     TextView textView2;
     @InjectView(R.id.relatlayout)
     RelativeLayout relatlayout;
     @InjectView(R.id.tv_shenqingpaotui)
     TextView tvShenqingpaotui;
-    @InjectView(R.id.tv_wodeyuer)
-    TextView tvWodeyuer;
     @InjectView(R.id.tv_wodefadan)
     TextView tvWodefadan;
     @InjectView(R.id.tv_wodejiedan)
@@ -74,7 +69,7 @@ public class HomePageFragment extends Fragment {
         ButterKnife.reset(this);
     }
 
-    @OnClick({R.id.tv_imageButton_geren, R.id.tv_shenqingpaotui, R.id.tv_wodeyuer, R.id.tv_wodefadan, R.id.tv_wodejiedan, R.id.tv_yijianfankui, R.id.v_changjianwenti, R.id.tv_wodejifen, R.id.tv_shezhi})
+    @OnClick({R.id.tv_imageButton_geren, R.id.tv_shenqingpaotui, R.id.tv_wodefadan, R.id.tv_wodejiedan, R.id.tv_yijianfankui, R.id.v_changjianwenti, R.id.tv_wodejifen, R.id.tv_shezhi})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_imageButton_geren:
@@ -84,11 +79,6 @@ public class HomePageFragment extends Fragment {
 
                 break;
             case R.id.tv_shenqingpaotui:
-                break;
-            case R.id.tv_wodeyuer:
-                Intent intent2=new Intent(getActivity(), Wodeyuer.class);
-                getActivity().startActivityForResult(intent2,REQUECT);
-                Log.i("HomePageFragment", "onClick: 1111");
                 break;
             case R.id.tv_wodefadan:
                 Intent intent3=new Intent(getActivity(), Wodefadan.class);

@@ -367,7 +367,10 @@ public class SendLifeActivity extends AppCompatActivity {
     }
 
     public String toJson(Object object) {
-        Gson gson = new Gson();
+        GsonBuilder gb=new GsonBuilder();
+        gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
+        gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
+        Gson gson = gb.create();
         String json = gson.toJson(object);
         return json;
     }
