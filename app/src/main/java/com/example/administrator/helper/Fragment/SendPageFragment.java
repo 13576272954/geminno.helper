@@ -101,6 +101,7 @@ public class SendPageFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("SharePageFragment", "onCreate:  "+((MyApplication)getActivity().getApplication()).getUser());
     }
 
     @Nullable

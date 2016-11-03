@@ -291,17 +291,46 @@
         android:layout_weight="2.5"
         >
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:inputType="number"
-            android:background="#cfcfcf"
+        <LinearLayout
+            android:id="@+id/ll_money"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
             android:gravity="center"
-            android:textSize="18dp"
-            android:ems="8"
-            android:id="@+id/et_money_life"
-            android:layout_marginTop="10dp"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp">
+            <Button
+                android:id="@+id/but_jian"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_blue"
+                android:text="—"
+                android:textSize="30dp"
+                android:gravity="center"
+                />
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="3"
+                android:inputType="number"
+                android:background="#cfcfcf"
+                android:gravity="center"
+                android:textSize="18dp"
+                android:ems="8"
+                android:id="@+id/et_money_life"
+                android:layout_marginRight="1dp"
+                android:layout_marginLeft="1dp"/>
+            <Button
+                android:id="@+id/but_jia"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_blue_right"
+                android:text="＋"
+                android:textSize="30dp"
+                />
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -310,16 +339,16 @@
             android:textSize="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="8dp"
-            android:layout_toRightOf="@+id/et_money_life"
-            android:layout_toEndOf="@+id/et_money_life" />
+            android:layout_toRightOf="@+id/ll_money"
+            android:layout_toEndOf="@+id/ll_money" />
 
         <Button
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="立即发单"
             android:id="@+id/but_send_study_life"
-            android:background="@drawable/shape"
-            android:layout_below="@+id/et_money_life"
+            android:background="@drawable/shape_red"
+            android:layout_below="@+id/ll_money"
             android:layout_marginTop="15dp"
             android:layout_centerHorizontal="true" />
         <TextView

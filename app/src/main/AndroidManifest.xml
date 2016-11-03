@@ -92,6 +92,9 @@
         <activity android:name=".my.Activity.Main3Activity" />
         <activity android:name=".my.Activity.zhuce" />
         <activity android:name=".share.ReleaseActivity" />
+        <activity android:name=".share.ImageListActivity"/>
+        <activity android:name=".share.ImageActivity"/>
+        <activity android:name=".share.MapActivity"/>
 
         <!-- 百度地图服务 -->
         <service

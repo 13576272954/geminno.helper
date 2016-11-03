@@ -69,7 +69,7 @@ public class MyApplication extends Application {
         initEasemob();
 
         /***
-         * 初始化定位sdk，建议在Application中创建
+         * 初始化定位sdk， 建议在Application中创建
          */
         locationService = new LocationService(getApplicationContext());
         mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
