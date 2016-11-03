@@ -116,6 +116,11 @@
                />
 
         </RelativeLayout>
+        <com.example.administrator.helper.View.NoScrollListview
+            android:id="@+id/list_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </com.example.administrator.helper.View.NoScrollListview>
 
     </LinearLayout>
 

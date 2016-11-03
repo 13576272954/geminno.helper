@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.administrator.helper.BaseFragment;
 import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
+import com.example.administrator.helper.View.NoScrollListview;
 import com.example.administrator.helper.entity.ClickLike;
 import com.example.administrator.helper.entity.Comment;
 import com.example.administrator.helper.entity.ShareEntity;
@@ -47,6 +48,7 @@ import butterknife.ButterKnife;
  * Created by bin on 2016/9/19.
  */
 public class SharePageFragment extends BaseFragment {
+    private static int FABU=123;
     ImageView imtianjia;
     RefreshListView lvshare;
     int orderFlag = 0;
@@ -83,7 +85,7 @@ public class SharePageFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ReleaseActivity.class);
-                startActivity(intent);
+                getActivity().startActivityForResult(intent,FABU);
             }
         });
         lvshare.setOnRefreshUploadChangeListener(new RefreshListView.OnRefreshUploadChangeListener() {
@@ -116,8 +118,7 @@ public class SharePageFragment extends BaseFragment {
         requestParams.addQueryStringParameter("orderFlag", orderFlag + "");//排序标记
         requestParams.addQueryStringParameter("pageNo", pageNo + "");
         requestParams.addQueryStringParameter("pageSize", pageSize + "");
-        Log.i("SharePageFragment", "getData:  city"+((MyApplication)getActivity().getApplication()).getCity());
-        Log.i("SharePageFragment", "getData:  user"+((MyApplication)getActivity().getApplication()));
+        Log.i("SharePageFragment", "getData:  user---:"+((MyApplication)getActivity().getApplication()).getUser());
         requestParams.addQueryStringParameter("thisuser",((MyApplication)getActivity().getApplication()).getUser().getId()+"");
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
@@ -217,6 +218,16 @@ public class SharePageFragment extends BaseFragment {
             final RadioButton imz = viewHolder.getViewById(R.id.im_zan);
             imz.setTag(position);//加标记，保证每个checkbox的tag不一样
             imz.setChecked(shareEntity.isCheck());
+            NoScrollListview noScrollListview = viewHolder.getViewById(R.id.list_comment);
+            noScrollListview.setDividerHeight(0);
+            noScrollListview.setTag(position);
+            CommentAdapter commentAdapter = null;//子listView适配器
+            if (commentAdapter==null){
+                commentAdapter=new CommentAdapter(getActivity(),comments.get(shareEntity.getDynamic().getId()),R.layout.item_comment);
+                noScrollListview.setAdapter(commentAdapter);
+            }else {
+                commentAdapter.notifyDataSetChanged();
+            }
             imz.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -306,7 +317,6 @@ public class SharePageFragment extends BaseFragment {
                         comments.put(shareId,null);
                     }
                     if (comments.size()==shareEntities.size()){
-                        Log.i("aaaaaaaaaa", "onSuccess:  "+comments);
 
                         if (shareAdapter == null) {
                             Log.i("SharePageFragment", "onSuccess:  shareAdapter == null");
