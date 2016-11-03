@@ -44,6 +44,7 @@
 
     </RelativeLayout>
     <View
+        android:id="@+id/v1111"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.3"
@@ -257,18 +258,45 @@
         android:layout_height="0dp"
         android:layout_weight="2.5"
         >
+<LinearLayout
+    android:id="@+id/ll_money"
+    android:layout_width="200dp"
+    android:layout_height="50dp"
+    android:gravity="center"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="10dp">
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:background="@drawable/shape_blue"
+        android:text="—"
+        android:textSize="30dp"
+        android:gravity="center"
+        />
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="3"
+        android:inputType="number"
+        android:background="#cfcfcf"
+        android:gravity="center"
+        android:textSize="18dp"
+        android:ems="8"
+        android:id="@+id/et_money"
+        android:layout_marginRight="1dp"
+        android:layout_marginLeft="1dp"/>
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:background="@drawable/shape_blue_right"
+        android:text="＋"
+        android:textSize="30dp"
+       />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:inputType="number"
-            android:background="#cfcfcf"
-            android:gravity="center"
-            android:textSize="18dp"
-            android:ems="8"
-            android:id="@+id/et_money"
-            android:layout_marginTop="10dp"
-            android:layout_centerHorizontal="true" />
+</LinearLayout>
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -277,16 +305,16 @@
             android:textSize="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="8dp"
-            android:layout_toRightOf="@+id/et_money"
-            android:layout_toEndOf="@+id/et_money" />
+            android:layout_toRightOf="@+id/ll_money"
+            android:layout_toEndOf="@+id/ll_money" />
 
         <Button
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="立即发单"
             android:id="@+id/but_send_study"
-            android:background="@drawable/shape"
-            android:layout_below="@+id/et_money"
+            android:background="@drawable/shape_red"
+            android:layout_below="@+id/ll_money"
             android:layout_marginTop="20dp"
             android:layout_centerHorizontal="true" />
         <TextView

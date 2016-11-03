@@ -52,26 +52,10 @@ public class LoginActivity extends AppCompatActivity {
     Button btElse;
 
     private SharedPreferences sp;//保存密码的存储类
-    private String userNameValue,passwordValue;//用户名和密码
-    boolean choseAutoLogin;//是否自动登陆
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        sp=getSharedPreferences("userInfo",Context.MODE_PRIVATE);//第一个参数，xml文件名；第二个，文件读写权限
-        choseAutoLogin = sp.getBoolean("autoLogin", false);//false表示默认返回值为false
-        userNameValue = sp.getString("userName",null);
-        passwordValue = sp.getString("userPsd",null);
-        if (choseAutoLogin){
-            try {
-                Log.i("LoginActivity", "onCreate:  检测到用户信息，自动登录");
-                getUser(userNameValue,passwordValue);
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        }
+        sp=getSharedPreferences("userInfo", Context.MODE_PRIVATE);//第一个参数，xml文件名；第二个，文件读写权限
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -80,6 +64,11 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
+    public void choseAutoLogin(String name ,String psd ,SharedPreferences sp,AppCompatActivity context ){
+            Log.i("LoginActivity", "choseAutoLogin:  aaaaaaa"+Context.MODE_PRIVATE);
+            this.sp = sp;
+        getUser(name, psd,context);
+    }
 
     @OnClick({R.id.bt_login, R.id.bt_forget, R.id.bt_creat, R.id.bt_else})
     public void onClick(View view) {
@@ -87,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
             case R.id.bt_login:
                String name = etName.getText().toString();
                String psd = etPsd.getText().toString();
-                getUser(name,psd);
+                getUser(name,psd,this);
                 break;
             case R.id.bt_forget:
                 break;
@@ -98,11 +87,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void getUser(final String name, final String psd){
+    private void getUser(final String name, final String psd, final AppCompatActivity context){
         String url = UrlUtils.MYURL+"LoginServlet";
         RequestParams params = new RequestParams(url);
         params.addQueryStringParameter("userName",name);
         params.addQueryStringParameter("userPsd",psd);
+        Log.i("dingwei", "getUser:  aaaaaaa"+sp);
         final SharedPreferences.Editor editor = sp.edit();
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
@@ -111,31 +101,35 @@ public class LoginActivity extends AppCompatActivity {
                 gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
                 gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
                 Gson gson = gb.create();
-//                Gson gson = new Gson();
                 User user=gson.fromJson(result,User.class);
                 if (user!=null){
                     Log.i("1111111", "onSuccess:  user:"+user);
 
-                    MyApplication myApplication= (MyApplication) getApplication();
+                    MyApplication myApplication= (MyApplication) context.getApplication();
                     myApplication.setUser(user);
-                    Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                     Log.i("LoginActivity", "onSuccess:  登陆账户"+name);
                     editor.putString("userName",name);
                     editor.putString("userPsd",psd);
                     editor.putBoolean("autoLogin",true);
                     editor.commit();
 
-                    loginHuanxin(user.getPhoneNumber(),user.getPassword());
+                    loginHuanxin(user.getPhoneNumber(),user.getPassword(),context);
 
                 }else {
-                    Toast.makeText(LoginActivity.this, "账号或密码错误", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "账号或密码错误", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context,LoginActivity.class);
+                    context.finish();
+                    context.startActivity(intent);
                 }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 Log.i("LoginActivity", "LoginActivity:onError失败"+ex.getMessage());
-                Toast.makeText(LoginActivity.this, "网络访问失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "网络访问失败", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context,LoginActivity.class);
+                context.finish();
+                context.startActivity(intent);
             }
 
             @Override
@@ -150,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void loginHuanxin(String name , String psd){
+    public void loginHuanxin(String name , String psd, final AppCompatActivity context){
         EMClient.getInstance().login(name, psd, new EMCallBack() {
             /**
              * 登陆成功的回调
@@ -163,9 +157,9 @@ public class LoginActivity extends AppCompatActivity {
                         // 加载所有会话到内存
 
                         EMClient.getInstance().chatManager().loadAllConversations();
-                        Intent intent=new Intent(LoginActivity.this,MainActivity.class);
-                        finish();
-                        startActivity(intent);
+                        Intent intent=new Intent(context,MainActivity.class);
+                        context.finish();
+                        context.startActivity(intent);
                         Log.i("1111111", "run:  环信登陆成功");
 
                         // 加载所有群组到内存，如果使用了群组的话
@@ -192,44 +186,47 @@ public class LoginActivity extends AppCompatActivity {
                         switch (i) {
                             // 网络异常 2
                             case EMError.NETWORK_ERROR:
-                                Toast.makeText(LoginActivity.this, "网络错误 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "网络错误 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
                                 break;
                             // 无效的用户名 101
                             case EMError.INVALID_USER_NAME:
-                                Toast.makeText(LoginActivity.this, "无效的用户名 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "无效的用户名 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
                                 break;
                             // 无效的密码 102
                             case EMError.INVALID_PASSWORD:
-                                Toast.makeText(LoginActivity.this, "无效的密码 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "无效的密码 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
                                 break;
                             // 用户认证失败，用户名或密码错误 202
                             case EMError.USER_AUTHENTICATION_FAILED:
-                                Toast.makeText(LoginActivity.this, "用户认证失败，用户名或密码错误 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "用户认证失败，用户名或密码错误 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
                                 break;
                             // 用户不存在 204
                             case EMError.USER_NOT_FOUND:
-                                Toast.makeText(LoginActivity.this, "用户不存在 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "用户不存在 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
                                 break;
                             // 无法访问到服务器 300
                             case EMError.SERVER_NOT_REACHABLE:
-                                Toast.makeText(LoginActivity.this, "无法访问到服务器 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "无法访问到服务器 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
                                 break;
                             // 等待服务器响应超时 301
                             case EMError.SERVER_TIMEOUT:
-                                Toast.makeText(LoginActivity.this, "等待服务器响应超时 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "等待服务器响应超时 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
                                 break;
                             // 服务器繁忙 302
                             case EMError.SERVER_BUSY:
-                                Toast.makeText(LoginActivity.this, "服务器繁忙 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "服务器繁忙 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
                                 break;
                             // 未知 Server 异常 303 一般断网会出现这个错误
                             case EMError.SERVER_UNKNOWN_ERROR:
-                                Toast.makeText(LoginActivity.this, "未知的服务器异常 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "未知的服务器异常 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
                                 break;
                             default:
-                                Toast.makeText(LoginActivity.this, "ml_sign_in_failed code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "ml_sign_in_failed code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
                                 break;
                         }
+                        Intent intent = new Intent(context,LoginActivity.class);
+                        context.finish();
+                        context.startActivity(intent);
                     }
                 });
             }

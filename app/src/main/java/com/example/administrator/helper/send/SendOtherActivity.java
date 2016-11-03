@@ -31,6 +31,7 @@ import com.example.administrator.helper.entity.Task;
 import com.example.administrator.helper.entity.TaskType;
 import com.example.administrator.helper.entity.User;
 import com.example.administrator.helper.entity.bean.InsertOrderBean;
+import com.example.administrator.helper.send.TimePicker.GetTimePicker;
 import com.example.administrator.helper.send.map.getMap;
 import com.example.administrator.helper.utils.CommonAdapter;
 import com.example.administrator.helper.utils.TimestampTypeAdapter;
@@ -85,13 +86,16 @@ public class SendOtherActivity extends AppCompatActivity {
     Button butSendOther;
     @InjectView(R.id.tv_tixing_other)
     TextView tvTixingOther;
+    @InjectView(R.id.v1111)
+    View v1111;
 
+    GetTimePicker getTimePicker;
     //地址选择请求码
-    public static final int MAP_REQUEST1=11;
-    public static final int MAP_REQUEST2=11;
+    public static final int MAP_REQUEST1 = 11;
+    public static final int MAP_REQUEST2 = 11;
 
     //优惠券
-    Coupon coupon =null;
+    Coupon coupon = null;
     //优惠券listView布局
     LinearLayout youhuiListView;
     ListView youhuiList;
@@ -102,7 +106,8 @@ public class SendOtherActivity extends AppCompatActivity {
     CommonAdapter<Coupon> couponAdapter;
 
     //用户
-    User user=null;
+    User user = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +120,7 @@ public class SendOtherActivity extends AppCompatActivity {
         }
 
         //解析优惠券需要用到的listView的布局和控件
-        youhuiListView= (LinearLayout) LayoutInflater.from(this).inflate(R.layout.listview_youhuiquan,null);
+        youhuiListView = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.listview_youhuiquan, null);
         youhuiList = (ListView) youhuiListView.findViewById(R.id.list_youhuiquan);
     }
 
@@ -123,11 +128,11 @@ public class SendOtherActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==MAP_REQUEST1 && resultCode ==RESULT_OK){
+        if (requestCode == MAP_REQUEST1 && resultCode == RESULT_OK) {
             //地图界面返回
             String address = data.getStringExtra("address");
             tvRenwudizhiOther1.setText(address);
-        }else if (requestCode==MAP_REQUEST2 && resultCode ==RESULT_OK){
+        } else if (requestCode == MAP_REQUEST2 && resultCode == RESULT_OK) {
             //地图界面返回
             String address = data.getStringExtra("address");
             tvRenwudizhiOther2.setText(address);
@@ -135,56 +140,60 @@ public class SendOtherActivity extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.rl_city_other, R.id.rl_map_all_other1, R.id.rl_map_all_other2, R.id.rl_buy_other,R.id.rl_youhui_other, R.id.but_send_other})
+    @OnClick({R.id.rl_city_other, R.id.rl_map_all_other1, R.id.rl_map_all_other2, R.id.rl_buy_other, R.id.rl_youhui_other, R.id.but_send_other})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rl_city_other:
                 //选择时间
-                final Calendar calendar =Calendar.getInstance();//获取当前时间
-                //弹出日期选择
-                new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, final int year, final int monthOfYear, final int dayOfMonth) {
-
-                        //弹出时间选择
-                        new TimePickerDialog(SendOtherActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                Calendar calendar1 = Calendar.getInstance();
-                                calendar1.set(year,monthOfYear,dayOfMonth,hourOfDay,minute);
-                                Timestamp timestamp = new Timestamp(calendar1.getTimeInMillis());
-//                                Date date =calendar1.getTime();
-//                                DateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd HH/mm/ss");
-//                                String timeStr = sdf.format(date);
-//                                Timestamp timestamp;
-//                                timestamp = Timestamp.valueOf(timeStr);
-                                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                tvShowTimeOther.setText(format.format(timestamp));
-                            }
-                        },calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),true).show();
-                    }
-
-
-                },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
+                if (getTimePicker==null){
+                    getTimePicker = new GetTimePicker(tvShowTimeOther,v1111,this,this);
+                }
+                getTimePicker.showBottoPopupWindow();
+//                final Calendar calendar = Calendar.getInstance();//获取当前时间
+//                //弹出日期选择
+//                new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+//                    @Override
+//                    public void onDateSet(DatePicker view, final int year, final int monthOfYear, final int dayOfMonth) {
+//
+//                        //弹出时间选择
+//                        new TimePickerDialog(SendOtherActivity.this, new TimePickerDialog.OnTimeSetListener() {
+//                            @Override
+//                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//                                Calendar calendar1 = Calendar.getInstance();
+//                                calendar1.set(year, monthOfYear, dayOfMonth, hourOfDay, minute);
+//                                Timestamp timestamp = new Timestamp(calendar1.getTimeInMillis());
+////                                Date date =calendar1.getTime();
+////                                DateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd HH/mm/ss");
+////                                String timeStr = sdf.format(date);
+////                                Timestamp timestamp;
+////                                timestamp = Timestamp.valueOf(timeStr);
+//                                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                                tvShowTimeOther.setText(format.format(timestamp));
+//                            }
+//                        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+//                    }
+//
+//
+//                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
 
                 break;
             case R.id.rl_map_all_other1:
                 //选择地址
-                Intent intent =new Intent(this,getMap.class);
-                startActivityForResult(intent,MAP_REQUEST1);
+                Intent intent = new Intent(this, getMap.class);
+                startActivityForResult(intent, MAP_REQUEST1);
                 break;
             case R.id.rl_map_all_other2:
                 //选择地址
-                Intent intent2 =new Intent(this,getMap.class);
-                startActivityForResult(intent2,MAP_REQUEST2);
+                Intent intent2 = new Intent(this, getMap.class);
+                startActivityForResult(intent2, MAP_REQUEST2);
                 break;
             case R.id.rl_buy_other:
-                CharSequence[] item = {"微信支付","支付宝"};
+                CharSequence[] item = {"微信支付", "支付宝"};
                 new AlertDialog.Builder(this).setTitle("选择支付方式")
                         .setItems(item, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                switch (which){
+                                switch (which) {
                                     case 0:
                                         tvBuyOther.setText("微信支付");
                                         break;
@@ -197,106 +206,106 @@ public class SendOtherActivity extends AppCompatActivity {
                 break;
             case R.id.rl_youhui_other:
                 //优惠券
-                if (dialog==null) {
+                if (dialog == null) {
                     initListview();
                     dialog = new AlertDialog.Builder(this).setTitle("请选择优惠券").setView(youhuiListView)
                             .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialo, int which) {
-                                    coupon =  new Coupon(-1, null, 0, null, null, null);
+                                    coupon = new Coupon(-1, null, 0, null, null, null);
                                     tvYouhuiquanOther.setText("未选择优惠券");
                                     dialog.cancel();
                                 }
                             }).create();
                     dialog.setCanceledOnTouchOutside(false);//使除了dialog以外的地方不能被点击
                     dialog.show();
-                }else {
+                } else {
                     dialog.show();
                 }
                 break;
             case R.id.but_send_other:
                 //获取用户填写内容
-                String xuqiu=null;//需求
+                String xuqiu = null;//需求
                 Timestamp creatTime = new Timestamp(System.currentTimeMillis());//创建日期
-                Timestamp time=null;//任务要求时间
+                Timestamp time = null;//任务要求时间
                 String makePlace = null;//任务地址
                 String submitPlace = null;//提交地址
                 String phone = null;//联系电话
-                boolean buyway=true;//付款方式
-                Integer money=null;//任务赏金
+                boolean buyway = true;//付款方式
+                Integer money = null;//任务赏金
 
                 //需求
-                if (etXuqiuOther.getText().toString() == null||"".equals(etXuqiuOther.getText().toString())) {
+                if (etXuqiuOther.getText().toString() == null || "".equals(etXuqiuOther.getText().toString())) {
                     tvTixingOther.setText("请输入具体需求");
                     return;
-                }else{
-                    xuqiu=etXuqiuOther.getText().toString();
+                } else {
+                    xuqiu = etXuqiuOther.getText().toString();
                 }
 
                 //任务地址
-                if (tvRenwudizhiOther1.getText().toString()==null||"".equals(tvRenwudizhiOther1.getText().toString())){
+                if (tvRenwudizhiOther1.getText().toString() == null || "".equals(tvRenwudizhiOther1.getText().toString())) {
                     tvTixingOther.setText("请选择任务地址");
                     return;
-                }else {
-                    makePlace=tvRenwudizhiOther1.getText().toString();
+                } else {
+                    makePlace = tvRenwudizhiOther1.getText().toString();
                 }
 
                 //联系电话
-                if (etPhoneOther.getText().toString()==null||"".equals(etPhoneOther.getText().toString())){
+                if (etPhoneOther.getText().toString() == null || "".equals(etPhoneOther.getText().toString())) {
                     tvTixingOther.setText("请输入联系电话");
                     return;
-                }else {
-                    phone=etPhoneOther.getText().toString();
+                } else {
+                    phone = etPhoneOther.getText().toString();
                 }
 
                 //赏金
-                if (etMoneyOther.getText().toString()==null||"".equals(etMoneyOther.getText().toString())){
+                if (etMoneyOther.getText().toString() == null || "".equals(etMoneyOther.getText().toString())) {
                     tvTixingOther.setText("请输入你预期的赏金");
                     return;
-                }else if( Integer.parseInt(etMoneyOther.getText().toString())<8){
+                } else if (Integer.parseInt(etMoneyOther.getText().toString()) < 8) {
                     tvTixingOther.setText("亲,赏金至少为8元哦~");
                     return;
-                }else {
-                    money=Integer.parseInt(etMoneyOther.getText().toString());
+                } else {
+                    money = Integer.parseInt(etMoneyOther.getText().toString());
                 }
                 int price = money - coupon.getReduce();
-                if (price<=0){
-                    price=0;
+                if (price <= 0) {
+                    price = 0;
                 }
 
                 //限定时间
-                String timeStr=tvShowTimeOther.getText().toString();
-                if (timeStr==null||"".equals(timeStr)) {
-                    time=null;
-                }else{
+                String timeStr = tvShowTimeOther.getText().toString();
+                if (timeStr == null || "".equals(timeStr)) {
+                    time = null;
+                } else {
                     time = Timestamp.valueOf(timeStr);
                 }
                 //提交地址
-                submitPlace=tvRenwudizhiOther2.getText().toString();
+                submitPlace = tvRenwudizhiOther2.getText().toString();
                 if ("".equals(submitPlace))
-                    submitPlace=null;
+                    submitPlace = null;
                 //支付方式
-                String buyWayStr=tvBuyOther.getText().toString();
-                switch (buyWayStr){
+                String buyWayStr = tvBuyOther.getText().toString();
+                switch (buyWayStr) {
                     case "支付宝":
-                        buyway=true;
+                        buyway = true;
                         break;
-                    case  "微信支付":
-                        buyway=false;
+                    case "微信支付":
+                        buyway = false;
                         break;
                 }
                 String[] c = (makePlace.split("省"))[1].split("市");
-                String city = c[0]+"市";
+                String city = c[0] + "市";
                 /**
                  封装对象
                  */
                 //任务
-                Task task = new Task(user,null,time,city,makePlace,submitPlace,phone,new TaskType(6,"其他"),xuqiu,money,1);
+                Task task = new Task(user, null, time, city, makePlace, submitPlace, phone, new TaskType(6, "其他"), xuqiu, money, 1);
                 final String taskJson = toJson(task);
                 //订单
-                Orders order = new Orders(null,task,coupon,price,buyway,creatTime,null,new OrderStaus(1,"待付款"),null);
+                Orders order = new Orders(null, task, coupon, price, buyway, creatTime, null, new OrderStaus(1, "待付款"), null);
                 final String orderJson = toJson(order);
-                InsertOrderBean insertOrderBean = new InsertOrderBean(coupon.getId(), price,buyway,1);
+                InsertOrderBean insertOrderBean = new InsertOrderBean(coupon.getId(), price, buyway, 1);
                 String insertOrderBeanJson = toJson(insertOrderBean);
 
                 //网络访问
@@ -343,49 +352,50 @@ public class SendOtherActivity extends AppCompatActivity {
     /**
      * 初始化优惠券listView
      */
-    void initListview(){
+    void initListview() {
         //listview 赋值
 //        获取网络数据
-        String url = UrlUtils.MYURL+"GetCouponServlet";
-        Log.i("SendStudyActivity", "initListview:       "+url);
-        RequestParams params =new RequestParams(url);
-        Log.i("SendStudyActivity", "initListview:  " +user.getId());
-        params.addQueryStringParameter("userId",user.getId()+"");
+        String url = UrlUtils.MYURL + "GetCouponServlet";
+        Log.i("SendStudyActivity", "initListview:       " + url);
+        RequestParams params = new RequestParams(url);
+        Log.i("SendStudyActivity", "initListview:  " + user.getId());
+        params.addQueryStringParameter("userId", user.getId() + "");
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                GsonBuilder gb=new GsonBuilder();
+                GsonBuilder gb = new GsonBuilder();
                 gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
                 gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
                 Gson gson = gb.create();
-                List<Coupon> list=gson.fromJson(result,new TypeToken<List<Coupon>>(){}.getType());
+                List<Coupon> list = gson.fromJson(result, new TypeToken<List<Coupon>>() {
+                }.getType());
                 coupons.clear();
                 coupons.addAll(list);
-                if (couponAdapter==null){
-                    couponAdapter =new CommonAdapter<Coupon>(SendOtherActivity.this,coupons,R.layout.item_youhui) {
+                if (couponAdapter == null) {
+                    couponAdapter = new CommonAdapter<Coupon>(SendOtherActivity.this, coupons, R.layout.item_youhui) {
                         @Override
                         public void convert(ViewHolder viewHolder, Coupon coupon, int position) {
                             //找控件赋值
                             TextView tvreduce = viewHolder.getViewById(R.id.tv_reduce);
                             TextView outTime = viewHolder.getViewById(R.id.out_time);
-                            tvreduce.setText(coupon.getReduce()+"");
-                            if (coupon.getOutTime()!=null) {
+                            tvreduce.setText(coupon.getReduce() + "");
+                            if (coupon.getOutTime() != null) {
                                 outTime.setText(coupon.getOutTime().toString() + " 过期");
-                            }else {
-                                outTime.setTextColor(Color.rgb(225,126,0));
+                            } else {
+                                outTime.setTextColor(Color.rgb(225, 126, 0));
                                 outTime.setText("不限期");
                             }
                         }
                     };
                     youhuiList.setAdapter(couponAdapter);
-                }else {
+                } else {
                     couponAdapter.notifyDataSetChanged();
                 }
                 youhuiList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        coupon=coupons.get(position);
-                        tvYouhuiquanOther.setText("优惠 "+coupon.getReduce()+" 元");
+                        coupon = coupons.get(position);
+                        tvYouhuiquanOther.setText("优惠 " + coupon.getReduce() + " 元");
                         dialog.cancel();
                     }
                 });
@@ -393,12 +403,12 @@ public class SendOtherActivity extends AppCompatActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Toast.makeText(SendOtherActivity.this,"抱歉，网络访问失败",Toast.LENGTH_SHORT).show();
+                Toast.makeText(SendOtherActivity.this, "抱歉，网络访问失败", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancelled(CancelledException cex) {
-                Toast.makeText(SendOtherActivity.this,"已取消网络访问",Toast.LENGTH_SHORT).show();
+                Toast.makeText(SendOtherActivity.this, "已取消网络访问", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -411,7 +421,7 @@ public class SendOtherActivity extends AppCompatActivity {
     }
 
     public String toJson(Object object) {
-        GsonBuilder gb=new GsonBuilder();
+        GsonBuilder gb = new GsonBuilder();
         gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
         gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
         Gson gson = gb.create();

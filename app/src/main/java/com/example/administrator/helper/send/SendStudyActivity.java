@@ -31,6 +31,7 @@ import com.example.administrator.helper.entity.Task;
 import com.example.administrator.helper.entity.TaskType;
 import com.example.administrator.helper.entity.User;
 import com.example.administrator.helper.entity.bean.InsertOrderBean;
+import com.example.administrator.helper.send.TimePicker.GetTimePicker;
 import com.example.administrator.helper.send.map.getMap;
 import com.example.administrator.helper.utils.CommonAdapter;
 import com.example.administrator.helper.utils.TimestampTypeAdapter;
@@ -81,6 +82,8 @@ public class SendStudyActivity extends AppCompatActivity {
     TextView tvYouhuiquan;
     @InjectView(R.id.tv_tixing_study)
     TextView tvTixingStudy;
+    @InjectView(R.id.v1111)
+    View v1111;
 
 
     //地址选择请求码
@@ -88,6 +91,7 @@ public class SendStudyActivity extends AppCompatActivity {
     //优惠券
     Coupon coupon = null;
 
+    GetTimePicker getTimePicker;
 
     //优惠券listView布局
     LinearLayout youhuiListView;
@@ -239,32 +243,37 @@ public class SendStudyActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.rl_city:
                 //选择时间
-                final Calendar calendar =Calendar.getInstance();//获取当前时间
-                //弹出日期选择
-                new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, final int year, final int monthOfYear, final int dayOfMonth) {
+                if (getTimePicker==null){
+                    getTimePicker = new GetTimePicker(tvShowTime,v1111,this,this);
+                }
+                getTimePicker.showBottoPopupWindow();
 
-                        //弹出时间选择
-                        new TimePickerDialog(SendStudyActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                Calendar calendar1 = Calendar.getInstance();
-                                calendar1.set(year,monthOfYear,dayOfMonth,hourOfDay,minute);
-                                Timestamp timestamp = new Timestamp(calendar1.getTimeInMillis());
-//                                Date date =calendar1.getTime();
-//                                DateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd HH/mm/ss");
-//                                String timeStr = sdf.format(date);
-//                                Timestamp timestamp;
-//                                timestamp = Timestamp.valueOf(timeStr);
-                                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                tvShowTime.setText(format.format(timestamp));
-                            }
-                        },calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),true).show();
-                    }
-
-
-                },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
+//                final Calendar calendar =Calendar.getInstance();//获取当前时间
+//                //弹出日期选择
+//                new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+//                    @Override
+//                    public void onDateSet(DatePicker view, final int year, final int monthOfYear, final int dayOfMonth) {
+//
+//                        //弹出时间选择
+//                        new TimePickerDialog(SendStudyActivity.this, new TimePickerDialog.OnTimeSetListener() {
+//                            @Override
+//                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//                                Calendar calendar1 = Calendar.getInstance();
+//                                calendar1.set(year,monthOfYear,dayOfMonth,hourOfDay,minute);
+//                                Timestamp timestamp = new Timestamp(calendar1.getTimeInMillis());
+////                                Date date =calendar1.getTime();
+////                                DateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd HH/mm/ss");
+////                                String timeStr = sdf.format(date);
+////                                Timestamp timestamp;
+////                                timestamp = Timestamp.valueOf(timeStr);
+//                                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                                tvShowTime.setText(format.format(timestamp));
+//                            }
+//                        },calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),true).show();
+//                    }
+//
+//
+//                },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
 
                 break;
             case R.id.rl_map_all:

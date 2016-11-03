@@ -2,10 +2,16 @@ package com.example.administrator.helper;
 
 import android.app.ActivityManager;
 import android.app.Application;
+import android.app.Service;
 import android.content.Context;
+import android.os.Vibrator;
 import android.util.Log;
 
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.mapapi.SDKInitializer;
 import com.example.administrator.helper.entity.User;
+import com.example.administrator.helper.utils.LocationService;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
 
@@ -21,6 +27,7 @@ import c.b.BP;
  */
 public class MyApplication extends Application {
 
+
     // 上下文菜单
     private Context mContext;
 
@@ -28,6 +35,15 @@ public class MyApplication extends Application {
     private boolean isInit = false;
 
     private User user;
+    private String  city;
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
 
     public User getUser() {
         return user;
@@ -37,6 +53,8 @@ public class MyApplication extends Application {
         this.user = user;
     }
 
+    public LocationService locationService;
+    public Vibrator mVibrator;
 
     @Override
     public void onCreate() {
@@ -44,10 +62,18 @@ public class MyApplication extends Application {
         mContext = this;
         x.Ext.init(this);
         x.Ext.setDebug(false); //输出debug日志，开启会影响性能
+        //Bmob支付初始化
         BP.init(this, "381e8949cca2851afa738898139f924a");
 
         // 初始化环信SDK
         initEasemob();
+
+        /***
+         * 初始化定位sdk，建议在Application中创建
+         */
+        locationService = new LocationService(getApplicationContext());
+        mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
+        SDKInitializer.initialize(getApplicationContext());
     }
 
     private void initEasemob() {

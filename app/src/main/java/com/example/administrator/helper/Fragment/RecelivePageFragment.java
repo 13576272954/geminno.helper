@@ -1,57 +1,42 @@
 package com.example.administrator.helper.Fragment;
 
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
-
-//import com.baidu.mapapi.SDKInitializer;
-
-import com.example.administrator.helper.R;
-import com.example.administrator.helper.entity.Task;
-import com.example.administrator.helper.receive.DetilsActivity;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
 import android.Manifest;
-import android.content.Context;
-import android.content.DialogInterface;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Parcelable;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
-
+import android.util.SparseArray;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baidu.mapapi.SDKInitializer;
-import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BitmapDescriptor;
-import com.baidu.mapapi.map.BitmapDescriptorFactory;
-import com.baidu.mapapi.map.MapStatusUpdate;
-import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.Marker;
-import com.baidu.mapapi.map.MarkerOptions;
-import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.map.OverlayOptions;
-import com.baidu.mapapi.map.TextOptions;
-import com.baidu.mapapi.model.LatLng;
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.Poi;
+import com.example.administrator.helper.MyApplication;
+import com.example.administrator.helper.R;
+import com.example.administrator.helper.entity.User;
+import com.example.administrator.helper.receive.DetilsActivity;
+import com.example.administrator.helper.receive.TaskDetilsActivity;
+
+import com.example.administrator.helper.utils.ImageLoader;
+import com.example.administrator.helper.utils.UrlUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -59,98 +44,545 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 
-public class RecelivePageFragment extends Fragment {
-
-
-    @InjectView(R.id.ib_message)
-    ImageButton ibMessage;
-    @InjectView(R.id.ib_detils)
-    ImageButton ibDetils;
-    @InjectView(R.id.ib_myw)
-    ImageButton ibMyw;
-    @InjectView(R.id.ib_myd)
-    ImageButton ibMyd;
-    @InjectView(R.id.et_myw)
-    EditText etMyw;
-    @InjectView(R.id.et_myd)
-    EditText etMyd;
-    @InjectView(R.id.tv_mywz)
-    TextView tvMywz;
-    @InjectView(R.id.tv_mywd)
-    TextView tvMywd;
-    @InjectView(R.id.et_destination)
-    EditText etDestination;
-//    @InjectView(R.id.btn_navi)
-//    Button btnNavi;
-//    int user_id = 2;
-    //    @InjectView(R.id.relativeLayout)
-//    RelativeLayout relativeLayout;
-//    @InjectView(R.id.bmapsView)
-//    MapView bmapview;
-
-//    double j, w;
-//    @InjectView(R.id.button)
-//    Button button;
-    // 百度地图控件
-    private MapView mMapView = null;
-    // 百度地图对象
-    private BaiduMap bdMap;
-    //定位的实例
-    private LocationManager locationManager;
-    //3种位置提供器的哪一种
-    private String provider;
-    //立一个标签，防止重复定位当前地址
-    private boolean isFirstLocate = true;
-
-    Boolean flag1 = true, flag2 = true, flag3 = true, flag4 = true, flag5 = true, flag6 = true, flag11 = flag1, flag22 = flag2, flag33 = flag3, flag44 = flag4, flag55 = flag5;
-    ;
+//import com.baidu.mapapi.SDKInitializer;
+//import android.Manifest;
+//import android.content.Context;
+//import android.content.DialogInterface;
+//import android.content.Intent;
+//import android.content.pm.PackageManager;
+//import android.graphics.Color;
+//import android.location.Location;
+//import android.location.LocationListener;
+//import android.support.v4.app.ActivityCompat;
+//import android.support.v7.app.AlertDialog;
+//import android.support.v7.app.AppCompatActivity;
+//import android.util.Log;
+//
+//import android.widget.RelativeLayout;
+//import android.widget.Toast;
+//import com.baidu.mapapi.SDKInitializer;
+//import com.baidu.mapapi.map.BaiduMap;
+//import com.baidu.mapapi.map.BitmapDescriptor;
+//import com.baidu.mapapi.map.BitmapDescriptorFactory;
+//import com.baidu.mapapi.map.MapStatusUpdate;
+//import com.baidu.mapapi.map.MapStatusUpdateFactory;
+//import com.baidu.mapapi.map.MapView;
+//import com.baidu.mapapi.map.Marker;
+//import com.baidu.mapapi.map.MarkerOptions;
+//import com.baidu.mapapi.map.MyLocationData;
+//import com.baidu.mapapi.map.OverlayOptions;
+//import com.baidu.mapapi.map.TextOptions;
+//import com.baidu.mapapi.model.LatLng;
+//import java.util.ArrayList;
 
 
-    //加载的mark集合
-    private List<Task> infos;
-    private List<Task> infos1;
-    private List<Task> infos2;
-    private List<Task> infos3;
-    private List<Task> infos4;
-    private List<Task> infos5;
-    private List<Task> infos6;
+public class RecelivePageFragment extends Fragment  {
 
-    List<String> providerList;
+//    @InjectView(R.id.ib_detils)
+//    ImageButton ibDetils;
+//    @InjectView(R.id.abc)
+//    RadarView abc;
+//    @InjectView(R.id.radar)
+//    RadarViewGroup radar;
+//    @InjectView(R.id.vp)
+//    CustomViewPager vp;
+//    @InjectView(R.id.textView1)
+//    TextView textView1;
+//
+//
+//    private CustomViewPager viewPager;
+//    private RelativeLayout ryContainer;
+//    private RadarViewGroup radarViewGroup;
+//    List<User> list = new ArrayList<User>();
+//
+//    private int mPosition;
+//    ViewpagerAdapter mAdapter;
+//
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        locationService.stop();
+//    }
+//
+//    private FixedSpeedScroller scroller;
+//    private SparseArray<User> mDatas = new SparseArray<>();
+//    String url2;
+//    int tasktypeid = 0;
+//    Integer pageNo = null;
+//    Integer pageSize = null;
+//    String city;
+//    String taskDemand = null;
+    View view;
+//    ImageLoader myImageLoader;
+//    private final int SDK_PERMISSION_REQUEST = 127;
+//    private LocationService locationService;
+//    private TextView LocationResult;
+//    private Button startLocation;
+//    private String permissionInfo;
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.recelive_fragment, null);
+//        LocationResult = (TextView) view.findViewById(R.id.textView1);
+//        LocationResult.setMovementMethod(ScrollingMovementMethod.getInstance());
+//        startLocation = (Button) view.findViewById(R.id.addfence);
 
-//        SDKInitializer.initialize(getActivity().getApplicationContext());
-        View view = inflater.inflate(R.layout.recelive_fragment, null);
-
-        ButterKnife.inject(this, view);
+//        onStart();
+//        initView();
+//        initData();
+//        getPersimmions();
+//        mAdapter = new ViewpagerAdapter();
+//        viewPager.setAdapter(mAdapter);
+//        //设置缓存数为展示的数目
+//        viewPager.setOffscreenPageLimit(list.size());
+//        viewPager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.viewpager_margin));
+//        //设置切换动画
+//        viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+//        viewPager.addOnPageChangeListener(this);
+//        setViewPagerSpeed(250);
+//
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                radarViewGroup.setDatas(mDatas);
+//            }
+//        }, 1500);
+//
+//        radarViewGroup.setiRadarClickListener(this);
+//
+//        ButterKnife.inject(this, view);
+//        onStop();
         return view;
     }
 
-    @OnClick({R.id.ib_message, R.id.ib_detils, R.id.et_myw, R.id.et_myd})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.ib_message:
-                break;
-            case R.id.ib_detils:
-                Intent intent = new Intent(getActivity(), DetilsActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.et_myw:
-                break;
-            case R.id.et_myd:
-                break;
-        }
-    }
+//    @TargetApi(23)
+//    private void getPersimmions() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            ArrayList<String> permissions = new ArrayList<String>();
+//            /***
+//             * 定位权限为必须权限，用户如果禁止，则每次进入都会申请
+//             */
+//            // 定位精确位置
+//            if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+//            }
+//            if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+//            }
+//            /*
+//			 * 读写权限和电话状态权限非必要权限(建议授予)只会申请一次，用户同意或者禁止，只会弹一次
+//			 */
+//            // 读写权限
+//            if (addPermission(permissions, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+//                permissionInfo += "Manifest.permission.WRITE_EXTERNAL_STORAGE Deny \n";
+//            }
+//            // 读取电话状态权限
+//            if (addPermission(permissions, Manifest.permission.READ_PHONE_STATE)) {
+//                permissionInfo += "Manifest.permission.READ_PHONE_STATE Deny \n";
+//            }
+//
+//            if (permissions.size() > 0) {
+//                requestPermissions(permissions.toArray(new String[permissions.size()]), SDK_PERMISSION_REQUEST);
+//            }
+//        }
+//    }
+//
+//    @TargetApi(23)
+//    private boolean addPermission(ArrayList<String> permissionsList, String permission) {
+//        if (getActivity().checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) { // 如果应用没有获得对应权限,则添加到列表中,准备批量申请
+//            if (shouldShowRequestPermissionRationale(permission)) {
+//                return true;
+//            } else {
+//                permissionsList.add(permission);
+//                Log.i("RecelivePageFragment", "addPermission: " + permission);
+//                return false;
+//            }
+//
+//        } else {
+//            return true;
+//        }
+//    }
+//
+//    @TargetApi(23)
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+//        // TODO Auto-generated method stub
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//
+//    }
+//
+//    private void initData() {
+//        for (int i = 0; i < list.size(); i++) {
+//            final User user = new User();
+//            String url = UrlUtils.MYURL + "ReceiveServlet";//访问网络的url
+//            RequestParams requestParams = new RequestParams(url);
+//            requestParams.addQueryStringParameter("city", city + "");
+//            requestParams.addQueryStringParameter("tasktypeid", tasktypeid + "");
+//            requestParams.addQueryStringParameter("taskDemand", taskDemand + "");
+//            requestParams.addQueryStringParameter("pageNo", pageNo + "");
+//            requestParams.addQueryStringParameter("pageSize", pageSize + "");
+//            x.http().get(requestParams, new Callback.CacheCallback<String>() {
+//                @Override
+//                public boolean onCache(String result) {
+//                    return false;
+//                }
+//
+//                @Override
+//                public void onSuccess(String result) {
+//                    Gson gson = new Gson();
+//                    Type type = new TypeToken<List<User>>() {
+//                    }.getType();
+//                    List<User> newTasks = new ArrayList<User>();
+//                    newTasks = gson.fromJson(result, type);
+//                    list.clear();//清空原来的数据
+//                    list.addAll(newTasks);
+//                    viewPager.setAdapter(mAdapter);
+//                }
+//
+//                @Override
+//                public void onError(Throwable ex, boolean isOnCallback) {
+//
+//                }
+//
+//                @Override
+//                public void onCancelled(CancelledException cex) {
+//
+//                }
+//
+//                @Override
+//                public void onFinished() {
+//
+//                }
+//            });
+//            mDatas.put(i, user);
+//        }
+//    }
+//
+//    private void initView() {
+//        viewPager = (CustomViewPager) view.findViewById(R.id.vp);
+//        radarViewGroup = (RadarViewGroup) view.findViewById(R.id.radar);
+//        ryContainer = (RelativeLayout) view.findViewById(R.id.ry_container);
+//    }
+//
+//    /**
+//     * 设置ViewPager切换速度
+//     *
+//     * @param duration
+//     */
+//    private void setViewPagerSpeed(int duration) {
+//        try {
+//            Field field = ViewPager.class.getDeclaredField("mScroller");
+//            field.setAccessible(true);
+//            scroller = new FixedSpeedScroller(getActivity(), new AccelerateInterpolator());
+//            field.set(viewPager, scroller);
+//            scroller.setmDuration(duration);
+//        } catch (NoSuchFieldException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    @Override
+//    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//        mPosition = position;
+//    }
+//
+//    @Override
+//    public void onPageSelected(int position) {
+//        radarViewGroup.setCurrentShowItem(position);
+//        LogUtil.m("当前位置 " + mPosition);
+//        LogUtil.m("速度 " + viewPager.getSpeed());
+//        //当手指左滑速度大于2000时viewpager右滑（注意是item+2）
+//        if (viewPager.getSpeed() < -1800) {
+//
+//            viewPager.setCurrentItem(mPosition + 2);
+//            LogUtil.m("位置 " + mPosition);
+//            viewPager.setSpeed(0);
+//        } else if (viewPager.getSpeed() > 1800 && mPosition > 0) {
+//            //当手指右滑速度大于2000时viewpager左滑（注意item-1即可）
+//            viewPager.setCurrentItem(mPosition - 1);
+//            LogUtil.m("位置 " + mPosition);
+//            viewPager.setSpeed(0);
+//        }
+//    }
+//
+//    @Override
+//    public void onPageScrollStateChanged(int state) {
+//
+//    }
+//
+//    @Override
+//    public void onRadarItemClick(int position) {
+//        viewPager.setCurrentItem(position);
+//    }
+//
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//        ButterKnife.reset(this);
+//        locationService.stop();
+//    }
+//
+//    @OnClick(R.id.ib_detils)
+//    public void onClick() {
+//        Intent intent = new Intent(getActivity(), DetilsActivity.class);
+//
+//        startActivity(intent);
+//
+//    }
+//
+//
+//    class ViewpagerAdapter extends PagerAdapter {
+//        @Override
+//        public Object instantiateItem(ViewGroup container, final int position) {
+//            final User user = mDatas.get(position);
+//            //设置一大堆演示用的数据，麻里麻烦~~
+//            final View view = LayoutInflater.from(getActivity()).inflate(R.layout.viewpager_layout, null);
+//            ImageView image = (ImageView) view.findViewById(R.id.iv);
+//            url2 = user.getImage();
+//            myImageLoader = new ImageLoader(getActivity());
+//            myImageLoader.showImageByUrl(url2, image);
+//            ImageView ivSex = (ImageView) view.findViewById(R.id.iv_sex);
+//            TextView tvName = (TextView) view.findViewById(R.id.tv_name);
+//            TextView tvDistance = (TextView) view.findViewById(R.id.tv_distance);
+//            tvName.setText(user.getName());
+////            tvDistance.setText(user.getDistance() + "km");
+//
+//            view.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    return viewPager.dispatchTouchEvent(event);
+//                }
+//            });
+//
+//
+//            if (user.getSex() == null) {
+//                ivSex.setImageResource(R.drawable.girl);
+//            } else {
+//                ivSex.setImageResource(R.drawable.boy);
+//            }
+//            view.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(getActivity(), TaskDetilsActivity.class);
+//                    intent.putExtra("dd", (Parcelable) list.get(position));
+//                    startActivityForResult(intent, 111);
+//                    Toast.makeText(getActivity(), "这是 " + user.getName() + " >.<", Toast.LENGTH_SHORT).show();
+//
+//                }
+//            });
+//            container.addView(view);
+//            return view;
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return list.size();
+//        }
+//
+//        @Override
+//        public boolean isViewFromObject(View view, Object object) {
+//            return view == object;
+//        }
+//
+//        @Override
+//        public void destroyItem(ViewGroup container, int position, Object object) {
+//            View view = (View) object;
+//            container.removeView(view);
+//        }
+//
+//    }
+//
+//    /**
+//     * 显示请求字符串
+//     *
+//     * @param str
+//     */
+//    public void logMsg(String str) {
+//        try {
+//            if (LocationResult != null)
+//                LocationResult.setText(str);
+//            Log.i("RecelivePageFragment", "onReceiveLocation1111: " + str);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            Log.i("RecelivePageFragment", "onReceiveLocation2222: " + str);
+//        }
+//    }
+//
+//
+//    /***
+//     * Stop location service
+//     */
+//    @Override
+//    public void onStop() {
+//        // TODO Auto-generated method stub
+//        locationService.unregisterListener(mListener); //注销掉监听
+//        locationService.stop(); //停止定位服务
+//        Log.i("RecelivePageFragment", "onStop222: " + mListener);
+//        super.onStop();
+//    }
+//
+//    @Override
+//    public void onStart() {
+//        // TODO Auto-generated method stub
+//        super.onStart();
+//        // -----------location config ------------
+//        locationService = ((MyApplication) getActivity().getApplication()).locationService;
+//        //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
+//        locationService.registerListener(mListener);
+//        //注册监听
+////        int type = getActivity().getIntent().getIntExtra("from", 0);
+////        if (type == 0) {
+//        locationService.setLocationOption(locationService.getDefaultLocationClientOption());
+////        }
+//        Log.i("LocationService", "getDefaultLocationClientOption44444: " + mListener);
+////        else if (type == 1) {
+////            locationService.setLocationOption(locationService.getOption());
+////        }
+////        startLocation.setOnClickListener(new View.OnClickListener() {
+//
+////            @Override
+////            public void onClick(View v) {
+////                if (startLocation.getText().toString().equals(getString(R.string.startlocation))) {
+//
+//        locationService.start();// 定位SDK
+//
+//        Log.i("RecelivePageFragment", "onStart8888888888: ");
+//
+//        // start之后会默认发起一次定位请求，开发者无须判断isstart并主动调用request
+////                    startLocation.setText(getString(R.string.stoplocation));
+////                } else {
+//
+////                    startLocation.setText(getString(R.string.startlocation));
+////                }
+////            }
+////        });/
+//    }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.reset(this);
-    }
+//    private BDLocationListener mListener = new BDLocationListener() {
+//
+//        @Override
+//        public void onReceiveLocation(BDLocation location) {
+//            // TODO Auto-generated method stub
+//
+//            if (null != location && location.getLocType() != BDLocation.TypeServerError) {
+//                StringBuffer sb = new StringBuffer(256);
+//                sb.append("time : ");
+////                 * 时间也可以使用systemClock.elapsedRealtime()方法 获取的是自从开机以来，每次回调的时间；
+////                 * location.getTime() 是指服务端出本次结果的时间，如果位置不发生变化，则时间不变
+////                 */
+//                sb.append(location.getTime());
+//                sb.append("\nlocType : ");// 定位类型
+//                sb.append(location.getLocType());
+//                sb.append("\nlocType description : ");// *****对应的定位类型说明*****
+//                sb.append(location.getLocTypeDescription());
+//                sb.append("\nlatitude : ");// 纬度
+//                sb.append(location.getLatitude());
+//                sb.append("\nlontitude : ");// 经度
+//                sb.append(location.getLongitude());
+//                sb.append("\nradius : ");// 半径
+//                sb.append(location.getRadius());
+//                sb.append("\nCountryCode : ");// 国家码
+//                sb.append(location.getCountryCode());
+//                sb.append("\nCountry : ");// 国家名称
+//                sb.append(location.getCountry());
+//                sb.append("\ncitycode : ");// 城市编码
+//                Log.i("RecelivePageFragment", "onReceiveLocation55555: " + location.getCountry());
+//                sb.append(location.getCityCode());
+//                sb.append("\ncity : ");// 城市
+//                Log.i("RecelivePageFragment", "onReceiveLocation55555: " + location.getCityCode());
+//                sb.append(location.getCity());
+//                sb.append("\nDistrict : ");// 区
+//                sb.append(location.getDistrict());
+//                sb.append("\nStreet : ");// 街道
+//                sb.append(location.getStreet());
+//                sb.append("\naddr : ");// 地址信息
+//                sb.append(location.getAddrStr());
+//                sb.append("\nUserIndoorState: ");// *****返回用户室内外判断结果*****
+//                sb.append(location.getUserIndoorState());
+//                sb.append("\nDirection(not all devices have value): ");
+//                sb.append(location.getDirection());// 方向
+//                sb.append("\nlocationdescribe: ");
+//                sb.append(location.getLocationDescribe());// 位置语义化信息
+//                sb.append("\nPoi: ");// POI信息
+//
+//                if (location.getPoiList() != null && !location.getPoiList().isEmpty()) {
+//                    for (int i = 0; i < location.getPoiList().size(); i++) {
+//                        Poi poi = (Poi) location.getPoiList().get(i);
+//                        sb.append(poi.getName() + ";");
+//                    }
+//                }
+//                if (location.getLocType() == BDLocation.TypeGpsLocation) {// GPS定位结果
+//                    Log.i("RecelivePageFragment", "onReceiveLocation: " + location.getLocType());
+//                    sb.append("\nspeed : ");
+//                    sb.append(location.getSpeed());// 速度 单位：km/h
+//                    sb.append("\nsatellite : ");
+//                    sb.append(location.getSatelliteNumber());// 卫星数目
+//                    sb.append("\nheight : ");
+//                    sb.append(location.getAltitude());// 海拔高度 单位：米
+//                    sb.append("\ngps status : ");
+//                    sb.append(location.getGpsAccuracyStatus());// *****gps质量判断*****
+//                    sb.append("\ndescribe : ");
+//                    Log.i("RecelivePageFragment", "onReceiveLocation77777777: " + location.getLocType());
+//                    sb.append("gps定位成功");
+//                } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {// 网络定位结果
+////                     运营商信息
+//                    if (location.hasAltitude()) {// *****如果有海拔高度*****
+//                        sb.append("\nheight : ");
+//                        sb.append(location.getAltitude());// 单位：米
+//                    }
+//                    sb.append("\noperationers : ");// 运营商信息
+//                    sb.append(location.getOperators());
+//                    sb.append("\ndescribe : ");
+//                    Log.i("RecelivePageFragment", "onReceiveLocatio6666666666: " + location.getLocType());
+//                    sb.append("网络定位成功");
+//                } else if (location.getLocType() == BDLocation.TypeOffLineLocation) {// 离线定位结果
+//                    sb.append("\ndescribe : ");
+//                    sb.append("离线定位成功，离线定位结果也是有效的");
+//                } else if (location.getLocType() == BDLocation.TypeServerError) {
+//                    sb.append("\ndescribe : ");
+//                    sb.append("服务端网络定位失败，可以反馈IMEI号和大体定位时间到loc-bugs@baidu.com，会有人追查原因");
+//                } else if (location.getLocType() == BDLocation.TypeNetWorkException) {
+//                    sb.append("\ndescribe : ");
+//                    sb.append("网络不同导致定位失败，请检查网络是否通畅");
+//                } else if (location.getLocType() == BDLocation.TypeCriteriaException) {
+//                    sb.append("\ndescribe : ");
+//                    sb.append("无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机");
+//                }
+////                logMsg(sb.toString());
+//
+//            }
+//        }
+//
+//    };
+}
+
+
+//    @OnClick({ R.id.ib_detils})
+//    public void onClick(View view) {
+//        switch (view.getId()) {
+//            case R.id.ib_detils:
+//                Intent intent = new Intent(getActivity(), DetilsActivity.class);
+//                startActivity(intent);
+//                break;
+//        }
+//    }
+//
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//        ButterKnife.reset(this);
+//    }
+
 
 //    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //
@@ -213,10 +645,6 @@ public class RecelivePageFragment extends Fragment {
 //        ButterKnife.inject(this, view);
 //        return view;
 //    }
-
-
-
-
 
 
 //        private void navigateTo(Location location) {
@@ -450,7 +878,7 @@ public class RecelivePageFragment extends Fragment {
 //                    Bundle bundle = marker.getExtraInfo();
 //                    Task infoUtil = (Task) bundle.getSerializable("info");
 //
-                    //跳转到详情表
+//跳转到详情表
 //                    Intent intent = new Intent(getActivity(), DetilsActivity.class);
 //                    intent.putExtra("user_id", 2);
 //                    Bundle bundle2 = new Bundle();
@@ -584,4 +1012,4 @@ public class RecelivePageFragment extends Fragment {
 //        super.onDestroyView();
 //        ButterKnife.reset(this);
 //    }
-}
+//    }}

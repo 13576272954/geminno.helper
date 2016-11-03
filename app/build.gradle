@@ -4,6 +4,15 @@ android {
     compileSdkVersion 25
     buildToolsVersion "24.0.2"
 
+    signingConfigs{
+        config3 {
+            storeFile file("../signApk/Helper.jks")
+            storePassword '19951116'
+            keyAlias 'myHelper'
+            keyPassword '19951116'
+        }
+    }
+
     defaultConfig {
         applicationId "com.example.administrator.helper"
         minSdkVersion 15
@@ -19,23 +28,24 @@ android {
         }
     }
 
-
     buildTypes {
+        debug {
+            signingConfig signingConfigs.config3
+        }
+        release {
+            signingConfig signingConfigs.config3
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    /*buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-    }
+    }*/
 
-    signingConfigs{
-        debug {
-            storeFile file("../signApk/Helper.jks")
-            storePassword '19951116'
-            keyAlias 'myHelper'
-            keyPassword '19951116'
-        }
-    }
 }
 
 dependencies {
@@ -45,9 +55,11 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:design:25.+'
     compile 'com.jakewharton:butterknife:5.1.1'
     compile 'org.xutils:xutils:3.3.36'
     compile 'com.google.code.gson:gson:2.7'
+    compile 'com.github.florent37:viewanimator:1.0.3'
     compile files('libs/BmobSMS_V1.0.1_20150710.jar')
     compile files('libs/BmobPay_v3.0.3_160621.jar')
     compile files('libs/BmobSDK_V3.3.5_0408.jar')
@@ -56,4 +68,6 @@ dependencies {
     compile 'io.taig.android:parcelable_2.11:3.0.0-BETA1'
     compile files('libs/hyphenatechat_3.2.0.jar')
     compile 'com.android.support:design:25.0.0'
+    compile files('libs/httpmime-4.1.2.jar')
+    compile files('libs/baidumapapi_map_v4_1_1.jar')
 }
