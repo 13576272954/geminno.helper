@@ -8,7 +8,7 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="52dp"
-    android:background="#98F898">
+    android:background="#02bb9d">
 
 <TextView
     android:layout_width="60dp"
@@ -31,7 +31,7 @@
         android:textSize="20dp"
         android:layout_toRightOf="@+id/tv_quxiao"
         android:layout_toEndOf="@+id/tv_quxiao"
-        android:layout_marginLeft="70dp"/>
+        android:layout_marginLeft="80dp"/>
 
 <TextView
     android:layout_width="60dp"
@@ -61,34 +61,37 @@
        <EditText
            android:id="@+id/edt_nr"
            android:layout_width="match_parent"
-           android:layout_height="wrap_content"
+           android:layout_height="match_parent"
            android:background="@null"
+           android:gravity="top"
            android:hint="发表内容..."/>
    </RelativeLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"></View>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="#FFFFFF">
-
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:id="@+id/im_tuku"
-            android:src="@drawable/tuku"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-            <ImageView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/im_tupian"/>
+                android:layout_height="80dp"
+                android:background="#FFFFFF">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/im_tupian1"
+                    android:src="@drawable/add_photo"
+                    android:layout_marginRight="284dp"
+                    android:layout_marginEnd="284dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
 
-        </RelativeLayout>
+        <com.example.administrator.helper.utils.MyGridView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/grideview_release"
+            android:numColumns="3">
+        </com.example.administrator.helper.utils.MyGridView>
 
         <View
             android:layout_width="match_parent"

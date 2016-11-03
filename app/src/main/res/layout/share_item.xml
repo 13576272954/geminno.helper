@@ -51,56 +51,25 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp">
+            android:layout_height="60dp">
             
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent" 
                 android:id="@+id/tv_neirong"
                 android:text="jjdfjhfjnvnxzkjhcjzn
                 jfhsdjknklmc.,mc.,mckm,.m,.scmklsmcc,mv,nsmvlkdvkuhxbcmxbck"/>
-            
         </RelativeLayout>
-        <LinearLayout
-            android:orientation="horizontal"
+        <com.example.administrator.helper.utils.MyGridView
             android:layout_width="match_parent"
-            android:layout_height="100dp">
-            <ImageView
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/touxaing"/>
-            <ImageView
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/touxaing"/>
-            <ImageView
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/touxaing"/>
+            android:layout_height="wrap_content"
+            android:id="@+id/grideview_share"
+            android:numColumns="3">
+        </com.example.administrator.helper.utils.MyGridView>
 
-
-        </LinearLayout>
-        
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp">
-            <!--
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginRight="44dp"
-                android:layout_marginEnd="44dp"
-                android:src="@drawable/landian"
-                android:id="@+id/im_zan"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/im_pin"
-                android:layout_toStartOf="@+id/im_pin"
-               />
-               -->
+            android:layout_height="40dp">
             <RadioButton
                 android:layout_width="wrap_content"
                 android:button="@null"
@@ -114,7 +83,7 @@
                 android:layout_toLeftOf="@+id/im_pin"
                 android:layout_toStartOf="@+id/im_pin"
                 android:checked="false"
-              />
+                />
 
 
             <TextView
@@ -139,13 +108,15 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
 
+            <TextView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_address"
+                android:layout_centerVertical="true"
+               />
+
         </RelativeLayout>
 
-        <com.example.administrator.helper.View.NoScrollListview
-            android:id="@+id/list_comment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </com.example.administrator.helper.View.NoScrollListview>
     </LinearLayout>
 
 

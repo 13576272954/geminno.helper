@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -20,7 +21,9 @@ import com.example.administrator.helper.MyApplication;
 
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.entity.Share;
-import com.example.administrator.helper.utils.UrlUtils;
+import com.example.administrator.helper.utils.CommonAdapter;
+import com.example.administrator.helper.utils.MyGridView;
+import com.example.administrator.helper.utils.ViewHolder;
 import com.google.gson.Gson;
 import com.google.gson.internal.Streams;
 
@@ -32,8 +35,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ReleaseActivity extends AppCompatActivity {
@@ -99,7 +102,6 @@ public class ReleaseActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(String result) {
                         Log.i("ReleaseActivity", "onSuccess: "+result);
-                        Toast.makeText(ReleaseActivity.this,"发布成功",Toast.LENGTH_SHORT);
                         finish();
                     }
 
