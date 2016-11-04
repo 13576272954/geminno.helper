@@ -1,27 +1,19 @@
-package com.example.administrator.helper.Fragment;
+package com.example.administrator.helper.share;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.administrator.helper.BaseFragment;
 import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.entity.ClickLike;
 import com.example.administrator.helper.entity.ShareEntity;
-import com.example.administrator.helper.share.DetailsActivity;
-import com.example.administrator.helper.share.ReleaseActivity;
-import com.example.administrator.helper.share.ShowImageActivity;
-import com.example.administrator.helper.share.SpaceActivity;
 import com.example.administrator.helper.utils.CommonAdapter;
 import com.example.administrator.helper.utils.MyGridView;
 import com.example.administrator.helper.utils.RefreshListView;
@@ -38,103 +30,75 @@ import org.xutils.x;
 import java.lang.reflect.Type;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import butterknife.ButterKnife;
+public class SpaceActivity extends AppCompatActivity {
+    ImageView imfh;
+    TextView tvmin;
+    RefreshListView respace;
+    ShareEntity shareEntity1;
 
-
-/**
- * Created by bin on 2016/9/19.
- */
-public class SharePageFragment extends BaseFragment {
-    ImageView imtianjia;
-    RefreshListView lvshare;
-    int orderFlag = 0;
-    int pageNo = 1;
-    int pageSize = 5;
-    List<ShareEntity> shareEntities = new ArrayList<>();
-    SshaeAdapter shareAdapter;
     int shareId;
     Timestamp sentTime;
     ClickLike clickLike;
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_share_page, null);
-        imtianjia = (ImageView) v.findViewById(R.id.im_tianjia);
-        lvshare = (RefreshListView) v.findViewById(R.id.view);
-        ButterKnife.inject(this, v);
-        return v;
 
+    int orderFlag = 0;
+    int pageNo = 1;
+    int pageSize = 5;
+    List<ShareEntity> shareEntitiess = new ArrayList<>();
+    SpaceAdapter spaceAdapter;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_space);
+        //获得跳转数据
+        Intent intent=getIntent();
+        Gson gson=new Gson();
+        shareEntity1=gson.fromJson(intent.getStringExtra("shareEntity"),ShareEntity.class);
+        //控件
+        imfh= (ImageView) findViewById(R.id.im_fanhi1);
+        tvmin= (TextView) findViewById(R.id.min);
+        respace= (RefreshListView) findViewById(R.id.view1);
+
+        initData();
+        initEven();
     }
-
-    @Override
-    public void initView() {
-
-    }
-
-    @Override
-    public void initEvent() {
-        imtianjia.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), ReleaseActivity.class);
-                startActivity(intent);
-            }
-        });
-        lvshare.setOnRefreshUploadChangeListener(new RefreshListView.OnRefreshUploadChangeListener() {
-            @Override
-            public void onRefresh() {
-               pageNo = 1;
-               shareEntities.clear();
-               getData();
-
-            }
-
-            @Override
-            public void onPull() {
-                pageNo++;
-           getData();
-            }
-        });
-    }
-
-    @Override
-    public void initData() {
+    public void initData(){
         getData();
     }
+    public void initEven(){
 
-    public void getData() {
+    }
+    //获取网络数据
+    public void getData(){
         //界面初始化数据：listview显示数据
         //xutils获取网络数据
-        String url = UrlUtils.MYURL+"QueryDynamicServlet";
+        String url = UrlUtils.MYURL+"QuerySpaceServlet";
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("orderFlag", orderFlag + "");//排序标记
         requestParams.addQueryStringParameter("pageNo", pageNo + "");
         requestParams.addQueryStringParameter("pageSize", pageSize + "");
-        requestParams.addQueryStringParameter("thisuser",((MyApplication)getActivity().getApplication()).getUser().getId()+"");
+        MyApplication myApplication=new MyApplication();
+        requestParams.addQueryStringParameter("thisuser",myApplication.getUser().getId()+"");
+        //当前头像用户的id
+        int touuserId=shareEntity1.getDynamic().getUserId();
+        Log.i("SpaceActivity", "getData: 7777777----"+touuserId);
+        requestParams.addQueryStringParameter("touuserId",touuserId+"");
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.i("------->", "onSuccess: result" + result);
-                //gson解析list<Dynamic>
                 Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
                 Type type = new TypeToken<List<ShareEntity>>(){}.getType();
-               // shareEntities=gson.fromJson(result,type);
                 List<ShareEntity> newshareEntities=gson.fromJson(result,type);
                 //shareEntities.clear();
-                shareEntities.addAll(newshareEntities);
-                Log.i("SharePageFragment", "onSuccess: shareEntities" + "--" + shareEntities);
-                if (shareAdapter == null) {
-                    shareAdapter = new SshaeAdapter(getActivity(), shareEntities, R.layout.share_item);
-                    lvshare.setAdapter(shareAdapter);
-                } else {
-                    shareAdapter.notifyDataSetChanged();
+                shareEntitiess.addAll(newshareEntities);
+                if (spaceAdapter==null){
+                    spaceAdapter=new SpaceAdapter(SpaceActivity.this,shareEntitiess, R.layout.share_item);
+                    respace.setAdapter(spaceAdapter);
+                }else {
+                    spaceAdapter.notifyDataSetChanged();
                 }
-                lvshare.completeRefresh();
-                lvshare.completeLoad();
+
             }
 
             @Override
@@ -152,27 +116,18 @@ public class SharePageFragment extends BaseFragment {
 
             }
         });
+
     }
+    class SpaceAdapter extends CommonAdapter<ShareEntity> {
 
-    class SshaeAdapter extends CommonAdapter<ShareEntity> {
-
-        public Map<Integer, Integer> getNumbers() {
-            return numbers;
-        }
-
-        //每个位置的显示数量:key:position,value:分享表中的数量
-        Map<Integer,Integer> numbers=new HashMap<>();
-
-        public SshaeAdapter(Context context, List<ShareEntity> lists, int layoutId) {
+        public SpaceAdapter(Context context, List<ShareEntity> lists, int layoutId) {
             super(context, lists, layoutId);
-
         }
 
         @Override
-        public void convert(final ViewHolder viewHolder, final ShareEntity shareEntity, final int position) {
-            //遍历数组把所有地址加入集合中
+        public void convert(ViewHolder viewHolder, final ShareEntity shareEntity, final int position) {
             final List<String> images=new ArrayList<>();
-           String[] pictures= shareEntity.getDynamic().getPicture().split(",");
+            String[] pictures= shareEntity.getDynamic().getPicture().split(",");
             Log.i("SshaeAdapter", "convert111: ----"+shareEntity.getDynamic().getPicture().split(",").toString());
             //遍历数组加到集合中
             for (int i=0;i<pictures.length;i++){
@@ -190,56 +145,17 @@ public class SharePageFragment extends BaseFragment {
             tvnr.setText(shareEntity.getDynamic().getShare()+        +shareEntity.getDynamic().getId());
             final TextView tvcount = viewHolder.getViewById(R.id.tv_count);
             tvcount.setText(shareEntity.getDynamic().getCount()+ "");
-            //内容布局点击事件跳转到详情界面
-            RelativeLayout relxq= viewHolder.getViewById(R.id.rel_neirong);
-            relxq.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Gson gson =new Gson();
-                    String shareEntityjson=gson.toJson(shareEntity);
-                    String imagejson=gson.toJson(images);
-                    Intent intent=new Intent(getActivity(),DetailsActivity.class);
-                    intent.putExtra("shareEntity",shareEntityjson ) ;
-                    intent.putExtra("images",imagejson);
-                    startActivity(intent);
-                }
-            });
-            //头像
             ImageView imtouxian=viewHolder.getViewById(R.id.im_touxiang);
             x.image().bind(imtouxian, UrlUtils.MYURL + "/" +shareEntity.getDynamic().getUser().getImage() );
-            //头像点击事件,跳转到空间详情界面
-            imtouxian.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Gson gson =new Gson();
-                    String shareEntityjson=gson.toJson(shareEntity);
-                    Intent intent1=new Intent(getActivity(), SpaceActivity.class);
-                    intent1.putExtra("shareEntity",shareEntityjson );
-                    startActivity(intent1);
-                }
-            });
-
-
             //显示图片
             final MyGridView gridduotu=viewHolder.getViewById(R.id.grideview_share);
             gridduotu.setTag(position);
-            gridduotu.setAdapter(new CommonAdapter<String>(getActivity(),images, R.layout.gridview_item) {
-               @Override
-               public void convert(ViewHolder viewHolder, String s, final int position) {
-                   Log.i("SshaeAdapter", "convert: "+images.get(position)+"------"+position);
-              ImageView imxiance=viewHolder.getViewById(R.id.image);
-              x.image().bind(imxiance, UrlUtils.MYURL+s);
-              Log.i("SshaeAdapter", "convert: 333333"+ UrlUtils.MYURL+s);
-                   //图片点击事件
-                   imxiance.setOnClickListener(new View.OnClickListener() {
-                       @Override
-                       public void onClick(View view) {
-                          Intent intent=new Intent(getActivity(), ShowImageActivity.class);
-                           intent.putExtra("image",images.get(position));
-                           Log.i("SshaeAdapter", "66666: "+images.get(position));
-                           startActivity(intent);
-                       }
-                   });
+            gridduotu.setAdapter(new CommonAdapter<String>(SpaceActivity.this,images, R.layout.gridview_item) {
+                @Override
+                public void convert(ViewHolder viewHolder, String s, final int position) {
+                    Log.i("SshaeAdapter", "convert: "+images.get(position)+"------"+position);
+                    ImageView imxiance=viewHolder.getViewById(R.id.image);
+                    x.image().bind(imxiance, UrlUtils.MYURL+s);
                 }
             });
             final RadioButton imz = viewHolder.getViewById(R.id.im_zan);
@@ -254,8 +170,8 @@ public class SharePageFragment extends BaseFragment {
                         Log.i("SshaeAdapter", "onClick:isCheck "+position);
                         imz.setChecked(false);
                         shareEntity.setCheck(false);
-                        shareId=shareEntities.get(position).getDynamic().getId();
-                        sentTime=shareEntities.get(position).getDynamic().getSentTime();
+                        shareId=shareEntity.getDynamic().getId();
+                        sentTime=shareEntity.getDynamic().getSentTime();
                         count--;
                         shareEntity.getDynamic().setCount(count);;
                         tvcount.setText(count +"");
@@ -264,8 +180,8 @@ public class SharePageFragment extends BaseFragment {
                         Log.i("SshaeAdapter", "onClick: !isCheck"+position);
                         imz.setChecked(true);
                         shareEntity.setCheck(true);
-                        shareId=shareEntities.get(position).getDynamic().getId();
-                        sentTime=shareEntities.get(position).getDynamic().getSentTime();
+                        shareId=shareEntity.getDynamic().getId();
+                        sentTime=shareEntity.getDynamic().getSentTime();
                         count++;
                         shareEntity.getDynamic().setCount(count);
                         tvcount.setText(count +"");
@@ -274,14 +190,14 @@ public class SharePageFragment extends BaseFragment {
 
                 }
             });
-
         }
     }
-   //点赞增加插入数据库
+    //点赞增加插入数据库
     public void insertThumb() {
         String url = UrlUtils.MYURL+"InsertThumbServlet";
         RequestParams requestParams1 = new RequestParams(url);
-        clickLike=new ClickLike(((MyApplication)getActivity().getApplication()).getUser().getId(),shareId,sentTime);
+        MyApplication myApplication=new MyApplication();
+        clickLike=new ClickLike(myApplication.getUser().getId(),shareId,sentTime);
         Gson gson = new Gson();
         String clickLikeJson = gson.toJson(clickLike);
         requestParams1.addBodyParameter("clickLikeJson", clickLikeJson);
@@ -311,7 +227,8 @@ public class SharePageFragment extends BaseFragment {
     public void deleteThumb(){
         String url= UrlUtils.MYURL+"DeleteThumbServlet";
         RequestParams requestParams2 = new RequestParams(url);
-        clickLike=new ClickLike(((MyApplication)getActivity().getApplication()).getUser().getId(),shareId,sentTime);
+        MyApplication myApplication=new MyApplication();
+        clickLike=new ClickLike(myApplication.getUser().getId(),shareId,sentTime);
         Gson gson = new Gson();
         String clickLikeJson = gson.toJson(clickLike);
         requestParams2.addBodyParameter("clickLikeJson", clickLikeJson);
@@ -337,6 +254,5 @@ public class SharePageFragment extends BaseFragment {
             }
         });
     }
-
 
 }
