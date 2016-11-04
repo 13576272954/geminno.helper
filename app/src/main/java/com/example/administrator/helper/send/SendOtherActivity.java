@@ -1,25 +1,24 @@
 package com.example.administrator.helper.send;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.administrator.helper.MyApplication;
@@ -46,10 +45,7 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -88,6 +84,12 @@ public class SendOtherActivity extends AppCompatActivity {
     TextView tvTixingOther;
     @InjectView(R.id.v1111)
     View v1111;
+    @InjectView(R.id.but_jian)
+    Button butJian;
+    @InjectView(R.id.but_jia)
+    Button butJia;
+    @InjectView(R.id.tv_quxiao)
+    TextView tvQuXiao;
 
     GetTimePicker getTimePicker;
     //地址选择请求码
@@ -109,6 +111,7 @@ public class SendOtherActivity extends AppCompatActivity {
     User user = null;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +125,8 @@ public class SendOtherActivity extends AppCompatActivity {
         //解析优惠券需要用到的listView的布局和控件
         youhuiListView = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.listview_youhuiquan, null);
         youhuiList = (ListView) youhuiListView.findViewById(R.id.list_youhuiquan);
+
+        etMoneyOther.addTextChangedListener(changeMoney);
     }
 
     //请求返回界面回调
@@ -140,41 +145,15 @@ public class SendOtherActivity extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.rl_city_other, R.id.rl_map_all_other1, R.id.rl_map_all_other2, R.id.rl_buy_other, R.id.rl_youhui_other, R.id.but_send_other})
+    @OnClick({R.id.rl_city_other, R.id.rl_map_all_other1, R.id.rl_map_all_other2, R.id.rl_buy_other,R.id.tv_quxiao, R.id.rl_youhui_other, R.id.but_send_other,R.id.but_jian, R.id.but_jia})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rl_city_other:
                 //选择时间
-                if (getTimePicker==null){
-                    getTimePicker = new GetTimePicker(tvShowTimeOther,v1111,this,this);
+                if (getTimePicker == null) {
+                    getTimePicker = new GetTimePicker(tvShowTimeOther, v1111, this, this);
                 }
                 getTimePicker.showBottoPopupWindow();
-//                final Calendar calendar = Calendar.getInstance();//获取当前时间
-//                //弹出日期选择
-//                new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-//                    @Override
-//                    public void onDateSet(DatePicker view, final int year, final int monthOfYear, final int dayOfMonth) {
-//
-//                        //弹出时间选择
-//                        new TimePickerDialog(SendOtherActivity.this, new TimePickerDialog.OnTimeSetListener() {
-//                            @Override
-//                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//                                Calendar calendar1 = Calendar.getInstance();
-//                                calendar1.set(year, monthOfYear, dayOfMonth, hourOfDay, minute);
-//                                Timestamp timestamp = new Timestamp(calendar1.getTimeInMillis());
-////                                Date date =calendar1.getTime();
-////                                DateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd HH/mm/ss");
-////                                String timeStr = sdf.format(date);
-////                                Timestamp timestamp;
-////                                timestamp = Timestamp.valueOf(timeStr);
-//                                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//                                tvShowTimeOther.setText(format.format(timestamp));
-//                            }
-//                        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
-//                    }
-//
-//
-//                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
 
                 break;
             case R.id.rl_map_all_other1:
@@ -222,6 +201,19 @@ public class SendOtherActivity extends AppCompatActivity {
                 } else {
                     dialog.show();
                 }
+                break;
+            case R.id.but_jian:
+                if (Integer.parseInt(etMoneyOther.getText().toString())<=8){
+                    return;
+                }else if (Integer.parseInt(etMoneyOther.getText().toString())>8){
+                    etMoneyOther.setText(Integer.parseInt(etMoneyOther.getText().toString())-1+"");
+                }
+                break;
+            case R.id.but_jia:
+                etMoneyOther.setText(Integer.parseInt(etMoneyOther.getText().toString())+1+"");
+                break;
+            case R.id.tv_quxiao:
+                finish();
                 break;
             case R.id.but_send_other:
                 //获取用户填写内容
@@ -420,6 +412,36 @@ public class SendOtherActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 赏金输入框内容监听
+     */
+    TextWatcher changeMoney = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            if (editable!=null) {
+                if (Integer.parseInt(editable.toString()) <= 8) {
+                    Drawable drawable = getResources().getDrawable(R.drawable.shape_left_no);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    butJian.setBackgroundDrawable(drawable);
+                } else if (Integer.parseInt(editable.toString()) > 8) {
+                    Drawable drawable = getResources().getDrawable(R.drawable.shape_blue);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    butJian.setBackgroundDrawable(drawable);
+                }
+            }
+        }
+    };
+
     public String toJson(Object object) {
         GsonBuilder gb = new GsonBuilder();
         gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -428,4 +450,6 @@ public class SendOtherActivity extends AppCompatActivity {
         String json = gson.toJson(object);
         return json;
     }
+
+
 }

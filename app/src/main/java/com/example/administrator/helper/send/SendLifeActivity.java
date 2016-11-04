@@ -3,9 +3,12 @@ package com.example.administrator.helper.send;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +30,6 @@ import com.example.administrator.helper.entity.Task;
 import com.example.administrator.helper.entity.TaskType;
 import com.example.administrator.helper.entity.User;
 import com.example.administrator.helper.entity.bean.InsertOrderBean;
-import com.example.administrator.helper.send.TimePicker.GetTimePicker;
 import com.example.administrator.helper.send.map.getMap;
 import com.example.administrator.helper.utils.CommonAdapter;
 import com.example.administrator.helper.utils.TimestampTypeAdapter;
@@ -79,8 +81,12 @@ public class SendLifeActivity extends AppCompatActivity {
     TextView tvTixingLife;
     @InjectView(R.id.v1111)
     View v1111;
-
-
+    @InjectView(R.id.but_jian)
+    Button butJian;
+    @InjectView(R.id.but_jia)
+    Button butJia;
+    @InjectView(R.id.tv_quxiao)
+    TextView tvQuXiao;;
 
     //地址选择请求码
     public static final int MAP_REQUEST1 = 11;
@@ -102,6 +108,7 @@ public class SendLifeActivity extends AppCompatActivity {
     User user = null;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +124,8 @@ public class SendLifeActivity extends AppCompatActivity {
         //解析优惠券需要用到的listView的布局和控件
         youhuiListView = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.listview_youhuiquan, null);
         youhuiList = (ListView) youhuiListView.findViewById(R.id.list_youhuiquan);
+
+        etMoneyLife.addTextChangedListener(changeMoney);
     }
 
     //请求返回界面回调
@@ -135,7 +144,7 @@ public class SendLifeActivity extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.rl_map_all_life1, R.id.rl_map_all_life, R.id.rl_buy_life, R.id.rl_youhui_life, R.id.but_send_study_life})
+    @OnClick({R.id.rl_map_all_life1, R.id.rl_map_all_life, R.id.rl_buy_life, R.id.rl_youhui_life,R.id.tv_quxiao, R.id.but_send_study_life,R.id.but_jian, R.id.but_jia})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rl_map_all_life1:
@@ -184,6 +193,19 @@ public class SendLifeActivity extends AppCompatActivity {
                 } else {
                     dialog.show();
                 }
+                break;
+            case R.id.but_jian:
+                if (Integer.parseInt(etMoneyLife.getText().toString())<=8){
+                    return;
+                }else if (Integer.parseInt(etMoneyLife.getText().toString())>8){
+                    etMoneyLife.setText(Integer.parseInt(etMoneyLife.getText().toString())-1+"");
+                }
+                break;
+            case R.id.but_jia:
+                etMoneyLife.setText(Integer.parseInt(etMoneyLife.getText().toString())+1+"");
+                break;
+            case R.id.tv_quxiao:
+                finish();
                 break;
             case R.id.but_send_study_life:
                 //获取用户输入信息
@@ -373,6 +395,36 @@ public class SendLifeActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 赏金输入框内容监听
+     */
+    TextWatcher changeMoney = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            if (editable!=null) {
+                if (Integer.parseInt(editable.toString()) <= 8) {
+                    Drawable drawable = getResources().getDrawable(R.drawable.shape_left_no);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    butJian.setBackgroundDrawable(drawable);
+                } else if (Integer.parseInt(editable.toString()) > 8) {
+                    Drawable drawable = getResources().getDrawable(R.drawable.shape_blue);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    butJian.setBackgroundDrawable(drawable);
+                }
+            }
+        }
+    };
+
     public String toJson(Object object) {
         GsonBuilder gb = new GsonBuilder();
         gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -381,4 +433,6 @@ public class SendLifeActivity extends AppCompatActivity {
         String json = gson.toJson(object);
         return json;
     }
+
+
 }

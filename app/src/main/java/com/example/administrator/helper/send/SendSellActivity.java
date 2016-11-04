@@ -3,9 +3,12 @@ package com.example.administrator.helper.send;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,6 +75,12 @@ public class SendSellActivity extends AppCompatActivity {
     TextView tvTixingSell;
     @InjectView(R.id.v1111)
     View v1111;
+    @InjectView(R.id.but_jian)
+    Button butJian;
+    @InjectView(R.id.but_jia)
+    Button butJia;
+    @InjectView(R.id.tv_quxiao)
+    TextView tvQuXiao;
 
     GetTimePicker getTimePicker;
 
@@ -92,6 +101,7 @@ public class SendSellActivity extends AppCompatActivity {
     User user = null;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +116,7 @@ public class SendSellActivity extends AppCompatActivity {
         youhuiListView = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.listview_youhuiquan, null);
         youhuiList = (ListView) youhuiListView.findViewById(R.id.list_youhuiquan);
 
+        etMoneySell.addTextChangedListener(changeMoney);
     }
 
     //请求返回界面回调
@@ -115,7 +126,7 @@ public class SendSellActivity extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.rl_city_sell, R.id.rl_buy_sell, R.id.rl_youhui_sell, R.id.but_send_study_sell})
+    @OnClick({R.id.rl_city_sell, R.id.rl_buy_sell, R.id.rl_youhui_sell, R.id.but_send_study_sell,R.id.tv_quxiao,R.id.but_jian, R.id.but_jia})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rl_city_sell:
@@ -124,33 +135,6 @@ public class SendSellActivity extends AppCompatActivity {
                     getTimePicker = new GetTimePicker(tvShowTimeSell, v1111, this, this);
                 }
                 getTimePicker.showBottoPopupWindow();
-
-//                final Calendar calendar =Calendar.getInstance();//获取当前时间
-//                //弹出日期选择
-//                new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-//                    @Override
-//                    public void onDateSet(DatePicker view, final int year, final int monthOfYear, final int dayOfMonth) {
-//
-//                        //弹出时间选择
-//                        new TimePickerDialog(SendSellActivity.this, new TimePickerDialog.OnTimeSetListener() {
-//                            @Override
-//                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//                                Calendar calendar1 = Calendar.getInstance();
-//                                calendar1.set(year,monthOfYear,dayOfMonth,hourOfDay,minute);
-//                                Timestamp timestamp = new Timestamp(calendar1.getTimeInMillis());
-////                                Date date =calendar1.getTime();
-////                                DateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd HH/mm/ss");
-////                                String timeStr = sdf.format(date);
-////                                Timestamp timestamp;
-////                                timestamp = Timestamp.valueOf(timeStr);
-//                                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//                                tvShowTimeSell.setText(format.format(timestamp));
-//                            }
-//                        },calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),true).show();
-//                    }
-//
-//
-//                },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
                 break;
             case R.id.rl_buy_sell:
                 //支付方式
@@ -188,6 +172,19 @@ public class SendSellActivity extends AppCompatActivity {
                 } else {
                     dialog.show();
                 }
+                break;
+            case R.id.but_jian:
+                if (Integer.parseInt(etMoneySell.getText().toString())<=8){
+                    return;
+                }else if (Integer.parseInt(etMoneySell.getText().toString())>8){
+                    etMoneySell.setText(Integer.parseInt(etMoneySell.getText().toString())-1+"");
+                }
+                break;
+            case R.id.but_jia:
+                etMoneySell.setText(Integer.parseInt(etMoneySell.getText().toString())+1+"");
+                break;
+            case R.id.tv_quxiao:
+                finish();
                 break;
             case R.id.but_send_study_sell:
                 String xuqiu = null;//需求
@@ -369,6 +366,36 @@ public class SendSellActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 赏金输入框内容监听
+     */
+    TextWatcher changeMoney = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            if (editable!=null) {
+                if (Integer.parseInt(editable.toString()) <= 8) {
+                    Drawable drawable = getResources().getDrawable(R.drawable.shape_left_no);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    butJian.setBackgroundDrawable(drawable);
+                } else if (Integer.parseInt(editable.toString()) > 8) {
+                    Drawable drawable = getResources().getDrawable(R.drawable.shape_blue);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    butJian.setBackgroundDrawable(drawable);
+                }
+            }
+        }
+    };
+
     public String toJson(Object object) {
         GsonBuilder gb = new GsonBuilder();
         gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -377,4 +404,6 @@ public class SendSellActivity extends AppCompatActivity {
         String json = gson.toJson(object);
         return json;
     }
+
+
 }

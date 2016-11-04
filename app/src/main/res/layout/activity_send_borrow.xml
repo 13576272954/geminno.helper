@@ -7,11 +7,35 @@
     android:orientation="vertical"
     tools:context=".send.SendBorrowActivity">
 
-    <android.support.v7.widget.Toolbar
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="52dp"
+        android:background="#02bb9d">
 
-    </android.support.v7.widget.Toolbar>
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:id="@+id/tv_quxiao"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:text="取消"
+            android:textColor="#FFFFFF"
+            android:textSize="15dp"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="发布任务"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:layout_toRightOf="@+id/tv_quxiao"
+            android:layout_toEndOf="@+id/tv_quxiao"
+            android:layout_marginLeft="80dp"/>
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -242,12 +266,13 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
-                android:background="@drawable/shape_blue"
+                android:background="@drawable/shape_left_no"
                 android:text="—"
                 android:textSize="30dp"
                 android:gravity="center"
                 />
             <EditText
+                android:text="8"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="3"
@@ -286,7 +311,7 @@
             android:layout_height="wrap_content"
             android:text="立即发单"
             android:id="@+id/but_send_study_borrow"
-            android:background="@drawable/shape_red"
+            android:background="@drawable/shape_yellow"
             android:layout_below="@+id/ll_money"
             android:layout_marginTop="15dp"
             android:layout_centerHorizontal="true" />
