@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.administrator.helper.BaseFragment;
@@ -19,7 +20,10 @@ import com.example.administrator.helper.View.NoScrollListview;
 import com.example.administrator.helper.entity.ClickLike;
 import com.example.administrator.helper.entity.Comment;
 import com.example.administrator.helper.entity.ShareEntity;
+import com.example.administrator.helper.share.DetailsActivity;
 import com.example.administrator.helper.share.ReleaseActivity;
+import com.example.administrator.helper.share.ShowImageActivity;
+import com.example.administrator.helper.share.SpaceActivity;
 import com.example.administrator.helper.utils.CommonAdapter;
 import com.example.administrator.helper.utils.MyGridView;
 import com.example.administrator.helper.utils.RefreshListView;
@@ -199,20 +203,56 @@ public class SharePageFragment extends BaseFragment {
             tvnr.setText(shareEntity.getDynamic().getShare()+        +shareEntity.getDynamic().getId());
             final TextView tvcount = viewHolder.getViewById(R.id.tv_count);
             tvcount.setText(shareEntity.getDynamic().getCount()+ "");
+            //内容布局点击事件跳转到详情界面
+            RelativeLayout relxq= viewHolder.getViewById(R.id.rel_neirong);
+            relxq.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Gson gson =new Gson();
+                    String shareEntityjson=gson.toJson(shareEntity);
+                    String imagejson=gson.toJson(images);
+                    Intent intent=new Intent(getActivity(),DetailsActivity.class);
+                    intent.putExtra("shareEntity",shareEntityjson ) ;
+                    intent.putExtra("images",imagejson);
+                    startActivity(intent);
+                }
+            });
             //头像
             ImageView imtouxian=viewHolder.getViewById(R.id.im_touxiang);
             x.image().bind(imtouxian, UrlUtils.MYURL + "/" +shareEntity.getDynamic().getUser().getImage() );
+            //头像点击事件,跳转到空间详情界面
+            imtouxian.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Gson gson =new Gson();
+                    String shareEntityjson=gson.toJson(shareEntity);
+                    Intent intent1=new Intent(getActivity(), SpaceActivity.class);
+                    intent1.putExtra("shareEntity",shareEntityjson );
+                    startActivity(intent1);
+                }
+            });
+
+
             //显示图片
             final MyGridView gridduotu=viewHolder.getViewById(R.id.grideview_share);
             gridduotu.setTag(position);
             gridduotu.setAdapter(new CommonAdapter<String>(getActivity(),images, R.layout.gridview_item) {
                @Override
-               public void convert(ViewHolder viewHolder, String s, int position) {
+               public void convert(ViewHolder viewHolder, String s, final int position) {
                    Log.i("SshaeAdapter", "convert: "+images.get(position)+"------"+position);
               ImageView imxiance=viewHolder.getViewById(R.id.image);
               x.image().bind(imxiance, UrlUtils.MYURL+s);
               Log.i("SshaeAdapter", "convert: 333333"+ UrlUtils.MYURL+s);
-
+                   //图片点击事件
+                   imxiance.setOnClickListener(new View.OnClickListener() {
+                       @Override
+                       public void onClick(View view) {
+                          Intent intent=new Intent(getActivity(), ShowImageActivity.class);
+                           intent.putExtra("image",images.get(position));
+                           Log.i("SshaeAdapter", "66666: "+images.get(position));
+                           startActivity(intent);
+                       }
+                   });
                 }
             });
             final RadioButton imz = viewHolder.getViewById(R.id.im_zan);
@@ -228,6 +268,7 @@ public class SharePageFragment extends BaseFragment {
             }else {
                 commentAdapter.notifyDataSetChanged();
             }
+            //点赞的点击事件
             imz.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -259,6 +300,7 @@ public class SharePageFragment extends BaseFragment {
 
         }
     }
+   //点赞增加插入数据库
 
     /**
      * 不可滑动的listView的适配器
@@ -376,6 +418,7 @@ public class SharePageFragment extends BaseFragment {
             }
         });
     }
+    //取消点赞删除数据库
     public void deleteThumb(){
         String url= UrlUtils.MYURL+"DeleteThumbServlet";
         RequestParams requestParams2 = new RequestParams(url);
@@ -405,5 +448,6 @@ public class SharePageFragment extends BaseFragment {
             }
         });
     }
+
 
 }
