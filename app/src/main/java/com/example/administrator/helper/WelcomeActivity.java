@@ -24,6 +24,8 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        initData();
+//        isLogin();
 
     }
     private void initData (){
@@ -56,7 +58,7 @@ public class WelcomeActivity extends AppCompatActivity {
         locationService.stop(); //停止定位服务
         super.onStop();
     }
-
+////
     @Override
     protected void onStart() {
         super.onStart();

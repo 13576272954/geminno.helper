@@ -110,6 +110,9 @@
         <activity android:name=".share.ImageListActivity"/>
         <activity android:name=".share.ImageActivity"/>
         <activity android:name=".share.MapActivity"/>
+        <activity android:name=".share.DetailsActivity"/>
+        <activity android:name=".share.ShowImageActivity"/>
+        <activity android:name=".share.SpaceActivity"/>
 
         <!--分享-->
         <activity

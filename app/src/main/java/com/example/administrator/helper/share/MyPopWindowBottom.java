@@ -2,6 +2,8 @@ package com.example.administrator.helper.share;
 
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,12 +54,12 @@ public class MyPopWindowBottom extends PopupWindow implements OnClickListener {
         //设置SelectPicPopupWindow弹出窗体动画效果
         this.setAnimationStyle(R.style.BottomPopWindowAnimation);
         //实例化一个ColorDrawable颜色为半透明
-//        ColorDrawable dw = new ColorDrawable(0xb0000000);
+        ColorDrawable dw = new ColorDrawable(0xb0000000);
         //设置SelectPicPopupWindow弹出窗体的背景
-//        this.setBackgroundDrawable(dw);
+        this.setBackgroundDrawable(dw);
 //        //点击外部消失
-//        this.setOutsideTouchable(true);
-//        this.setBackgroundDrawable(new BitmapDrawable());
+        this.setOutsideTouchable(true);
+        this.setBackgroundDrawable(new BitmapDrawable());
 
         popView.setOnTouchListener(new View.OnTouchListener() {//设置背景区域外为点击消失popwindow
             public boolean onTouch(View v, MotionEvent event) {
@@ -80,7 +82,7 @@ public class MyPopWindowBottom extends PopupWindow implements OnClickListener {
         switch (view.getId()){
             case R.id.but_comment_send:
                 Log.i("MyPopWindowBottom", "onClick:  11111111");
-                myPopWindowListener.firstItem();
+                myPopWindowListener.firstItem(mCommentEdittext);
             break;
         }
     }
@@ -99,8 +101,9 @@ public class MyPopWindowBottom extends PopupWindow implements OnClickListener {
                     mCommentEdittext.requestFocus();//获取焦点
                     imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 } else {
+                    Log.i("123456789", "run:  隐藏");
                     //隐藏输入法
-                    imm.hideSoftInputFromWindow(mCommentEdittext.getWindowToken(), 0);
+                    imm.hideSoftInputFromWindow(mCommentEdittext.getWindowToken(),0);
 
                 }
             }

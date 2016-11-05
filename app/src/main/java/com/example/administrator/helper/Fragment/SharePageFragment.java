@@ -6,14 +6,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,12 +31,15 @@ import com.example.administrator.helper.entity.ClickLike;
 import com.example.administrator.helper.entity.Comment;
 import com.example.administrator.helper.entity.ShareEntity;
 import com.example.administrator.helper.share.DetailsActivity;
+import com.example.administrator.helper.share.MyPopWindowBottom;
+import com.example.administrator.helper.share.MyPopWindowListener;
 import com.example.administrator.helper.share.ReleaseActivity;
 import com.example.administrator.helper.share.ShowImageActivity;
 import com.example.administrator.helper.share.SpaceActivity;
 import com.example.administrator.helper.utils.CommonAdapter;
 import com.example.administrator.helper.utils.MyGridView;
 import com.example.administrator.helper.utils.RefreshListView;
+import com.example.administrator.helper.utils.RefreshListViews;
 import com.example.administrator.helper.utils.TimestampTypeAdapter;
 import com.example.administrator.helper.utils.UrlUtils;
 import com.example.administrator.helper.utils.ViewHolder;
@@ -63,19 +69,21 @@ import butterknife.ButterKnife;
 public class SharePageFragment extends BaseFragment {
     private static int FABU=123;
     ImageView imtianjia;
-    RefreshListView lvshare;
+    RefreshListViews lvshare;
     int orderFlag = 0;
     int pageNo = 1;
     int pageSize = 5;
     List<ShareEntity> shareEntities = new ArrayList<>();
     SshaeAdapter shareAdapter;
     CommonAdapter<String> tupianadapter;
+
+    Comment sendComment;//要发表的评论
     private Button mSendBut;//评论发送按钮
-    private NoTouchLinearLayout mLytEdittextVG;//发表评论框
-    private EditText mCommentEdittext;//评论输入框
+    private MyPopWindowBottom myPopWindowBottom;//屏幕底部popwindow
     private boolean isReply;            //发表还是回复评论，true代表回复
     private String comment = "";        //记录评论输入对话框中的内容
 
+    View thisFragment;
     Map<Integer , List<Comment>> comments = new HashMap<Integer , List<Comment>>(); //评论的集合    key:分享id，value:评论集合
 
     int shareId;
@@ -86,11 +94,10 @@ public class SharePageFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_share_page, null);
         imtianjia = (ImageView) v.findViewById(R.id.im_tianjia);
-        lvshare = (RefreshListView) v.findViewById(R.id.view);
-        mLytEdittextVG = (NoTouchLinearLayout) v.findViewById(R.id.edit_vg_lyt);
-        mCommentEdittext = (EditText) v.findViewById(R.id.edit_comment);
-        mSendBut = (Button) v.findViewById(R.id.but_comment_send);
+        lvshare = (RefreshListViews) v.findViewById(R.id.view);
+        myPopWindowBottom = new MyPopWindowBottom(getActivity(), new PoPListener());
         ButterKnife.inject(this, v);
+        thisFragment = v;
         return v;
 
     }
@@ -109,7 +116,7 @@ public class SharePageFragment extends BaseFragment {
                 getActivity().startActivityForResult(intent,FABU);
             }
         });
-        lvshare.setOnRefreshUploadChangeListener(new RefreshListView.OnRefreshUploadChangeListener() {
+        lvshare.setOnRefreshUploadChangeListener(new RefreshListViews.OnRefreshUploadChangeListener() {
             @Override
             public void onRefresh() {
                pageNo = 1;
@@ -122,6 +129,14 @@ public class SharePageFragment extends BaseFragment {
             public void onPull() {
                 pageNo++;
            getData();
+            }
+        });
+
+        myPopWindowBottom.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                myPopWindowBottom.onFocusChange(false,getActivity());
+                sendComment=null;
             }
         });
     }
@@ -272,7 +287,7 @@ public class SharePageFragment extends BaseFragment {
                    });
                 }
             });
-            NoScrollListview noScrollListview = viewHolder.getViewById(R.id.list_comment);
+            final NoScrollListview noScrollListview = viewHolder.getViewById(R.id.list_comment);
             noScrollListview.setDividerHeight(0);
             noScrollListview.setTag(position);
             CommentAdapter commentAdapter = null;//子listView适配器
@@ -282,6 +297,22 @@ public class SharePageFragment extends BaseFragment {
             }else {
                 commentAdapter.notifyDataSetChanged();
             }
+            noScrollListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    if (myPopWindowBottom==null) {
+                        myPopWindowBottom = new MyPopWindowBottom(getActivity(), new PoPListener());
+                    }
+                    sendComment=new Comment();
+
+                    sendComment.setPublishUser(((MyApplication)getActivity().getApplication()).getUser());
+                    shareId =shareEntities.get((int) noScrollListview.getTag()).getDynamic().getId();
+                    sendComment.setShare(shareId);
+                    sendComment.setFather(comments.get(shareId).get(i));
+                    myPopWindowBottom.showAtLocation(thisFragment.findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//这种方式无论有虚拟按键还是没有都可完全显示，因为它显示的在整个父布局中
+                    myPopWindowBottom.onFocusChange(true,getActivity());
+                }
+            });
             final RadioButton imz = viewHolder.getViewById(R.id.im_zan);
             imz.setTag(position);//加标记，保证每个checkbox的tag不一样
             imz.setChecked(shareEntity.isCheck());
@@ -316,7 +347,21 @@ public class SharePageFragment extends BaseFragment {
             });
             ImageView imp=viewHolder.getViewById(R.id.im_pin);
             imp.setTag(position);//加标记
-
+            imp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (myPopWindowBottom==null) {
+                        myPopWindowBottom = new MyPopWindowBottom(getActivity(), new PoPListener());
+                    }
+                    sendComment=new Comment();
+                    sendComment.setFather(null);
+                    sendComment.setPublishUser(((MyApplication)getActivity().getApplication()).getUser());
+                    shareId =shareEntities.get((Integer) view.getTag()).getDynamic().getId();
+                    sendComment.setShare(shareId);
+                    myPopWindowBottom.showAtLocation(thisFragment.findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//这种方式无论有虚拟按键还是没有都可完全显示，因为它显示的在整个父布局中
+                    myPopWindowBottom.onFocusChange(true,getActivity());
+                }
+            });
         }
     }
    //点赞增加插入数据库
@@ -468,37 +513,69 @@ public class SharePageFragment extends BaseFragment {
         });
     }
 
-
     /**
-     * 显示或隐藏输入法
+     * PopWindow按钮点击事件
      */
-    private void onFocusChange(boolean hasFocus) {
-        final boolean isFocus = hasFocus;
-        (new Handler()).postDelayed(new Runnable() {
-            public void run() {
-                InputMethodManager imm = (InputMethodManager)
-                        mCommentEdittext.getContext().getSystemService(getActivity().INPUT_METHOD_SERVICE);
-                if (isFocus) {
-                    //显示输入法
-                    mCommentEdittext.requestFocus();//获取焦点
-                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-                } else {
-                    //隐藏输入法
-                    imm.hideSoftInputFromWindow(mCommentEdittext.getWindowToken(), 0);
+    class PoPListener implements MyPopWindowListener {
+        @Override
+        public void firstItem(EditText editText) {
+            //封装对象
+            comment = editText.getText().toString();
+            sendComment.setCotent(comment);
+            comment="";
+            editText.setText("");
+            sendComment.setSendTime(new Timestamp(System.currentTimeMillis()));
+//            //刷新界面
+//            if (sendComment.getFather()==null) {
+//                comments.get(shareId).add(sendComment);
+//                shareAdapter.notifyDataSetChanged();
+//            }
+            //网络访问
+            String url = UrlUtils.MYURL+"SendCommentServlet";
+            RequestParams params = new RequestParams(url);
+            GsonBuilder gb = new GsonBuilder();
+            gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
+            gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
+            Gson gson = gb.create();
+            String commentStr = gson.toJson(sendComment);
+            params.addBodyParameter("comment",commentStr);
+            x.http().post(params, new Callback.CommonCallback<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    if (result.equals("success")){
+                        Log.i("PoPListener", "onSuccess:  发表成功");
+                        sendComment=null;
+                        myPopWindowBottom.onFocusChange(false,getActivity());
+                        myPopWindowBottom.dismiss();
+                        getComment(shareId);
+                    }else{
+                        Log.i("PoPListener", "onSuccess:  asjbfakjhsf");
+                        Toast.makeText(getActivity(),"发表评论失败",Toast.LENGTH_LONG);
+                    }
                 }
-            }
-        }, 100);
-    }
-    /**
-     * 判断对话框中是否输入内容
-     */
-    private boolean isEditEmply() {
-        comment = mCommentEdittext.getText().toString().trim();
-        if (comment.equals("")) {
-            Toast.makeText(getActivity(), "评论不能为空", Toast.LENGTH_SHORT).show();
-            return false;
+
+                @Override
+                public void onError(Throwable ex, boolean isOnCallback) {
+                    Log.i("PoPListener", "onError:  "+ex);
+                    Toast.makeText(getActivity(),"发表评论失败",Toast.LENGTH_LONG);
+                }
+
+                @Override
+                public void onCancelled(CancelledException cex) {
+
+                }
+
+                @Override
+                public void onFinished() {
+
+                }
+            });
         }
-        mCommentEdittext.setText("");
-        return true;
+
+    }
+
+    public void onTouchEvent() {
+            myPopWindowBottom.onFocusChange(false,getActivity());
+            myPopWindowBottom.dismiss();
     }
 }

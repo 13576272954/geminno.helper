@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -114,6 +115,20 @@ public class MainActivity extends AppCompatActivity {
             toggleFragment(fragmentList.get(preIndex),fragmentList.get(currentIndex));
             preIndex=currentIndex;
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        if (preIndex==2){
+            if (ev.getAction() == MotionEvent.ACTION_DOWN){
+                View v = getCurrentFocus();
+                sharePageFragment.onTouchEvent();
+            }
+            if (getWindow().superDispatchTouchEvent(ev)) {
+                return true;
+            }
+        }
+        return super.onTouchEvent(ev);
     }
 }
 

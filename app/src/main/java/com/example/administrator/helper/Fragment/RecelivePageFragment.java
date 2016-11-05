@@ -25,21 +25,25 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.bumptech.glide.Glide;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.geocode.GeoCodeOption;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
-import com.bumptech.glide.Glide;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.entity.Task;
 import com.example.administrator.helper.entity.User;
+import com.example.administrator.helper.receive.DetilsActivity;
 import com.example.administrator.helper.receive.TaskDetilsActivity;
+
 import com.example.administrator.helper.receive.custom.CustomViewPager;
 import com.example.administrator.helper.receive.custom.RadarView;
 import com.example.administrator.helper.receive.custom.RadarViewGroup;
@@ -62,6 +66,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -92,7 +97,8 @@ public class RecelivePageFragment extends Fragment implements ViewPager.OnPageCh
     @Override
     public void onDestroy() {
         super.onDestroy();
-         //停止定位服务
+        locationService.unregisterListener(mListener); //注销掉监听
+        locationService.stop(); //停止定位服务
     }
     private FixedSpeedScroller scroller;
     private SparseArray<Task> mDatas = new SparseArray<>();
@@ -101,17 +107,17 @@ public class RecelivePageFragment extends Fragment implements ViewPager.OnPageCh
     Integer pageNo = null;
     Integer pageSize = null;
     String city = null;
-//    String myaddress = null ;
+    String myaddress = null ;
     String taskDemand = null;
      View view;
     int i=0;
     ImageLoader myImageLoader;
     private final int SDK_PERMISSION_REQUEST = 127;
     private LocationService locationService;
-    private TextView LocationResult;
-    private Button startLocation;
+//    private TextView LocationResult;
+//    private Button startLocation;
     private String permissionInfo;
-    String strInfo;
+//    String strInfo;
 
     LatLng minePoint = null;
     LatLng newPoint = null ;
@@ -201,7 +207,6 @@ public class RecelivePageFragment extends Fragment implements ViewPager.OnPageCh
 
             RequestParams requestParams = new RequestParams(url);
             requestParams.addQueryStringParameter("city",city);
-
             requestParams.addQueryStringParameter("tasktypeid", tasktypeid + "");
             requestParams.addQueryStringParameter("taskDemand", taskDemand + "");
             requestParams.addQueryStringParameter("pageNo", pageNo + "");
@@ -268,8 +273,10 @@ public class RecelivePageFragment extends Fragment implements ViewPager.OnPageCh
             Log.i("RecelivePageFragment", "geocodeDiGui:-----------111 "+mDatas);
             return;
         }
-
+        Log.i("RecelivePageFragment", "geocodeDiGui:1111111111 "+list.size());
         GeoCodeOption GeoOption = new GeoCodeOption().city(list.get(size).getMakePlace()).address(list.get(size).getCity());
+
+        Log.i("RecelivePageFragment", "geocodeDiGui:222222222222 "+list.size());
         mSearch = GeoCoder.newInstance();
         mSearch.geocode(GeoOption);
 
@@ -364,7 +371,7 @@ public class RecelivePageFragment extends Fragment implements ViewPager.OnPageCh
         public Object instantiateItem(ViewGroup container, final int position) {
             Log.i("RecelivePageFragment", "ofgfgfgfdgdfgd: "+container+"            "+position+"             "+mDatas);
             final Task task = mDatas.get(position);
-            //设置一大堆演示用的数据，麻里麻烦~~
+
             final View view = LayoutInflater.from(getActivity()).inflate(R.layout.viewpager_layout, null);
             ImageView image = (ImageView) view.findViewById(R.id.iv);
             url2=task.getSendUser().getImage();
@@ -415,7 +422,7 @@ public class RecelivePageFragment extends Fragment implements ViewPager.OnPageCh
 
     public void logMsg(String city,String myaddress , LatLng point) {
             this.city=city;
-//            this.myaddress=myaddress;
+            this.myaddress=myaddress;
             this.minePoint = point;
              initData();
 
