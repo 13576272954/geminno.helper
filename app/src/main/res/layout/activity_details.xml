@@ -1,9 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-   >
+    android:orientation="vertical"
+    tools:context="com.example.administrator.helper.share.DetailsActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="#02bb9d">
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:id="@+id/tv_fhui"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:text="返回"
+            android:textColor="#FFFFFF"
+            android:textSize="15dp"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="详情"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:layout_toRightOf="@+id/tv_fhui"
+            android:layout_toEndOf="@+id/tv_fhui"
+            android:layout_marginLeft="80dp"/>
+
+       <ImageView
+           android:id="@+id/im_fx"
+           android:layout_width="20dp"
+           android:layout_height="20dp"
+           android:layout_gravity="right"
+           android:layout_centerVertical="true"
+           android:layout_alignParentRight="true"
+           android:layout_alignParentEnd="true"
+           android:layout_marginRight="31dp"
+           android:layout_marginEnd="31dp"
+           android:src="@drawable/fenxiang"/>
+
+    </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -52,19 +94,22 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:id="@+id/rel_neirong">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:id="@+id/tv_neirong1"
-                android:text="jjdfjhfjnvnxzkjhcjzn
-                jfhsdjknklmc.,mc.,mckm,.m,.scmklsmcc,mv,nsmvlkdvkuhxbcmxbck"/>
+                android:text=""/>
         </RelativeLayout>
         <com.example.administrator.helper.utils.MyGridView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:id="@+id/grideview_share1"
             android:numColumns="3">
         </com.example.administrator.helper.utils.MyGridView>
@@ -139,4 +184,4 @@
         </RelativeLayout>
 
     </LinearLayout>
-</RelativeLayout>
+</LinearLayout>
