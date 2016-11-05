@@ -50,6 +50,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rel_neirong"
             android:layout_width="match_parent"
             android:layout_height="60dp">
             

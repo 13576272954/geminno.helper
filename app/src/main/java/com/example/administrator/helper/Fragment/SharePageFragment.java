@@ -3,20 +3,27 @@ package com.example.administrator.helper.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.administrator.helper.BaseFragment;
 import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.View.NoScrollListview;
+import com.example.administrator.helper.View.NoTouchLinearLayout;
 import com.example.administrator.helper.entity.ClickLike;
 import com.example.administrator.helper.entity.Comment;
 import com.example.administrator.helper.entity.ShareEntity;
@@ -40,7 +47,9 @@ import org.xutils.x;
 
 import java.lang.reflect.Type;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +70,11 @@ public class SharePageFragment extends BaseFragment {
     List<ShareEntity> shareEntities = new ArrayList<>();
     SshaeAdapter shareAdapter;
     CommonAdapter<String> tupianadapter;
+    private Button mSendBut;//评论发送按钮
+    private NoTouchLinearLayout mLytEdittextVG;//发表评论框
+    private EditText mCommentEdittext;//评论输入框
+    private boolean isReply;            //发表还是回复评论，true代表回复
+    private String comment = "";        //记录评论输入对话框中的内容
 
     Map<Integer , List<Comment>> comments = new HashMap<Integer , List<Comment>>(); //评论的集合    key:分享id，value:评论集合
 
@@ -73,6 +87,9 @@ public class SharePageFragment extends BaseFragment {
         View v = inflater.inflate(R.layout.fragment_share_page, null);
         imtianjia = (ImageView) v.findViewById(R.id.im_tianjia);
         lvshare = (RefreshListView) v.findViewById(R.id.view);
+        mLytEdittextVG = (NoTouchLinearLayout) v.findViewById(R.id.edit_vg_lyt);
+        mCommentEdittext = (EditText) v.findViewById(R.id.edit_comment);
+        mSendBut = (Button) v.findViewById(R.id.but_comment_send);
         ButterKnife.inject(this, v);
         return v;
 
@@ -205,6 +222,7 @@ public class SharePageFragment extends BaseFragment {
             tvcount.setText(shareEntity.getDynamic().getCount()+ "");
             //内容布局点击事件跳转到详情界面
             RelativeLayout relxq= viewHolder.getViewById(R.id.rel_neirong);
+            Log.i("SshaeAdapter", "convert:  "+relxq);
             relxq.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -240,9 +258,8 @@ public class SharePageFragment extends BaseFragment {
                @Override
                public void convert(ViewHolder viewHolder, String s, final int position) {
                    Log.i("SshaeAdapter", "convert: "+images.get(position)+"------"+position);
-              ImageView imxiance=viewHolder.getViewById(R.id.image);
-              x.image().bind(imxiance, UrlUtils.MYURL+s);
-              Log.i("SshaeAdapter", "convert: 333333"+ UrlUtils.MYURL+s);
+                ImageView imxiance=viewHolder.getViewById(R.id.image);
+                x.image().bind(imxiance, UrlUtils.MYURL+s);
                    //图片点击事件
                    imxiance.setOnClickListener(new View.OnClickListener() {
                        @Override
@@ -255,9 +272,6 @@ public class SharePageFragment extends BaseFragment {
                    });
                 }
             });
-            final RadioButton imz = viewHolder.getViewById(R.id.im_zan);
-            imz.setTag(position);//加标记，保证每个checkbox的tag不一样
-            imz.setChecked(shareEntity.isCheck());
             NoScrollListview noScrollListview = viewHolder.getViewById(R.id.list_comment);
             noScrollListview.setDividerHeight(0);
             noScrollListview.setTag(position);
@@ -268,6 +282,9 @@ public class SharePageFragment extends BaseFragment {
             }else {
                 commentAdapter.notifyDataSetChanged();
             }
+            final RadioButton imz = viewHolder.getViewById(R.id.im_zan);
+            imz.setTag(position);//加标记，保证每个checkbox的tag不一样
+            imz.setChecked(shareEntity.isCheck());
             //点赞的点击事件
             imz.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -297,6 +314,8 @@ public class SharePageFragment extends BaseFragment {
 
                 }
             });
+            ImageView imp=viewHolder.getViewById(R.id.im_pin);
+            imp.setTag(position);//加标记
 
         }
     }
@@ -450,4 +469,36 @@ public class SharePageFragment extends BaseFragment {
     }
 
 
+    /**
+     * 显示或隐藏输入法
+     */
+    private void onFocusChange(boolean hasFocus) {
+        final boolean isFocus = hasFocus;
+        (new Handler()).postDelayed(new Runnable() {
+            public void run() {
+                InputMethodManager imm = (InputMethodManager)
+                        mCommentEdittext.getContext().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                if (isFocus) {
+                    //显示输入法
+                    mCommentEdittext.requestFocus();//获取焦点
+                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                } else {
+                    //隐藏输入法
+                    imm.hideSoftInputFromWindow(mCommentEdittext.getWindowToken(), 0);
+                }
+            }
+        }, 100);
+    }
+    /**
+     * 判断对话框中是否输入内容
+     */
+    private boolean isEditEmply() {
+        comment = mCommentEdittext.getText().toString().trim();
+        if (comment.equals("")) {
+            Toast.makeText(getActivity(), "评论不能为空", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        mCommentEdittext.setText("");
+        return true;
+    }
 }

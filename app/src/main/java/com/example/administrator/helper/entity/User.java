@@ -3,6 +3,9 @@ package com.example.administrator.helper.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.DistanceUtil;
+
 import java.sql.Timestamp;
 
 /**
@@ -27,7 +30,7 @@ public class User implements Parcelable {
 	private Timestamp time;//创建日期
 	private String phoneNumber;//电话号码
 	private String image;//图片
-	
+	private float distance;
 	public User(String name, String sex, Integer age, String image) {
 		super();
 		this.name = name;
@@ -36,10 +39,54 @@ public class User implements Parcelable {
 		this.image = image;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "User{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", password='" + password + '\'' +
+				", payPassword=" + payPassword +
+				", sex='" + sex + '\'' +
+				", age=" + age +
+				", credit=" + credit +
+				", rank=" + rank +
+				", points=" + points +
+				", school='" + school + '\'' +
+				", sign='" + sign + '\'' +
+				", balance=" + balance +
+				", time=" + time +
+				", phoneNumber='" + phoneNumber + '\'' +
+				", image='" + image + '\'' +
+				", distance=" + distance +
+				'}';
+	}
+	public User(Integer id, String name, String sex, Integer age, String image, float distance) {
+		this.id = id;
+		this.name = name;
+		this.sex = sex;
+		this.age = age;
+		this.image = image;
+		this.distance = distance;
+	}
+
+	public float calDistance(LatLng userpoint , LatLng minepoint ){
+		DistanceUtil distance=new DistanceUtil();
+		float newDistance = (float) distance.getDistance(userpoint,minepoint);
+
+		return newDistance;
+	}
+	public float getDistance() {
+
+		return distance;
+	}
+
+	public void setDistance(float distance) {
+		this.distance = distance;
+	}
+
 	public User(int id, String name, String password, Integer payPassword, String sex, Integer age,
-			Integer credit, Integer rank, Integer points, String school, String sign, Double balance,
-			Timestamp time, String phoneNumber, String image) {
+				Integer credit, Integer rank, Integer points, String school, String sign, Double balance,
+				Timestamp time, String phoneNumber, String image) {
 		// TODO Auto-generated constructor stub
 		super();
 		this.id=id;
@@ -62,8 +109,8 @@ public class User implements Parcelable {
 
 
 	public User(Integer id, String name, String password, Integer payPassword, String sex, Integer age, Integer credit,
-			Integer rank, Integer points, String school, String sign, Double balance, String phoneNumber,
-			String image) {
+				Integer rank, Integer points, String school, String sign, Double balance, String phoneNumber,
+				String image) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -236,15 +283,27 @@ public class User implements Parcelable {
 	}
 
 
-
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", password=" + password + ", payPassword=" + payPassword
-				+ ", sex=" + sex + ", age=" + age + ", credit=" + credit + ", rank=" + rank + ", points=" + points
-				+ ", school=" + school + ", sign=" + sign + ", balance=" + balance + ", time=" + time + ", phoneNumber="
-				+ phoneNumber + ", image=" + image + "]";
+	public User(Integer id, String name, String password, Integer payPassword, String sex, Integer age, Integer credit, Integer rank, Integer points, String school, String sign, Double balance, Timestamp time, String phoneNumber, String image, float distance) {
+		this.id = id;
+		this.name = name;
+		this.password = password;
+		this.payPassword = payPassword;
+		this.sex = sex;
+		this.age = age;
+		this.credit = credit;
+		this.rank = rank;
+		this.points = points;
+		this.school = school;
+		this.sign = sign;
+		this.balance = balance;
+		this.time = time;
+		this.phoneNumber = phoneNumber;
+		this.image = image;
+		this.distance = distance;
 	}
 
+	public User() {
+	}
 
 	@Override
 	public int describeContents() {
@@ -288,7 +347,7 @@ public class User implements Parcelable {
 		this.image = in.readString();
 	}
 
-	public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+	public static final Creator<User> CREATOR = new Creator<User>() {
 		@Override
 		public User createFromParcel(Parcel source) {
 			return new User(source);

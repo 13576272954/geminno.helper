@@ -57,17 +57,18 @@
         <!-- 声明SDK所需的service SDK核心功能 -->
 
         <activity android:name=".WelcomeActivity">
-
-        </activity>
-        <activity android:name=".LoginActivity"></activity>
-        <activity
-            android:name=".MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".LoginActivity"></activity>
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
         </activity>
         <activity android:name=".send.SendStudyActivity" />
         <activity android:name=".send.SendLifeActivity" />

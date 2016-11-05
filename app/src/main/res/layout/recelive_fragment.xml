@@ -1,135 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
-
-    <FrameLayout
-
+    android:background="@drawable/lkd1"
+    >
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:background="#d5d6d6"
-
-        >
-        <ImageButton
-            android:layout_marginLeft="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@mipmap/xiaoxi"
-             android:id="@+id/ib_message"
-            android:background="@null"
-            />
+        android:layout_height="52dp">
 
         <ImageButton
-            android:layout_marginRight="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="52dp"
             android:id="@+id/ib_detils"
             android:background="@null"
             android:src="@mipmap/xiangxi"
-            android:layout_gravity="right" />
-
-    </FrameLayout>
-    <FrameLayout
-
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-
-        >
-
-        <ImageButton
-            android:layout_marginTop="6dp"
-            android:layout_width="wrap_content"
-            android:layout_height="26dp"
-            android:id="@+id/ib_myw"
-            android:src="@mipmap/weizi"
-            android:background="@null"
-            android:layout_marginLeft="8dp"
-            android:layout_gravity="left|top" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="26dp"
-            android:id="@+id/ib_myd"
-            android:src="@mipmap/weizi"
-            android:background="@null"
-            android:layout_marginLeft="8dp"
-            android:layout_gravity="left|bottom" />
-
-        <EditText
-            android:layout_marginTop="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/et_myw"
-            android:hint="请输入你的位置"
-            android:background="@null"
-           android:layout_marginLeft="100dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
             />
-<View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="#000000"
-    android:layout_marginTop="44dp"
-    />
-
-
-        <EditText
-              android:layout_marginLeft="100dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/et_myd"
-            android:hint="请输入要到的地方"
-                android:background="@null"
-            android:layout_gravity="bottom" />
-
         <TextView
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="15dp"
+            android:id="@+id/textView1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="起点:"
-            android:id="@+id/tv_mywz"
+            android:layout_height="52dp"
+            android:textColor="#ffffffff"
+            android:text=" "/>
 
-            />
-
-        <TextView
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="50dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="终点:"
-            android:id="@+id/tv_mywd"
-         />
-
-    </FrameLayout>
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:text="Destination：" />
-
-        <EditText
-            android:id="@+id/et_destination"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+        <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/startlocation"-->
+        <!--android:id="@+id/addfence" />-->
     </LinearLayout>
+    <com.example.administrator.helper.receive.custom.RadarViewGroup
+        android:id="@+id/radar"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="52dp">
 
-    <Button
-        android:id="@+id/btn_navi"
-        android:layout_width="fill_parent"
+        <com.example.administrator.helper.receive.custom.RadarView
+            android:id="@+id/abc"
+            android:layout_width="280dp"
+            android:layout_height="280dp"/>
+    </com.example.administrator.helper.receive.custom.RadarViewGroup>
+
+    <RelativeLayout
+        android:id="@+id/ry_container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Start navigate"/>
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="52dp"
+        android:clipChildren="false">
+        <com.example.administrator.helper.receive.custom.CustomViewPager
+            android:id="@+id/vp"
+            android:layout_width="130dp"
+            android:layout_height="160dp"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="120dp"
+            android:layout_marginRight="120dp"
+            />
+    </RelativeLayout>
+</RelativeLayout>
 
-    <android.media.tv.TvView
-        android:id="@+id/bmapsView"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:clickable="true" />
-
-
-</LinearLayout>

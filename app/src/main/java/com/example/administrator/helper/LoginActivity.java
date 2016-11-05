@@ -94,6 +94,7 @@ public class LoginActivity extends AppCompatActivity {
         params.addQueryStringParameter("userPsd",psd);
         Log.i("dingwei", "getUser:  aaaaaaa"+sp);
         final SharedPreferences.Editor editor = sp.edit();
+        params.setConnectTimeout(3000);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

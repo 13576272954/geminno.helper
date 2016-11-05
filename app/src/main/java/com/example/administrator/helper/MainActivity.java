@@ -26,6 +26,11 @@ public class MainActivity extends AppCompatActivity {
         int preIndex;
         int currentIndex;
 
+    SendPageFragment sendPageFragment;
+    RecelivePageFragment recelivePageFragment;
+    SharePageFragment sharePageFragment;
+    HomePageFragment homePageFragment;
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -36,10 +41,10 @@ public class MainActivity extends AppCompatActivity {
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
-            SendPageFragment sendPageFragment=new SendPageFragment();
-            RecelivePageFragment recelivePageFragment=new RecelivePageFragment();
-            SharePageFragment sharePageFragment=new SharePageFragment();
-            HomePageFragment homePageFragment=new HomePageFragment();
+            sendPageFragment=new SendPageFragment();
+            recelivePageFragment=new RecelivePageFragment();
+            sharePageFragment=new SharePageFragment();
+            homePageFragment=new HomePageFragment();
             Button btnSend= (Button) findViewById(R.id.btn_send);
             Button btnRecelive= (Button) findViewById(R.id.btn_recelive);
             Button btnShare= (Button) findViewById(R.id.btn_share);
@@ -98,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.commit();
             }
         }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

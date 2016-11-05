@@ -27,4 +27,9 @@
 
     <!--<color name="base_title_color">#3cc8b3</color>-->
     <color name="divider_color_c7">#d3d3d3</color>
+
+
+    <color name="line_color_blue">#3C8EAE</color>
+    <color name="bg_color_pink">#FF90A2</color>
+    <color name="bg_color_blue">#43D5FF</color>
 </resources>
