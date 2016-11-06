@@ -70,17 +70,21 @@
             android:value="1103161022115942#helper" />
         <!-- 声明SDK所需的service SDK核心功能 -->
 
-        <activity android:name=".LoginActivity">
-
-        </activity>
-        <activity android:name=".MainActivity" >
+        <activity android:name=".WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".send.SendStudyActivity"></activity>
+        <activity android:name=".LoginActivity"></activity>
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+        </activity>
+        <activity android:name=".send.SendStudyActivity" />
         <activity android:name=".send.SendLifeActivity" />
         <activity android:name=".send.SendBorrowActivity" />
         <activity android:name=".send.SendSellActivity" />
@@ -88,15 +92,10 @@
         <activity android:name=".send.SendOtherActivity" />
         <activity android:name=".send.GoPayActivity" />
         <activity android:name=".send.map.getMap" />
-        <activity android:name=".send.chat.TalkingActivity">
-
-        </activity>
-        <activity android:name=".send.chat.FriendActivity">
-
-        </activity>
-
-        <activity android:name=".receive.DetilsActivity"></activity>
-        <activity android:name=".receive.TaskDetilsActivity"></activity>
+        <activity android:name=".send.chat.TalkingActivity"></activity>
+        <activity android:name=".send.chat.FriendActivity"></activity>
+        <activity android:name=".receive.DetilsActivity" />
+        <activity android:name=".receive.TaskDetilsActivity" />
         <activity android:name=".my.Activity.MainActivity2" />
         <activity android:name=".my.Activity.shezhi" />
         <activity android:name=".my.Activity.Wodefadan" />
@@ -108,6 +107,12 @@
         <activity android:name=".my.Activity.Main3Activity" />
         <activity android:name=".my.Activity.zhuce" />
         <activity android:name=".share.ReleaseActivity" />
+        <activity android:name=".share.ImageListActivity"/>
+        <activity android:name=".share.ImageActivity"/>
+        <activity android:name=".share.MapActivity"/>
+        <activity android:name=".share.DetailsActivity"/>
+        <activity android:name=".share.ShowImageActivity"/>
+        <activity android:name=".share.SpaceActivity"/>
 
         <!--分享-->
         <activity

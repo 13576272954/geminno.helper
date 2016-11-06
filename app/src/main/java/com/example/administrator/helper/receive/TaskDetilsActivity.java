@@ -13,7 +13,6 @@ import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.entity.Task;
 import com.example.administrator.helper.entity.User;
-import com.example.administrator.helper.send.chat.FriendActivity;
 import com.example.administrator.helper.send.chat.TalkingActivity;
 import com.example.administrator.helper.utils.TimestampTypeAdapter;
 import com.example.administrator.helper.utils.UrlUtils;

@@ -42,9 +42,9 @@ public class FriendActivity extends AppCompatActivity {
         loginHuanxin("12345","111");
 
         //获取当前用户
-//        my = ((MyApplication) getApplication()).getUser();
+        my = ((MyApplication) getApplication()).getUser();
         //获取当前用户好友集合
-//        getFriend(my.getId());
+        getFriend(my.getId());
     }
 
     private List<User> getFriend(int UserId) {

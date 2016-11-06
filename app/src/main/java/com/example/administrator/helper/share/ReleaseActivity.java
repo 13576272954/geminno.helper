@@ -97,7 +97,7 @@ public class ReleaseActivity extends AppCompatActivity {
                 String share1=edtnr.getText().toString();//内容
                 Log.i("ReleaseActivity", "onClick: share1"+"--"+share1);
                 share.setShare(share1);
-                MyApplication myApplication=new MyApplication();
+                MyApplication myApplication= (MyApplication) getApplication();
                 int userID=myApplication.getUser().getId();
                 Log.i("ReleaseActivity", "onClick: userID"+"--"+userID);
                 share.setUserID(userID);//用户id
@@ -139,7 +139,8 @@ public class ReleaseActivity extends AppCompatActivity {
                 x.http().post(requestParams, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
-                        Log.i("ReleaseActivity", "onClick: --------" + result);
+                        Log.i("ReleaseActivity", "success: --------" + result);
+                        ReleaseActivity.this.finish();
                     }
 
                     @Override
@@ -149,7 +150,7 @@ public class ReleaseActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(CancelledException cex) {
-
+                        Log.i("ReleaseActivity", "onFinished: ");
                     }
 
                     @Override

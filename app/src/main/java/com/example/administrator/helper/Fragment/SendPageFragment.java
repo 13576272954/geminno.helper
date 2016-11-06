@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +16,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.send.SendBorrowActivity;
 import com.example.administrator.helper.send.SendJobActivity;
@@ -24,6 +29,8 @@ import com.example.administrator.helper.send.SendLifeActivity;
 import com.example.administrator.helper.send.SendOtherActivity;
 import com.example.administrator.helper.send.SendSellActivity;
 import com.example.administrator.helper.send.SendStudyActivity;
+import com.example.administrator.helper.send.chat.FriendActivity;
+import com.example.administrator.helper.utils.LocationService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +71,14 @@ public class SendPageFragment extends Fragment {
     View dot2;
     @InjectView(R.id.frameLayout)
     FrameLayout frameLayout;
+    @InjectView(R.id.tv_city)
+    TextView tvCity;
+    @InjectView(R.id.rl_shouye_city)
+    RelativeLayout rlShouyeCity;
+    @InjectView(R.id.go_talk)
+    ImageView goTalk;
+
+    private LocationService locationService;//自定义百度定位服务
 
     private List<ImageView> images;
     private List<View> dots;
@@ -77,15 +92,27 @@ public class SendPageFragment extends Fragment {
             R.mipmap.send_c,
     };
 
+    String city;
+
     private ViewPagerAdapter adapter;
     private ScheduledExecutorService scheduledExecutorService;
     View v;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.i("SharePageFragment", "onCreate:  "+((MyApplication)getActivity().getApplication()).getUser());
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_send_page, null);
         ButterKnife.inject(this, v);
         getPicture();
+        city = ((MyApplication)getActivity().getApplication()).getCity();
+        tvCity.setText(city);
+        tvCity.setMovementMethod(ScrollingMovementMethod.getInstance());
         return v;
     }
 
@@ -93,9 +120,12 @@ public class SendPageFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+
     }
 
-    @OnClick({R.id.but_xuexi, R.id.but_shenghuo, R.id.but_jieyong, R.id.but_xiaoshou, R.id.but_jianzhi, R.id.but_qita})
+
+    @OnClick({R.id.but_xuexi, R.id.but_shenghuo, R.id.but_jieyong, R.id.but_xiaoshou, R.id.but_jianzhi, R.id.but_qita
+    ,R.id.rl_shouye_city,R.id.go_talk})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.but_xuexi:
@@ -122,6 +152,14 @@ public class SendPageFragment extends Fragment {
                 Intent intent6 = new Intent(getActivity(), SendOtherActivity.class);
                 getActivity().startActivityForResult(intent6, REQUECT);
                 break;
+            case R.id.rl_shouye_city:
+                //选择城市列表
+                break;
+            case R.id.go_talk:
+//                跳转聊天
+                Intent intent = new Intent(getActivity(), FriendActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 
@@ -139,7 +177,7 @@ public class SendPageFragment extends Fragment {
         dots.add(dot1);
         dots.add(dot2);
         adapter = new ViewPagerAdapter();
-        Log.i("RecommendFragment", "getPicture:  "+adapter);
+        Log.i("RecommendFragment", "getPicture:  " + adapter);
         mViewPaper.setAdapter(adapter);
         mViewPaper.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -239,5 +277,8 @@ public class SendPageFragment extends Fragment {
             scheduledExecutorService.shutdown();
             scheduledExecutorService = null;
         }
+
     }
+
+
 }

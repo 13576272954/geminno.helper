@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:textSize="18dp"
         android:text=""
+        android:layout_marginLeft="3dp"
         android:textColor="#0000ff"
         android:id="@+id/tv_user_send"
         android:layout_gravity="center_vertical" />
@@ -41,7 +42,7 @@
         android:textSize="18dp"
         android:text=""
         android:id="@+id/tv_comment_content"
-        android:layout_marginLeft="6dp"
+        android:layout_marginLeft="4dp"
         android:layout_gravity="center_vertical" />
 </LinearLayout>
     <View

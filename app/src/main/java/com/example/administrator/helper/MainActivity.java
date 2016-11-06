@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -26,6 +27,11 @@ public class MainActivity extends AppCompatActivity {
         int preIndex;
         int currentIndex;
 
+    SendPageFragment sendPageFragment;
+    RecelivePageFragment recelivePageFragment;
+    SharePageFragment sharePageFragment;
+    HomePageFragment homePageFragment;
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -36,10 +42,10 @@ public class MainActivity extends AppCompatActivity {
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
-            SendPageFragment sendPageFragment=new SendPageFragment();
-            RecelivePageFragment recelivePageFragment=new RecelivePageFragment();
-            SharePageFragment sharePageFragment=new SharePageFragment();
-            HomePageFragment homePageFragment=new HomePageFragment();
+            sendPageFragment=new SendPageFragment();
+            recelivePageFragment=new RecelivePageFragment();
+            sharePageFragment=new SharePageFragment();
+            homePageFragment=new HomePageFragment();
             Button btnSend= (Button) findViewById(R.id.btn_send);
             Button btnRecelive= (Button) findViewById(R.id.btn_recelive);
             Button btnShare= (Button) findViewById(R.id.btn_share);
@@ -99,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode==SendPageFragment.REQUECT&&resultCode==RESULT_OK){
@@ -108,6 +115,20 @@ public class MainActivity extends AppCompatActivity {
             toggleFragment(fragmentList.get(preIndex),fragmentList.get(currentIndex));
             preIndex=currentIndex;
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        if (preIndex==2){
+            if (ev.getAction() == MotionEvent.ACTION_DOWN){
+                View v = getCurrentFocus();
+                sharePageFragment.onTouchEvent();
+            }
+            if (getWindow().superDispatchTouchEvent(ev)) {
+                return true;
+            }
+        }
+        return super.onTouchEvent(ev);
     }
 }
 

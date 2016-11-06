@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 public class Comment {
 	private Integer id;//评论id
 	private User publishUser;//发表用户
-	private Comment father;//父级评论id
+	private Comment father;//父级评论
 	private Integer share;//分享
 	private String cotent;//评论内容
 	private Timestamp sendTime;//评论时间
