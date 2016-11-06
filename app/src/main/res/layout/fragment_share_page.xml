@@ -39,10 +39,33 @@
         android:layout_marginEnd="25dp" />
 </RelativeLayout>
 
-    <com.example.administrator.helper.utils.RefreshListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/view"
-        android:layout_gravity="center_horizontal" />
+    <in.srain.cube.views.ptr.PtrClassicFrameLayout
+        android:id="@+id/ultra_ptr_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--<com.example.administrator.helper.utils.RefreshListView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:id="@+id/view">-->
+
+        <!--</com.example.administrator.helper.utils.RefreshListView>-->
+
+        <com.example.administrator.helper.utils.RefreshListViewa
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/view">
+
+        </com.example.administrator.helper.utils.RefreshListViewa>
+
+        </in.srain.cube.views.ptr.PtrClassicFrameLayout>
+
+    <!--<com.example.administrator.helper.utils.RefreshListViews-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/view"-->
+        <!--android:layout_gravity="center_horizontal" />-->
+
+
 
 </LinearLayout>
