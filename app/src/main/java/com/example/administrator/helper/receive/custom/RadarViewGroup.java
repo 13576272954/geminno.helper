@@ -165,7 +165,9 @@ public class RadarViewGroup extends ViewGroup implements RadarView.IScanningList
         //根据数据源信息动态添加CircleView
         for (int i = 0; i < dataLength; i++) {
             CircleView circleView = new CircleView(getContext());
-            if (mDatas.get(i).getSendUser().getSex().equals("女")) {
+            if(mDatas.get(i).getSendUser().getSex()==null){
+                circleView.setPaintColor(getResources().getColor(R.color.bg_color_pink));
+            } else if (mDatas.get(i).getSendUser().getSex().equals("女")) {
                 circleView.setPaintColor(getResources().getColor(R.color.bg_color_pink));
             } else  if (mDatas.get(i).getSendUser().getSex().equals("男"))  {
                 circleView.setPaintColor(getResources().getColor(R.color.bg_color_blue));
@@ -228,11 +230,11 @@ public class RadarViewGroup extends ViewGroup implements RadarView.IScanningList
      */
     private void startAnim(CircleView object, int position) {
         if (object != null) {
-          String  x=  mDatas.get(position).getSendUser().getImage() ;//图片的url
-            String[] xs1 =  x.split("/");
-          String[] xs2 =  xs1[xs1.length-1].split("_");
+//          String  x=  mDatas.get(position).getSendUser().getImage() ;//图片的url
+//            String[] xs1 =  x.split("/");
+//          String[] xs2 =  xs1[xs1.length-1].split("_");
 
-          object.setPortraitIcon(Integer.parseInt(xs2[0]));
+//          object.setPortraitIcon(Integer.parseInt(xs2[0]));
 
             object.setPortraitIcon(R.drawable.mln);
 //            String url=mDatas.get(position).getSendUser().getImage();

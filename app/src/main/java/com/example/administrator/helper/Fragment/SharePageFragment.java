@@ -6,10 +6,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,15 +23,20 @@ import android.widget.Toast;
 import com.example.administrator.helper.BaseFragment;
 import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
+import com.example.administrator.helper.View.NoScrollListview;
 import com.example.administrator.helper.entity.ClickLike;
+import com.example.administrator.helper.entity.Comment;
 import com.example.administrator.helper.entity.ShareEntity;
 import com.example.administrator.helper.share.DetailsActivity;
+import com.example.administrator.helper.share.MyPopWindowBottom;
+import com.example.administrator.helper.share.MyPopWindowListener;
 import com.example.administrator.helper.share.ReleaseActivity;
 import com.example.administrator.helper.share.ShowImageActivity;
 import com.example.administrator.helper.share.SpaceActivity;
 import com.example.administrator.helper.utils.CommonAdapter;
 import com.example.administrator.helper.utils.MyGridView;
 import com.example.administrator.helper.utils.RefreshListViewa;
+import com.example.administrator.helper.utils.TimestampTypeAdapter;
 import com.example.administrator.helper.utils.UrlUtils;
 import com.example.administrator.helper.utils.ViewHolder;
 import com.google.gson.Gson;
@@ -69,6 +79,15 @@ public class SharePageFragment extends BaseFragment implements RefreshListViewa.
     Timestamp sentTime;
     ClickLike clickLike;
     private PtrClassicFrameLayout ptrFrame;
+
+    Comment sendComment;//要发表的评论
+    private Button mSendBut;//评论发送按钮
+    private MyPopWindowBottom myPopWindowBottom;//屏幕底部popwindow
+    private boolean isReply;            //发表还是回复评论，true代表回复
+    private String comment = "";        //记录评论输入对话框中的内容
+    View thisFragment;
+    Map<Integer , List<Comment>> comments = new HashMap<Integer , List<Comment>>(); //评论的集合    key:分享id，value:评论集合
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,7 +95,9 @@ public class SharePageFragment extends BaseFragment implements RefreshListViewa.
         imtianjia = (ImageView) v.findViewById(R.id.im_tianjia);
         lvshare = (RefreshListViewa) v.findViewById(R.id.view);
         ptrFrame = (PtrClassicFrameLayout) v.findViewById(R.id.ultra_ptr_frame);
+        myPopWindowBottom = new MyPopWindowBottom(getActivity(), new PoPListener());
 //        ButterKnife.inject(this, v);
+        thisFragment = v;
         return v;
 
     }
@@ -174,6 +195,14 @@ public class SharePageFragment extends BaseFragment implements RefreshListViewa.
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "222", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        myPopWindowBottom.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                myPopWindowBottom.onFocusChange(false,getActivity());
+                sendComment=null;
             }
         });
     }
@@ -401,9 +430,122 @@ public class SharePageFragment extends BaseFragment implements RefreshListViewa.
 
                 }
             });
+            final NoScrollListview noScrollListview = viewHolder.getViewById(R.id.list_comment);
+            noScrollListview.setDividerHeight(0);
+            noScrollListview.setTag(position);
+            CommentAdapter commentAdapter = null;//子listView适配器
+            if (commentAdapter==null){
+                commentAdapter=new CommentAdapter(getActivity(),comments.get(shareEntity.getDynamic().getId()),R.layout.item_comment);
+                noScrollListview.setAdapter(commentAdapter);
+            }else {
+                commentAdapter.notifyDataSetChanged();
+            }
+            noScrollListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    if (myPopWindowBottom==null) {
+                        myPopWindowBottom = new MyPopWindowBottom(getActivity(), new PoPListener());
+                    }
+                    sendComment=new Comment();
+
+                    sendComment.setPublishUser(((MyApplication)getActivity().getApplication()).getUser());
+                    shareId =shareEntities.get((int) noScrollListview.getTag()).getDynamic().getId();
+                    sendComment.setShare(shareId);
+                    sendComment.setFather(comments.get(shareId).get(i));
+                    myPopWindowBottom.showAtLocation(thisFragment.findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//这种方式无论有虚拟按键还是没有都可完全显示，因为它显示的在整个父布局中
+                    myPopWindowBottom.onFocusChange(true,getActivity());
+                }
+            });
 
         }
     }
+
+    /**
+     * 不可滑动的listView的适配器
+     */
+    class CommentAdapter extends CommonAdapter<Comment>{
+
+        public CommentAdapter(Context context, List<Comment> lists, int layoutId) {
+            super(context, lists, layoutId);
+        }
+
+        @Override
+        public void convert(ViewHolder viewHolder, Comment comment, int position) {
+            //找控件赋值
+            TextView sendUser = viewHolder.getViewById(R.id.tv_user_send);
+            TextView huiFu = viewHolder.getViewById(R.id.tv_huifu);
+            TextView receiveUser = viewHolder.getViewById(R.id.tv_user_receive);
+            TextView content = viewHolder.getViewById(R.id.tv_comment_content);
+            content.setText(comment.getCotent());
+            if (comment.getFather()!=null){
+                sendUser.setText(comment.getPublishUser().getName());
+                huiFu.setText("回复");
+                receiveUser.setText(comment.getFather().getPublishUser().getName()+":");
+            }else {
+                sendUser.setText(comment.getPublishUser().getName()+":");
+                huiFu.setText("");
+                receiveUser.setText("");
+            }
+        }
+    }
+    /**
+     * 获取评论
+     * @param shareId
+     */
+    private void getComment(final int shareId){
+        String url = UrlUtils.MYURL+"GetCommentServlet";
+        RequestParams params = new RequestParams(url);
+        params.addQueryStringParameter("shareId",shareId+"");
+        Log.i("SharePageFragment", "getComment:  shareId"+shareId);
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            List<Comment> comm = new ArrayList<Comment>();
+            @Override
+            public void onSuccess(String result) {
+                Log.i("SharePageFragment", "onSuccess:  comment"+result);
+                if (result!=null) {
+                    GsonBuilder gb = new GsonBuilder();
+                    gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
+                    gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
+                    Gson gson = gb.create();
+                    Type type = new TypeToken<List<Comment>>() {
+                    }.getType();
+                    comm = gson.fromJson(result, type);
+                    if (comm.size()>0) {
+                        comments.put(shareId, comm);
+                    }else {
+                        comments.put(shareId,null);
+                    }
+                    if (comments.size()==shareEntities.size()){
+
+                        if (shareAdapter == null) {
+                            Log.i("SharePageFragment", "onSuccess:  shareAdapter == null");
+                            shareAdapter = new SshaeAdapter(getActivity(), shareEntities, R.layout.share_item);
+                            lvshare.setAdapter(shareAdapter);
+                        } else {
+                            Log.i("SharePageFragment", "onSuccess:  shareAdapter != null");
+                            shareAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                Log.i("SharePageFragment", "onError:  评论获取失败");
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                Log.i("SharePageFragment", "onFinished:  ");
+            }
+        });
+    }
+
    //点赞增加插入数据库
     public void insertThumb() {
         String url = UrlUtils.MYURL+"InsertThumbServlet";
@@ -464,6 +606,70 @@ public class SharePageFragment extends BaseFragment implements RefreshListViewa.
             }
         });
     }
+    /**
+     * PopWindow按钮点击事件
+     */
+    class PoPListener implements MyPopWindowListener {
+        @Override
+        public void firstItem(EditText editText) {
+            //封装对象
+            comment = editText.getText().toString();
+            sendComment.setCotent(comment);
+            comment="";
+            editText.setText("");
+            sendComment.setSendTime(new Timestamp(System.currentTimeMillis()));
+//            //刷新界面
+//            if (sendComment.getFather()==null) {
+//                comments.get(shareId).add(sendComment);
+//                shareAdapter.notifyDataSetChanged();
+//            }
+            //网络访问
+            String url = UrlUtils.MYURL+"SendCommentServlet";
+            RequestParams params = new RequestParams(url);
+            GsonBuilder gb = new GsonBuilder();
+            gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
+            gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
+            Gson gson = gb.create();
+            String commentStr = gson.toJson(sendComment);
+            params.addBodyParameter("comment",commentStr);
+            x.http().post(params, new Callback.CommonCallback<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    if (result.equals("success")){
+                        Log.i("PoPListener", "onSuccess:  发表成功");
+                        sendComment=null;
+                        myPopWindowBottom.onFocusChange(false,getActivity());
+                        myPopWindowBottom.dismiss();
+                        getComment(shareId);
+                    }else{
+                        Log.i("PoPListener", "onSuccess:  asjbfakjhsf");
+                        Toast.makeText(getActivity(),"发表评论失败",Toast.LENGTH_LONG);
+                    }
+                }
 
+                @Override
+                public void onError(Throwable ex, boolean isOnCallback) {
+                    Log.i("PoPListener", "onError:  "+ex);
+                    Toast.makeText(getActivity(),"发表评论失败",Toast.LENGTH_LONG);
+                }
+
+                @Override
+                public void onCancelled(CancelledException cex) {
+
+                }
+
+                @Override
+                public void onFinished() {
+
+                }
+            });
+        }
+
+    }
+
+    public void onTouchEvent(){
+        myPopWindowBottom.onFocusChange(false,getActivity());
+        myPopWindowBottom.dismiss();
+    }
 
 }

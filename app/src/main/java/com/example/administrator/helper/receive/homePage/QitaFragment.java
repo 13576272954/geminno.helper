@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.administrator.helper.BaseFragment;
+import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.entity.Task;
 import com.example.administrator.helper.receive.TaskDetilsActivity;
@@ -75,11 +76,11 @@ public class QitaFragment extends BaseFragment implements RefreshListView.OnRefr
     Boolean flag1 = false, flag2 = true;
 
     //商品名称
-    String taskDemand = null;
+    String taskDemand = "null";
     int tasktypeid =6;
     int pageNo = 1;
     int pageSize = 5;
-
+    String city;
     String url2;
     ImageLoader myImageLoader;
     CommonAdapter<Task> goodsAdapter;
@@ -97,6 +98,7 @@ public class QitaFragment extends BaseFragment implements RefreshListView.OnRefr
 
 
         View v = inflater.inflate(R.layout.xuexi_fragment,null);
+        city=((MyApplication)getActivity().getApplication()).getCity();
         ButterKnife.inject(this, v);
         return v;
 
@@ -111,7 +113,6 @@ public class QitaFragment extends BaseFragment implements RefreshListView.OnRefr
     public void initEvent() {
         lvGoods.setOnRefreshUploadChangeListener(this);
         //lvGoods的item点击事件
-
         lvGoods.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -123,9 +124,11 @@ public class QitaFragment extends BaseFragment implements RefreshListView.OnRefr
                     //点击item的商品信息
                     intent.putExtra("productInfo", (Parcelable) tasks.get(position - 1));
                     startActivityForResult(intent, 123);
+
                 }
             }
         });
+
 //        //设置query的文本改变事件
 //        query.addTextChangedListener(new TextWatcher() {
 //            @Override
@@ -183,7 +186,8 @@ public class QitaFragment extends BaseFragment implements RefreshListView.OnRefr
         // goodsAdapter = null;
         String url = UrlUtils.MYURL + "ReceiveServlet";//访问网络的url
         RequestParams requestParams = new RequestParams(url);
-        requestParams.addQueryStringParameter("TaskDemand",taskDemand);
+        requestParams.addQueryStringParameter("city",city);
+        requestParams.addQueryStringParameter("taskDemand",taskDemand);
         requestParams.addQueryStringParameter("tasktypeid", tasktypeid + "");//排序标记
         requestParams.addQueryStringParameter("pageNo", pageNo + "");
         requestParams.addQueryStringParameter("pageSize", pageSize + "");
@@ -222,7 +226,7 @@ public class QitaFragment extends BaseFragment implements RefreshListView.OnRefr
                     };
                     lvGoods.setAdapter(goodsAdapter);
                     lvGoods.setOnRefreshUploadChangeListener((RefreshListView.OnRefreshUploadChangeListener)getActivity());
-} else {
+                } else {
                     goodsAdapter.notifyDataSetChanged();
                 }
             }
@@ -281,7 +285,8 @@ public class QitaFragment extends BaseFragment implements RefreshListView.OnRefr
 
         String url = UrlUtils.MYURL+ "ReceiveServlet";//访问网络的url
         RequestParams requestParams = new RequestParams(url);
-        requestParams.addQueryStringParameter("TaskDemand",  taskDemand);
+        requestParams.addQueryStringParameter("city",city);
+        requestParams.addQueryStringParameter("taskDemand",  taskDemand);
         requestParams.addQueryStringParameter("tasktypeid",tasktypeid + "");//排序标记
         requestParams.addQueryStringParameter("pageNo", pageNo + "");
         requestParams.addQueryStringParameter("pageSize", pageSize + "");

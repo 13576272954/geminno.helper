@@ -1,13 +1,10 @@
 package com.example.administrator.helper.send.chat;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -28,7 +25,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.hyphenate.EMCallBack;
-import com.hyphenate.EMError;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -39,7 +35,6 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-import java.lang.reflect.Type;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,102 +72,17 @@ public class TalkingActivity extends AppCompatActivity  implements EMMessageList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.talking);
         // 获取当前会话的username(如果是群聊就是群id)
-        /** String str = getIntent().getStringExtra("user");
+        String str = getIntent().getStringExtra("user");
          GsonBuilder gb=new GsonBuilder();
          gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
          gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
          Gson gson = gb.create();
         otherUser=gson.fromJson(str,User.class);
-         thisUser=((MyApplication)getApplication()).getUser();*/
-        thisUser =new User(3,"333","33",null,"男",22,null,null,null,null,null,null,new Timestamp(System.currentTimeMillis()),"333","http://pic.qqtn.com/up/2016-9/2016091811555278855.jpg");
-        otherUser =new User(1,"11","111",11111,"男",20,null,null,null,null,null,null,new Timestamp(System.currentTimeMillis()),"12345","http://pic.qqtn.com/up/2016-9/2016091811555278855.jpg");
+        thisUser=((MyApplication)getApplication()).getUser();
+//        thisUser =new User(3,"333","33",null,"男",22,null,null,null,null,null,null,new Timestamp(System.currentTimeMillis()),"333","http://pic.qqtn.com/up/2016-9/2016091811555278855.jpg");
+//        otherUser =new User(1,"11","111",11111,"男",20,null,null,null,null,null,null,new Timestamp(System.currentTimeMillis()),"12345","http://pic.qqtn.com/up/2016-9/2016091811555278855.jpg");
 
         Log.i("TalkingActivity", "onCreate:  "+EMClient.getInstance());
-        //模拟登陆
-        EMClient.getInstance().login("333", "33", new EMCallBack() {
-            /**
-             * 登陆成功的回调
-             */
-            @Override
-            public void onSuccess() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        // 加载所有会话到内存
-                        EMClient.getInstance().chatManager().loadAllConversations();
-                        // 加载所有群组到内存，如果使用了群组的话
-                        // EMClient.getInstance().groupManager().loadAllGroups();
-
-                    }
-                });
-            }
-
-            /**
-             * 登陆错误的回调
-             * @param i
-             * @param s
-             */
-            @Override
-            public void onError(final int i, final String s) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.i("lzan13", "登录失败 Error code:" + i + ", message:" + s);
-                        /**
-                         * 关于错误码可以参考官方api详细说明
-                         * http://www.easemob.com/apidoc/android/chat3.0/classcom_1_1hyphenate_1_1_e_m_error.html
-                         */
-                        switch (i) {
-                            // 网络异常 2
-                            case EMError.NETWORK_ERROR:
-                                Toast.makeText(TalkingActivity.this, "网络错误 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-                                break;
-                            // 无效的用户名 101
-                            case EMError.INVALID_USER_NAME:
-                                Toast.makeText(TalkingActivity.this, "无效的用户名 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-                                break;
-                            // 无效的密码 102
-                            case EMError.INVALID_PASSWORD:
-                                Toast.makeText(TalkingActivity.this, "无效的密码 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-                                break;
-                            // 用户认证失败，用户名或密码错误 202
-                            case EMError.USER_AUTHENTICATION_FAILED:
-                                Toast.makeText(TalkingActivity.this, "用户认证失败，用户名或密码错误 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-                                break;
-                            // 用户不存在 204
-                            case EMError.USER_NOT_FOUND:
-                                Toast.makeText(TalkingActivity.this, "用户不存在 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-                                break;
-                            // 无法访问到服务器 300
-                            case EMError.SERVER_NOT_REACHABLE:
-                                Toast.makeText(TalkingActivity.this, "无法访问到服务器 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-                                break;
-                            // 等待服务器响应超时 301
-                            case EMError.SERVER_TIMEOUT:
-                                Toast.makeText(TalkingActivity.this, "等待服务器响应超时 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-                                break;
-                            // 服务器繁忙 302
-                            case EMError.SERVER_BUSY:
-                                Toast.makeText(TalkingActivity.this, "服务器繁忙 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-                                break;
-                            // 未知 Server 异常 303 一般断网会出现这个错误
-                            case EMError.SERVER_UNKNOWN_ERROR:
-                                Toast.makeText(TalkingActivity.this, "未知的服务器异常 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-                                break;
-                            default:
-                                Toast.makeText(TalkingActivity.this, "ml_sign_in_failed code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-                                break;
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onProgress(int i, String s) {
-
-            }
-        });
 
         mChatId = otherUser.getPhoneNumber();
 

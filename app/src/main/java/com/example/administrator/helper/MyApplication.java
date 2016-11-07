@@ -7,8 +7,6 @@ import android.content.Context;
 import android.os.Vibrator;
 import android.util.Log;
 
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
 import com.baidu.mapapi.SDKInitializer;
 import com.example.administrator.helper.entity.User;
 import com.example.administrator.helper.utils.LocationService;
@@ -169,4 +167,6 @@ public class MyApplication extends Application {
         // 没有匹配的项，返回为null
         return null;
     }
+
+
 }

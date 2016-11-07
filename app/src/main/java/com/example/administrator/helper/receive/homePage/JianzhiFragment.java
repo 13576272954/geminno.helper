@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.administrator.helper.BaseFragment;
+import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.entity.Task;
 import com.example.administrator.helper.receive.TaskDetilsActivity;
@@ -74,15 +75,16 @@ public class JianzhiFragment extends BaseFragment implements  RefreshListView.On
     Boolean flag1 = false, flag2 = true;
 
     //商品名称
-    String taskDemand = null;
+    String taskDemand = "null";
     int tasktypeid =4;
     int pageNo = 1;
     int pageSize = 5;
 
+    String city;
     String url2;
     ImageLoader myImageLoader;
     CommonAdapter<Task> goodsAdapter;
-
+    List<String> popContents = new ArrayList<String>();
     List<Task> tasks = new ArrayList<Task>();//存放商品信息
 
     @InjectView(R.id.lv_goods)
@@ -96,8 +98,12 @@ public class JianzhiFragment extends BaseFragment implements  RefreshListView.On
 
 
         View v = inflater.inflate(R.layout.xuexi_fragment,null);
+        city=((MyApplication)getActivity().getApplication()).getCity();
         ButterKnife.inject(this, v);
         return v;
+
+
+
     }
 
 
@@ -107,8 +113,6 @@ public class JianzhiFragment extends BaseFragment implements  RefreshListView.On
     public void initEvent() {
         lvGoods.setOnRefreshUploadChangeListener(this);
         //lvGoods的item点击事件
-
-
         lvGoods.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -120,10 +124,12 @@ public class JianzhiFragment extends BaseFragment implements  RefreshListView.On
                     //点击item的商品信息
                     intent.putExtra("productInfo", (Parcelable) tasks.get(position - 1));
                     startActivityForResult(intent, 123);
+
                 }
             }
         });
-        //设置query的文本改变事件
+
+//        //设置query的文本改变事件
 //        query.addTextChangedListener(new TextWatcher() {
 //            @Override
 //            public void afterTextChanged(Editable s) {
@@ -180,7 +186,8 @@ public class JianzhiFragment extends BaseFragment implements  RefreshListView.On
         // goodsAdapter = null;
         String url = UrlUtils.MYURL + "ReceiveServlet";//访问网络的url
         RequestParams requestParams = new RequestParams(url);
-        requestParams.addQueryStringParameter("TaskDemand",taskDemand);
+        requestParams.addQueryStringParameter("city",city);
+        requestParams.addQueryStringParameter("taskDemand",taskDemand);
         requestParams.addQueryStringParameter("tasktypeid", tasktypeid + "");//排序标记
         requestParams.addQueryStringParameter("pageNo", pageNo + "");
         requestParams.addQueryStringParameter("pageSize", pageSize + "");
@@ -204,7 +211,7 @@ public class JianzhiFragment extends BaseFragment implements  RefreshListView.On
                         public void convert(ViewHolder viewHolder, Task task, int position) {
                             //取出控件，赋值
                             TextView tv = viewHolder.getViewById(R.id.prod_list_item_tv);
-                            tv.setText("发布时间："+  task.getBeginTime());//商品名称
+                            tv.setText("发布时间："+ task.getBeginTime());//商品名称
                             TextView tvPrice = viewHolder.getViewById(R.id.prod_list_item_tv2);
                             tvPrice.setText("￥" + task.getMoney());
                             TextView a = viewHolder.getViewById(R.id.prod_list_item_tv3);
@@ -219,7 +226,7 @@ public class JianzhiFragment extends BaseFragment implements  RefreshListView.On
                     };
                     lvGoods.setAdapter(goodsAdapter);
                     lvGoods.setOnRefreshUploadChangeListener((RefreshListView.OnRefreshUploadChangeListener)getActivity());
- } else {
+                } else {
                     goodsAdapter.notifyDataSetChanged();
                 }
             }
@@ -238,14 +245,9 @@ public class JianzhiFragment extends BaseFragment implements  RefreshListView.On
             }
         });
     }
-//
-//    @Override
-//    public void onHiddenChanged(boolean hidden) {
-//        super.onHiddenChanged(hidden);
-//    }
 
 
-    //    @OnClick({R.id.tv_search, R.id.search_clear})
+//    @OnClick({R.id.tv_search, R.id.search_clear})
 //    public void onClick(View view) {
 //        switch (view.getId()) {
 //            case R.id.tv_search:
@@ -283,7 +285,8 @@ public class JianzhiFragment extends BaseFragment implements  RefreshListView.On
 
         String url = UrlUtils.MYURL+ "ReceiveServlet";//访问网络的url
         RequestParams requestParams = new RequestParams(url);
-        requestParams.addQueryStringParameter("TaskDemand",  taskDemand);
+        requestParams.addQueryStringParameter("city",city);
+        requestParams.addQueryStringParameter("taskDemand",  taskDemand);
         requestParams.addQueryStringParameter("tasktypeid",tasktypeid + "");//排序标记
         requestParams.addQueryStringParameter("pageNo", pageNo + "");
         requestParams.addQueryStringParameter("pageSize", pageSize + "");

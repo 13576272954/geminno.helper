@@ -18,14 +18,14 @@ public class WelcomeActivity extends AppCompatActivity {
     boolean choseAutoLogin;//是否自动登陆
     LoginActivity loginActivity;
 
-    private LocationService locationService;
+//    private LocationService locationService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         initData();
-//        isLogin();
+        isLogin();
 
     }
     private void initData (){
@@ -46,46 +46,46 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
-    private void logMsg(String city){
-        initData();
-        isLogin();
-        ((MyApplication)getApplication()).setCity(city);
-    }
+//    private void logMsg(String city){
+//        initData();
+//        isLogin();
+//        ((MyApplication)getApplication()).setCity(city);
+//    }
 
-    @Override
-    protected void onStop() {
-        locationService.unregisterListener(mListener); //注销掉监听
-        locationService.stop(); //停止定位服务
-        super.onStop();
-    }
+//    @Override
+//    protected void onStop() {
+//        locationService.unregisterListener(mListener); //注销掉监听
+//        locationService.stop(); //停止定位服务
+//        super.onStop();
+//    }
 ////
-    @Override
-    protected void onStart() {
-        super.onStart();
-        locationService = ((MyApplication) getApplication()).locationService;
-        //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
-        locationService.registerListener(mListener);
-        //注册监听
-        locationService.setLocationOption(locationService.getDefaultLocationClientOption());
-        locationService.start();// 定位SDK
-        Log.i("dingwei", "onReceiveLocation:  开始定位");
-        // start之后会默认发起一次定位请求，开发者无须判断isstart并主动调用request
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        locationService = ((MyApplication) getApplication()).locationService;
+//        //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
+//        locationService.registerListener(mListener);
+//        //注册监听
+//        locationService.setLocationOption(locationService.getDefaultLocationClientOption());
+//        locationService.start();// 定位SDK
+//        Log.i("dingwei", "onReceiveLocation:  开始定位");
+//        // start之后会默认发起一次定位请求，开发者无须判断isstart并主动调用request
+//    }
 
     /**
      * 定位结果回调，重写onReceiveLocation方法
      */
-    private BDLocationListener mListener = new BDLocationListener() {
-        @Override
-        public void onReceiveLocation(BDLocation location) {
-            Log.i("dingwei", "onReceiveLocation:  定位回调");
-            if (null != location && location.getLocType() != BDLocation.TypeServerError) {
-                Log.i("dingwei", "onReceiveLocation:  Time:"+location.getTime());
-                Log.i("dingwei", "onReceiveLocation:  Type:"+location.getLocType());
-                Log.i("dingwei", "onReceiveLocation:  city:"+location.getCity());
-                logMsg(location.getCity());
-            }
-
-        }
-    };
+//    private BDLocationListener mListener = new BDLocationListener() {
+//        @Override
+//        public void onReceiveLocation(BDLocation location) {
+//            Log.i("dingwei", "onReceiveLocation:  定位回调");
+//            if (null != location && location.getLocType() != BDLocation.TypeServerError) {
+//                Log.i("dingwei", "onReceiveLocation:  Time:"+location.getTime());
+//                Log.i("dingwei", "onReceiveLocation:  Type:"+location.getLocType());
+//                Log.i("dingwei", "onReceiveLocation:  city:"+location.getCity());
+//                logMsg(location.getCity());
+//            }
+//
+//        }
+//    };
 }

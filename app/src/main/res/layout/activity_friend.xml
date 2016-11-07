@@ -4,26 +4,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.administrator.helper.send.chat.FriendActivity">
-    <RelativeLayout android:background="#ff1facfd"
+    <LinearLayout android:background="#02bb9d"
         android:id="@+id/rl_talk_toolbar"
         android:layout_width="fill_parent"
         android:layout_height="52.0dip">
         <ImageView android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20.0dip"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="15.0dip"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:src="@drawable/back"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true" />
         <TextView android:textSize="20.0sp"
             android:textStyle="bold"
             android:textColor="#ffffffff"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="4"
             android:text="我的消息"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true" />
-    </RelativeLayout>
+            android:gravity="center"
+            android:layout_gravity="center"/>
+        <ImageView
+            android:id="@+id/tv_add_friend"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:src="@drawable/add_friend"
+            android:layout_marginRight="15.0dip"/>
+    </LinearLayout>
 
     <com.example.administrator.helper.utils.RefreshListView
         android:id="@+id/list_friend"

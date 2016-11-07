@@ -110,7 +110,7 @@ public class SendPageFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_send_page, null);
         ButterKnife.inject(this, v);
         getPicture();
-        city = ((MyApplication)getActivity().getApplication()).getCity();
+//        city = ((MyApplication)getActivity().getApplication()).getCity();
         tvCity.setText(city);
         tvCity.setMovementMethod(ScrollingMovementMethod.getInstance());
         return v;

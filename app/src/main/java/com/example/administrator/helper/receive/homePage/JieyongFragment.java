@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.administrator.helper.BaseFragment;
+import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.entity.Task;
 import com.example.administrator.helper.receive.TaskDetilsActivity;
@@ -75,15 +76,16 @@ public class JieyongFragment extends BaseFragment implements RefreshListView.OnR
     Boolean flag1 = false, flag2 = true;
 
     //商品名称
-    String taskDemand = null;
+    String taskDemand = "null";
     int tasktypeid = 3;
     int pageNo = 1;
     int pageSize = 5;
 
+    String city;
     String url2;
     ImageLoader myImageLoader;
     CommonAdapter<Task> goodsAdapter;
-
+    List<String> popContents = new ArrayList<String>();
     List<Task> tasks = new ArrayList<Task>();//存放商品信息
 
     @InjectView(R.id.lv_goods)
@@ -97,6 +99,7 @@ public class JieyongFragment extends BaseFragment implements RefreshListView.OnR
 
 
         View v = inflater.inflate(R.layout.xuexi_fragment,null);
+        city=((MyApplication)getActivity().getApplication()).getCity();
         ButterKnife.inject(this, v);
         return v;
 
@@ -111,7 +114,6 @@ public class JieyongFragment extends BaseFragment implements RefreshListView.OnR
     public void initEvent() {
         lvGoods.setOnRefreshUploadChangeListener(this);
         //lvGoods的item点击事件
-
         lvGoods.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -123,11 +125,12 @@ public class JieyongFragment extends BaseFragment implements RefreshListView.OnR
                     //点击item的商品信息
                     intent.putExtra("productInfo", (Parcelable) tasks.get(position - 1));
                     startActivityForResult(intent, 123);
+
                 }
             }
         });
 
-        //设置query的文本改变事件
+//        //设置query的文本改变事件
 //        query.addTextChangedListener(new TextWatcher() {
 //            @Override
 //            public void afterTextChanged(Editable s) {
@@ -184,7 +187,8 @@ public class JieyongFragment extends BaseFragment implements RefreshListView.OnR
         // goodsAdapter = null;
         String url = UrlUtils.MYURL + "ReceiveServlet";//访问网络的url
         RequestParams requestParams = new RequestParams(url);
-        requestParams.addQueryStringParameter("TaskDemand",taskDemand);
+        requestParams.addQueryStringParameter("city",city);
+        requestParams.addQueryStringParameter("taskDemand",taskDemand);
         requestParams.addQueryStringParameter("tasktypeid", tasktypeid + "");//排序标记
         requestParams.addQueryStringParameter("pageNo", pageNo + "");
         requestParams.addQueryStringParameter("pageSize", pageSize + "");
@@ -223,7 +227,6 @@ public class JieyongFragment extends BaseFragment implements RefreshListView.OnR
                     };
                     lvGoods.setAdapter(goodsAdapter);
                     lvGoods.setOnRefreshUploadChangeListener((RefreshListView.OnRefreshUploadChangeListener)getActivity());
-
                 } else {
                     goodsAdapter.notifyDataSetChanged();
                 }
@@ -283,7 +286,8 @@ public class JieyongFragment extends BaseFragment implements RefreshListView.OnR
 
         String url = UrlUtils.MYURL+ "ReceiveServlet";//访问网络的url
         RequestParams requestParams = new RequestParams(url);
-        requestParams.addQueryStringParameter("TaskDemand",  taskDemand);
+        requestParams.addQueryStringParameter("city",city);
+        requestParams.addQueryStringParameter("taskDemand",  taskDemand);
         requestParams.addQueryStringParameter("tasktypeid",tasktypeid + "");//排序标记
         requestParams.addQueryStringParameter("pageNo", pageNo + "");
         requestParams.addQueryStringParameter("pageSize", pageSize + "");
@@ -318,7 +322,7 @@ public class JieyongFragment extends BaseFragment implements RefreshListView.OnR
                             TextView tvPrice = viewHolder.getViewById(R.id.prod_list_item_tv2);
                             tvPrice.setText("￥" + task.getMoney());
                             TextView a = viewHolder.getViewById(R.id.prod_list_item_tv3);
-                            a.setText(  task.getBeginTime().toString());
+                            a.setText( task.getBeginTime().toString());
                             //其他控件赋值
 
                         }

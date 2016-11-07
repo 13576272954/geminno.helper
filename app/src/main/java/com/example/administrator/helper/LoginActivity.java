@@ -14,8 +14,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.administrator.helper.entity.User;
-import com.example.administrator.helper.send.GoPayActivity;
-import com.example.administrator.helper.send.chat.FriendActivity;
 import com.example.administrator.helper.utils.TimestampTypeAdapter;
 import com.example.administrator.helper.utils.UrlUtils;
 import com.google.gson.Gson;
@@ -118,19 +116,23 @@ public class LoginActivity extends AppCompatActivity {
 
                 }else {
                     Toast.makeText(context, "账号或密码错误", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(context,LoginActivity.class);
-                    context.finish();
-                    context.startActivity(intent);
+                    if (context!=LoginActivity.this){
+                        Intent intent = new Intent(context,LoginActivity.class);
+                        context.finish();
+                        context.startActivity(intent);
+                    }
                 }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Log.i("LoginActivity", "LoginActivity:onError失败"+ex.getMessage());
+                Log.i("LoginActivity", "LoginActivity:onError失败"+ex);
                 Toast.makeText(context, "网络访问失败", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(context,LoginActivity.class);
-                context.finish();
-                context.startActivity(intent);
+                if (context!=LoginActivity.this){
+                    Intent intent = new Intent(context,LoginActivity.class);
+                    context.finish();
+                    context.startActivity(intent);
+                }
             }
 
             @Override

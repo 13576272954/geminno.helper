@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.administrator.helper.BaseFragment;
+import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.entity.Task;
 import com.example.administrator.helper.receive.TaskDetilsActivity;
@@ -73,11 +74,11 @@ public class ShenghuoFragment extends BaseFragment implements RefreshListView.On
     Boolean flag1 = false, flag2 = true;
 
     //商品名称
-    String taskDemand = null;
+    String taskDemand = "null";
     int tasktypeid = 2;
     int pageNo = 1;
     int pageSize = 5;
-
+    String city;
     String url2;
     ImageLoader myImageLoader;
     CommonAdapter<Task> goodsAdapter;
@@ -95,6 +96,7 @@ public class ShenghuoFragment extends BaseFragment implements RefreshListView.On
 
 
         View v = inflater.inflate(R.layout.xuexi_fragment,null);
+        city=((MyApplication)getActivity().getApplication()).getCity();
         ButterKnife.inject(this, v);
         return v;
 
@@ -120,11 +122,12 @@ public class ShenghuoFragment extends BaseFragment implements RefreshListView.On
                     //点击item的商品信息
                     intent.putExtra("productInfo", (Parcelable) tasks.get(position - 1));
                     startActivityForResult(intent, 123);
+
                 }
             }
         });
 
-        //设置query的文本改变事件
+//        //设置query的文本改变事件
 //        query.addTextChangedListener(new TextWatcher() {
 //            @Override
 //            public void afterTextChanged(Editable s) {
@@ -181,7 +184,8 @@ public class ShenghuoFragment extends BaseFragment implements RefreshListView.On
         // goodsAdapter = null;
         String url = UrlUtils.MYURL + "ReceiveServlet";//访问网络的url
         RequestParams requestParams = new RequestParams(url);
-        requestParams.addQueryStringParameter("TaskDemand",taskDemand);
+        requestParams.addQueryStringParameter("city",city);
+        requestParams.addQueryStringParameter("taskDemand",taskDemand);
         requestParams.addQueryStringParameter("tasktypeid", tasktypeid + "");//排序标记
         requestParams.addQueryStringParameter("pageNo", pageNo + "");
         requestParams.addQueryStringParameter("pageSize", pageSize + "");
@@ -220,8 +224,7 @@ public class ShenghuoFragment extends BaseFragment implements RefreshListView.On
                     };
                     lvGoods.setAdapter(goodsAdapter);
                     lvGoods.setOnRefreshUploadChangeListener((RefreshListView.OnRefreshUploadChangeListener)getActivity());
-
-               } else {
+                } else {
                     goodsAdapter.notifyDataSetChanged();
                 }
             }
@@ -241,7 +244,7 @@ public class ShenghuoFragment extends BaseFragment implements RefreshListView.On
         });
     }
 
-//
+
 //    @OnClick({R.id.tv_search, R.id.search_clear})
 //    public void onClick(View view) {
 //        switch (view.getId()) {
@@ -280,7 +283,8 @@ public class ShenghuoFragment extends BaseFragment implements RefreshListView.On
 
         String url = UrlUtils.MYURL+ "ReceiveServlet";//访问网络的url
         RequestParams requestParams = new RequestParams(url);
-        requestParams.addQueryStringParameter("TaskDemand",  taskDemand);
+        requestParams.addQueryStringParameter("city",city);
+        requestParams.addQueryStringParameter("taskDemand",  taskDemand);
         requestParams.addQueryStringParameter("tasktypeid",tasktypeid + "");//排序标记
         requestParams.addQueryStringParameter("pageNo", pageNo + "");
         requestParams.addQueryStringParameter("pageSize", pageSize + "");

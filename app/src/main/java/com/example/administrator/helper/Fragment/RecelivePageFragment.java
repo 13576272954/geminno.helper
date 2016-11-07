@@ -19,7 +19,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -29,14 +28,11 @@ import com.bumptech.glide.Glide;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.geocode.GeoCodeOption;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
-import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
-import com.baidu.mapapi.utils.DistanceUtil;
 import com.example.administrator.helper.MyApplication;
 import com.example.administrator.helper.R;
 import com.example.administrator.helper.entity.Task;
@@ -66,7 +62,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -130,15 +125,12 @@ public class RecelivePageFragment extends Fragment implements ViewPager.OnPageCh
 
         getPersimmions();
         initView();
-
-
         ryContainer.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return viewPager.dispatchTouchEvent(event);
             }
         });
-        Log.i("RecelivePageFragment", "onCreateViewxvvvvvvvvvvv: "+list.size());
 
         ButterKnife.inject(this, view);
 //        onStop();
@@ -270,15 +262,19 @@ public class RecelivePageFragment extends Fragment implements ViewPager.OnPageCh
                 }
             }, 1500);
             radarViewGroup.setiRadarClickListener(this);
-            Log.i("RecelivePageFragment", "geocodeDiGui:-----------111 "+mDatas);
             return;
         }
         Log.i("RecelivePageFragment", "geocodeDiGui:1111111111 "+list.size());
-        GeoCodeOption GeoOption = new GeoCodeOption().city(list.get(size).getMakePlace()).address(list.get(size).getCity());
-
+//        GeoCodeOption GeoOption = new GeoCodeOption().city(list.get(size).getCity()).address(list.get(size).getMakePlace());
+//
+//        mSearch = GeoCoder.newInstance();
+//        Log.i("RecelivePageFragment", "geocodeDiGui:  "+GeoOption);
+//        mSearch.geocode(GeoOption);
+        GeoCodeOption GeoOption = new GeoCodeOption().city( list.get(size).getCity()).address(list.get(size).getMakePlace());
         Log.i("RecelivePageFragment", "geocodeDiGui:222222222222 "+list.size());
         mSearch = GeoCoder.newInstance();
         mSearch.geocode(GeoOption);
+        mSearchList.add(mSearch);
 
         mSearch.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
             @Override
@@ -286,7 +282,7 @@ public class RecelivePageFragment extends Fragment implements ViewPager.OnPageCh
                 newPoint=geoCodeResult.getLocation();
                 User user = new User();
                 newDestain = user.calDistance(minePoint,newPoint);
-                newDestain = newDestain/1000;
+
                 final String image= list.get(size).getSendUser().getImage();
                 list.get(size).getSendUser().setImage(image);
                 final  String name=list.get(size).getSendUser().getName();
@@ -362,9 +358,10 @@ public class RecelivePageFragment extends Fragment implements ViewPager.OnPageCh
 
     @OnClick(R.id.ib_detils)
     public void onClick() {
-        Intent intent = new Intent(getActivity(),XuexiFragment.class);
-        intent.putExtra("xiangxi", (Parcelable)list.get(i));
-        startActivityForResult(intent, 222);
+        Intent intent = new Intent(getActivity(), DetilsActivity.class);
+//        intent.putExtra("xiangxi", (Parcelable)list.get(i));
+//        startActivityForResult(intent, 222);
+        startActivity(intent);
     }
     class ViewpagerAdapter extends PagerAdapter {
         @Override
@@ -382,8 +379,13 @@ public class RecelivePageFragment extends Fragment implements ViewPager.OnPageCh
             TextView tvName = (TextView) view.findViewById(R.id.tv_name1);
             TextView tvDistance = (TextView) view.findViewById(R.id.tv_distance);
              tvName.setText(task.getSendUser().getName());
-             tvDistance.setText(newDestain+"km");
-         if (task.getSendUser().getSex().equals("女")) {
+            float x =task.getSendUser().getDistance()/1000;
+            String result = String .format("%.1f",x);
+            tvDistance.setText(result+"km");
+            if(task.getSendUser().getSex()==null){
+                ivSex.setImageResource(R.drawable.girl);
+            }
+           else if (task.getSendUser().getSex().equals("女")) {
                 ivSex.setImageResource(R.drawable.girl);
             } else if(task.getSendUser().getSex().equals("男")){
                 ivSex.setImageResource(R.drawable.boy);
@@ -421,8 +423,12 @@ public class RecelivePageFragment extends Fragment implements ViewPager.OnPageCh
     }
 
     public void logMsg(String city,String myaddress , LatLng point) {
+        ((MyApplication)getActivity().getApplication()).setCity(city);
+        Log.i("RecelivePageFragment", "onReceiveLocation:  "+city+"      "+((MyApplication)getActivity().getApplication()).getCity());
             this.city=city;
+        Log.i("RecelivePageFragment", "logMsg:  "+myaddress);
             this.myaddress=myaddress;
+        Log.i("RecelivePageFragment", "logMsg:  "+this.myaddress);
             this.minePoint = point;
              initData();
 
@@ -446,7 +452,9 @@ public class RecelivePageFragment extends Fragment implements ViewPager.OnPageCh
                 String address=location.getDistrict()+location.getStreet();
                 locationService.unregisterListener(mListener);
                 locationService.stop();
+                Log.i("RecelivePageFragment", "onReceiveLocation:  "+location.getCity());
                 logMsg(location.getCity(),address, new LatLng(location.getLatitude() , location.getLongitude())) ;
+
 
             }
         }

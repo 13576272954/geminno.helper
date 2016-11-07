@@ -38,7 +38,7 @@
     <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
-    <!--分享-->
+    <!-- 分享 -->
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -46,8 +46,8 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <!-- 蓝牙分享所需的权限 -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -77,13 +77,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".LoginActivity" />
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
         <activity android:name=".send.SendStudyActivity" />
         <activity android:name=".send.SendLifeActivity" />
         <activity android:name=".send.SendBorrowActivity" />
@@ -92,8 +90,8 @@
         <activity android:name=".send.SendOtherActivity" />
         <activity android:name=".send.GoPayActivity" />
         <activity android:name=".send.map.getMap" />
-        <activity android:name=".send.chat.TalkingActivity"></activity>
-        <activity android:name=".send.chat.FriendActivity"></activity>
+        <activity android:name=".send.chat.TalkingActivity" />
+        <activity android:name=".send.chat.FriendActivity" />
         <activity android:name=".receive.DetilsActivity" />
         <activity android:name=".receive.TaskDetilsActivity" />
         <activity android:name=".my.Activity.MainActivity2" />
@@ -107,24 +105,25 @@
         <activity android:name=".my.Activity.Main3Activity" />
         <activity android:name=".my.Activity.zhuce" />
         <activity android:name=".share.ReleaseActivity" />
-        <activity android:name=".share.ImageListActivity"/>
-        <activity android:name=".share.ImageActivity"/>
-        <activity android:name=".share.MapActivity"/>
-        <activity android:name=".share.DetailsActivity"/>
-        <activity android:name=".share.ShowImageActivity"/>
-        <activity android:name=".share.SpaceActivity"/>
+        <activity android:name=".share.ImageListActivity" />
+        <activity android:name=".share.ImageActivity" />
+        <activity android:name=".share.MapActivity" />
+        <activity android:name=".share.DetailsActivity" />
+        <activity android:name=".share.ShowImageActivity" />
+        <activity android:name=".share.SpaceActivity" />
 
-        <!--分享-->
+        <!-- 分享 -->
         <activity
             android:name="com.mob.tools.MobUIShell"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" >
-
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <data android:scheme="tencent100371282" />
+
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -132,18 +131,18 @@
             <!-- 调用新浪原生SDK，需要注册的回调activity -->
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <!--微信分享回调 -->
-        <activity
-            android:name="cn.sharesdk.demo.wxapi.WXEntryActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="true"
-            android:screenOrientation="portrait" />
-
+        <!--&lt;!&ndash; 微信分享回调 &ndash;&gt;-->
+        <!--<activity-->
+            <!--android:name="cn.sharesdk.demo.wxapi.WXEntryActivity"-->
+            <!--android:configChanges="keyboardHidden|orientation|screenSize"-->
+            <!--android:exported="true"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:theme="@android:style/Theme.Translucent.NoTitleBar" />-->
 
         <!-- 百度地图服务 -->
         <service
@@ -170,7 +169,7 @@
             </intent-filter>
         </receiver>
 
-
+        <activity android:name=".send.chat.AddFriendActivity"></activity>
     </application>
 
 </manifest>

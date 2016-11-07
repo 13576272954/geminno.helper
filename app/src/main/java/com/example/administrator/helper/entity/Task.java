@@ -29,8 +29,13 @@ public class Task implements Parcelable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Task(User sendUser, Timestamp beginTime, Timestamp latestTime,String city, String makePlace, String submitPlace, String phone,
-			TaskType taskType, String taskDemand, Integer money, Integer taskStatus) {
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Task(User sendUser, Timestamp beginTime, Timestamp latestTime, String city, String makePlace, String submitPlace, String phone,
+				TaskType taskType, String taskDemand, Integer money, Integer taskStatus) {
 		super();
 		this.sendUser = sendUser;
 		this.beginTime = beginTime;

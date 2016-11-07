@@ -1,6 +1,5 @@
 package com.example.administrator.helper.send;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -9,11 +8,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +18,6 @@ import com.example.administrator.helper.R;
 import com.example.administrator.helper.entity.Orders;
 import com.example.administrator.helper.entity.Task;
 import com.example.administrator.helper.entity.User;
-import com.example.administrator.helper.utils.TimestampTypeAdapter;
 import com.example.administrator.helper.utils.UrlUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -34,14 +29,12 @@ import org.xutils.x;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.sql.Timestamp;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import c.b.BP;
 import c.b.PListener;
-import c.b.QListener;
 
 public class GoPayActivity extends AppCompatActivity {
 
