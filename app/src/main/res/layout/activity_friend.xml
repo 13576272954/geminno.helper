@@ -24,7 +24,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:text="我的消息"
+            android:text="我的好友"
             android:gravity="center"
             android:layout_gravity="center"/>
         <ImageView
@@ -38,11 +38,10 @@
             android:layout_marginRight="15.0dip"/>
     </LinearLayout>
 
-    <com.example.administrator.helper.utils.RefreshListView
+    <ListView
         android:id="@+id/list_friend"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/rl_talk_toolbar">
-
-    </com.example.administrator.helper.utils.RefreshListView>
+        android:layout_below="@+id/rl_talk_toolbar"
+        />
 </RelativeLayout>

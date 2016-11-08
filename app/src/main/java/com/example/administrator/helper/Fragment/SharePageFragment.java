@@ -202,7 +202,6 @@ public class SharePageFragment extends BaseFragment implements RefreshListViewa.
             @Override
             public void onDismiss() {
                 myPopWindowBottom.onFocusChange(false,getActivity());
-                sendComment=null;
             }
         });
     }
@@ -232,6 +231,10 @@ public class SharePageFragment extends BaseFragment implements RefreshListViewa.
                 List<ShareEntity> newshareEntities=gson.fromJson(result,type);
                 shareEntities.clear();
                 shareEntities.addAll(newshareEntities);
+                for (ShareEntity shareEntity:shareEntities) {
+                    Log.i("aaaaaaaaaa", "onSuccess:  "+shareEntity.getDynamic().getId());
+                    getComment(shareEntity.getDynamic().getId());
+                }
                 Log.i("SharePageFragment", "onSuccess: shareEntities" + "--" + shareEntities);
                 if (shareAdapter == null) {
                     shareAdapter = new SshaeAdapter(getActivity(), shareEntities, R.layout.share_item);
@@ -275,6 +278,10 @@ public class SharePageFragment extends BaseFragment implements RefreshListViewa.
                     pageNo--;
                 }
                 shareEntities.addAll(newshareEntities);
+                for (ShareEntity shareEntity:shareEntities) {
+                    Log.i("aaaaaaaaaa", "onSuccess:  "+shareEntity.getDynamic().getId());
+                    getComment(shareEntity.getDynamic().getId());
+                }
                 Log.i("SharePageFragment", "onSuccess: shareEntities" + "--" + shareEntities);
                 if (shareAdapter == null) {
                     shareAdapter = new SshaeAdapter(getActivity(), shareEntities, R.layout.share_item);
@@ -304,6 +311,7 @@ public class SharePageFragment extends BaseFragment implements RefreshListViewa.
                 pageNo++;
                 loadMoreData();
                 lvshare.completeLoad();
+
             }
         },1000);
     }
@@ -398,6 +406,13 @@ public class SharePageFragment extends BaseFragment implements RefreshListViewa.
                    });
                 }
             });
+            Log.i("SshaeAdapter", "convert:  tupian:  "+shareEntity.getDynamic().getPicture());
+            if (images == null || images.size()<1||"".equals(shareEntity.getDynamic().getPicture())) {
+                Log.i("SshaeAdapter", "convert:  tupian:  ....");
+                gridduotu.setVisibility(View.GONE);
+            }else {
+                gridduotu.setVisibility(View.VISIBLE);
+            }
             final RadioButton imz = viewHolder.getViewById(R.id.im_zan);
             imz.setTag(position);//加标记，保证每个checkbox的tag不一样
             imz.setChecked(shareEntity.isCheck());
@@ -430,14 +445,38 @@ public class SharePageFragment extends BaseFragment implements RefreshListViewa.
 
                 }
             });
+
+            final ImageView imPin = viewHolder.getViewById(R.id.im_pin);
+            imPin.setTag(position);//加标记
+            imPin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (myPopWindowBottom==null) {
+                        myPopWindowBottom = new MyPopWindowBottom(getActivity(), new PoPListener());
+                    }
+                    sendComment=new Comment();
+
+                    sendComment.setPublishUser(((MyApplication)getActivity().getApplication()).getUser());
+                    shareId =shareEntities.get((int) imPin.getTag()).getDynamic().getId();
+                    sendComment.setShare(shareId);
+                    sendComment.setFather(null);
+                    myPopWindowBottom.showAtLocation(thisFragment.findViewById(R.id.main), Gravity.BOTTOM, 0, 0);//这种方式无论有虚拟按键还是没有都可完全显示，因为它显示的在整个父布局中
+                    myPopWindowBottom.onFocusChange(true,getActivity());
+                }
+            });
             final NoScrollListview noScrollListview = viewHolder.getViewById(R.id.list_comment);
+            Log.i("SshaeAdapter", "convert:  子评论listView");
             noScrollListview.setDividerHeight(0);
             noScrollListview.setTag(position);
+//            CommentAdapter commentAdapter = (CommentAdapter) noScrollListview.getAdapter();//子listView适配器
             CommentAdapter commentAdapter = null;//子listView适配器
             if (commentAdapter==null){
+                Log.i("SshaeAdapter", "convert:  新建适配器");
                 commentAdapter=new CommentAdapter(getActivity(),comments.get(shareEntity.getDynamic().getId()),R.layout.item_comment);
+                Log.i("SshaeAdapter", "convert:  评论集合:"+comments.get(shareEntity.getDynamic().getId()));
                 noScrollListview.setAdapter(commentAdapter);
             }else {
+                Log.i("SshaeAdapter", "convert:  更新适配器");
                 commentAdapter.notifyDataSetChanged();
             }
             noScrollListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -515,6 +554,7 @@ public class SharePageFragment extends BaseFragment implements RefreshListViewa.
                     }else {
                         comments.put(shareId,null);
                     }
+                    Log.i("aaaaaaaaaaaaaaaaaa", "onSuccess:  ......."+comments);
                     if (comments.size()==shareEntities.size()){
 
                         if (shareAdapter == null) {
@@ -623,6 +663,8 @@ public class SharePageFragment extends BaseFragment implements RefreshListViewa.
 //                comments.get(shareId).add(sendComment);
 //                shareAdapter.notifyDataSetChanged();
 //            }
+            myPopWindowBottom.onFocusChange(false,getActivity());
+            myPopWindowBottom.dismiss();
             //网络访问
             String url = UrlUtils.MYURL+"SendCommentServlet";
             RequestParams params = new RequestParams(url);
@@ -638,8 +680,6 @@ public class SharePageFragment extends BaseFragment implements RefreshListViewa.
                     if (result.equals("success")){
                         Log.i("PoPListener", "onSuccess:  发表成功");
                         sendComment=null;
-                        myPopWindowBottom.onFocusChange(false,getActivity());
-                        myPopWindowBottom.dismiss();
                         getComment(shareId);
                     }else{
                         Log.i("PoPListener", "onSuccess:  asjbfakjhsf");

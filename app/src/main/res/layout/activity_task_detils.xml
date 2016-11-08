@@ -28,13 +28,21 @@
          android:layout_alignParentRight="true"
          android:layout_centerVertical="true"/>
     </RelativeLayout>
+
+
     <ScrollView android:background="#ffdcdcdc"
         android:scrollbars="none"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
+
         <LinearLayout android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+            </LinearLayout>
             <LinearLayout android:orientation="vertical"
                 android:background="#ffc2c2c2"
                 android:layout_width="fill_parent"
@@ -98,7 +106,7 @@
 
 
                     <TextView android:id="@+id/tv_deliveryPlace"
-                        android:text="jhfdg"
+                        android:text="无"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="3.0" />
@@ -126,7 +134,7 @@
                         android:text="收货地:"
                         android:layout_weight="1.0" />
                     <TextView android:id="@+id/tv_receivingLand"
-                        android:text="11111"
+                        android:text="无"
                         android:layout_width="0.0dip"
                         android:layout_height="wrap_content"
                         android:layout_weight="3.0" />

@@ -156,6 +156,7 @@ public class AddFriendActivity extends AppCompatActivity {
                     x.http().post(params, new Callback.CommonCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
+                            Log.i("UserAdapter", "onSuccess:  "+result);
                             if (result.equals("success")){
                                 Toast.makeText(AddFriendActivity.this,"添加成功!",Toast.LENGTH_SHORT);
                             }else if (result.equals("fail")){

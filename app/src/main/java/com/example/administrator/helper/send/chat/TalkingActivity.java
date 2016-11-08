@@ -126,7 +126,7 @@ public class TalkingActivity extends AppCompatActivity  implements EMMessageList
                     // 将新的消息内容和时间加入到下边
                     Msg msg = null;
                     if(!"".equals(content)) {
-                        msg= new Msg(content, Msg.TYPE_SEND);
+                        msg= new Msg(content, Msg.TYPE_SEND,thisUser);
                         msgList.add(msg);
                         adapter.notifyDataSetChanged();
                         msgListView.setSelection(msgList.size());
@@ -178,7 +178,6 @@ public class TalkingActivity extends AppCompatActivity  implements EMMessageList
          * 第二个是绘画类型可以为空
          * 第三个表示如果会话不存在是否创建
          */
-        List<EMMessage> messages;
         mConversation = EMClient.getInstance().chatManager().getConversation(mChatId, null, true);
         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(mChatId);
         // 设置当前会话未读数为 0
@@ -187,10 +186,7 @@ public class TalkingActivity extends AppCompatActivity  implements EMMessageList
         if (count < mConversation.getAllMsgCount() && count < 20) {
             // 获取已经在列表中的最上边的一条消息id
             String msgId = mConversation.getAllMessages().get(0).getMsgId();
-            // 分页加载更多消息，需要传递已经加载的消息的最上边一条消息的id，以及需要加载的消息的条数
-            messages = conversation.loadMoreMsgFromDB(msgId, 20);
         }
-        // 打开聊天界面获取最后一条消息内容并显示
 
     }
 
@@ -206,7 +202,7 @@ public class TalkingActivity extends AppCompatActivity  implements EMMessageList
                     // 这里只是简单的demo，也只是测试文字消息的收发，所以直接将body转为EMTextMessageBody去获取内容
                     EMTextMessageBody body = (EMTextMessageBody) message.getBody();
                     // 将新的消息内容和时间加入到下边
-                    msgList.add(new Msg(body.getMessage(),Msg.TYPE_RECEIVED));
+                    msgList.add(new Msg(body.getMessage(),Msg.TYPE_RECEIVED,otherUser));
                     adapter.notifyDataSetChanged();
                     msgListView.setSelection(msgList.size());
                     break;
@@ -265,9 +261,9 @@ public class TalkingActivity extends AppCompatActivity  implements EMMessageList
                 for (Information information : informations ) {
                     Log.i("TalkingActivity", "onSuccess:  22222"+information.getId());
                     if (information.getSendUser()==thisUser.getId()){
-                        msgList.add(new Msg(information.getValue(),Msg.TYPE_SEND));
+                        msgList.add(new Msg(information.getValue(),Msg.TYPE_SEND,thisUser));
                     }else if (information.getReveiveUser()==thisUser.getId()){
-                        msgList.add(new Msg(information.getValue(),Msg.TYPE_RECEIVED));
+                        msgList.add(new Msg(information.getValue(),Msg.TYPE_RECEIVED,otherUser));
                     }
                 }
                 adapter.notifyDataSetChanged();

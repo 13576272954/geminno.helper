@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import c.b.BP;
+import cn.bmob.sms.BmobSMS;
 
 /**
  * Created by Administrator on 2016/9/25.
@@ -62,7 +63,8 @@ public class MyApplication extends Application {
         x.Ext.setDebug(false); //输出debug日志，开启会影响性能
         //Bmob支付初始化
         BP.init(this, "381e8949cca2851afa738898139f924a");
-
+        //bmob短信验证初始化
+        BmobSMS.initialize(this,"381e8949cca2851afa738898139f924a");
         // 初始化环信SDK
         initEasemob();
 

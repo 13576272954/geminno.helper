@@ -5,11 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.administrator.helper.R;
+import com.example.administrator.helper.View.CircularImageView;
+
+import org.xutils.x;
 
 import java.util.List;
 
@@ -35,8 +37,8 @@ public class MsgAdapter extends ArrayAdapter<Msg> {
             viewHolder.rightLayout = (LinearLayout)view.findViewById(R.id.right_layout);
             viewHolder.leftMsg = (TextView)view.findViewById(R.id.left_msg);
             viewHolder.rightMsg = (TextView)view.findViewById(R.id.right_msg);
-            viewHolder.head1 = (ImageView)view.findViewById(R.id.head_left);
-            viewHolder.head2 = (ImageView)view.findViewById(R.id.head_right);
+            viewHolder.head1 = (CircularImageView)view.findViewById(R.id.head_left);
+            viewHolder.head2 = (CircularImageView)view.findViewById(R.id.head_right);
             view.setTag(viewHolder);
         } else {
             view = convertView;
@@ -48,12 +50,14 @@ public class MsgAdapter extends ArrayAdapter<Msg> {
             viewHolder.rightLayout.setVisibility(View.GONE);
             viewHolder.head2.setVisibility(View.GONE);
             viewHolder.leftMsg.setText(msg.getContent());
+            x.image().bind(viewHolder.head1,msg.getSendUser().getImage());
         } else if(msg.getType() == Msg.TYPE_SEND) {
             viewHolder.rightLayout.setVisibility(View.VISIBLE);
             viewHolder.head2.setVisibility(View.VISIBLE);
             viewHolder.leftLayout.setVisibility(View.GONE);
             viewHolder.head1.setVisibility(View.GONE);
             viewHolder.rightMsg.setText(msg.getContent());
+            x.image().bind(viewHolder.head2,msg.getSendUser().getImage());
         }
         return view;
     }
@@ -63,7 +67,7 @@ public class MsgAdapter extends ArrayAdapter<Msg> {
         LinearLayout rightLayout;
         TextView leftMsg;
         TextView rightMsg;
-        ImageView head1;
-        ImageView head2;
+        CircularImageView head1;
+        CircularImageView head2;
     }
 }

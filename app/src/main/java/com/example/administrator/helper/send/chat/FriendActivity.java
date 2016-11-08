@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -31,6 +33,7 @@ import org.xutils.x;
 
 import java.lang.reflect.Type;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -39,14 +42,15 @@ import butterknife.OnClick;
 
 
 public class FriendActivity extends AppCompatActivity {
-    List<User> users;//好友集合
+    List<Friend> friends;//好友关系集合
+    List<User> users = new ArrayList<User>(); //好友集合
     User my;
     @InjectView(R.id.iv_back)
     ImageView ivBack;
     @InjectView(R.id.rl_talk_toolbar)
-    RelativeLayout rlTalkToolbar;
+    LinearLayout rlTalkToolbar;
     @InjectView(R.id.list_friend)
-    RefreshListView listFriend;
+    ListView listFriend;
     friendAdapter friendAdapter;
     @InjectView(R.id.tv_add_friend)
     ImageView tvAddFriend;
@@ -81,7 +85,16 @@ public class FriendActivity extends AppCompatActivity {
             public void onSuccess(String result) {
                 Type type = new TypeToken<List<Friend>>() {
                 }.getType();
-                users = gson.fromJson(result, type);
+                friends = gson.fromJson(result, type);
+                Log.i("FriendActivity", "onSuccess:  好友关系"+friends  );
+                for (Friend f: friends) {
+                    if (f.getUser1().getId()==my.getId()){
+                        users.add(f.getUser2());
+                    }else if (f.getUser2().getId()==my.getId()){
+                        users.add(f.getUser1());
+                    }
+                }
+                Log.i("FriendActivity", "onSuccess:  "+users);
                 if (friendAdapter == null) {
                     friendAdapter = new friendAdapter(FriendActivity.this, users, R.layout.item_friend);
                     listFriend.setAdapter(friendAdapter);
@@ -112,14 +125,16 @@ public class FriendActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(FriendActivity.this, TalkingActivity.class);
-                User user = users.get(i - 1);
-                GsonBuilder gb = new GsonBuilder();
-                gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
-                gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
-                Gson gson = gb.create();
-                String userStr = gson.toJson(user);
-                intent.putExtra("user", userStr);
-                startActivity(intent);
+                if (users.size()>0) {
+                    User user = users.get(i - 1);
+                    GsonBuilder gb = new GsonBuilder();
+                    gb.setDateFormat("yyyy-MM-dd hh:mm:ss");
+                    gb.registerTypeAdapter(Timestamp.class, new TimestampTypeAdapter());
+                    Gson gson = gb.create();
+                    String userStr = gson.toJson(user);
+                    intent.putExtra("user", userStr);
+                    startActivity(intent);
+                }
             }
         });
     }

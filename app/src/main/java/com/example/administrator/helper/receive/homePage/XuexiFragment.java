@@ -183,12 +183,14 @@ public class XuexiFragment extends BaseFragment implements RefreshListView.OnRef
         //界面初始化数据：listview显示数据
         //xutils获取网络数据
         // goodsAdapter = null;
+        Log.i("XuexiFragment", "getData:  请求");
         String url = UrlUtils.MYURL + "ReceiveServlet";//访问网络的url
         RequestParams requestParams = new RequestParams(url);
         Log.i("XuexiFragment11", "getData: "+city);
         requestParams.addQueryStringParameter("city",city);
         requestParams.addQueryStringParameter("taskDemand",taskDemand);
         requestParams.addQueryStringParameter("tasktypeid", tasktypeid + "");//排序标记
+        Log.i("XuexiFragment", "getData:  Type"+tasktypeid);
         requestParams.addQueryStringParameter("pageNo", pageNo + "");
         requestParams.addQueryStringParameter("pageSize", pageSize + "");
 

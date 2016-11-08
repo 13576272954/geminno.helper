@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#ececec"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.administrator.helper.send.SignUp.SignUpActivity">
+    <LinearLayout android:background="#02bb9d"
+        android:id="@+id/rl_talk_toolbar"
+        android:layout_width="fill_parent"
+        android:layout_height="52.0dip">
+        <ImageView android:id="@+id/iv_back"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="15.0dip"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/back"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true" />
+        <TextView android:textSize="20.0sp"
+            android:textStyle="bold"
+            android:textColor="#ffffffff"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:text="填写手机号码"
+            android:gravity="center"
+            android:layout_gravity="center"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:layout_marginRight="15.0dip"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_phone"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="#fff"
+        android:layout_below="@+id/rl_talk_toolbar"
+        android:layout_marginTop="20dp">
+        <TextView
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            android:text="中国  +86"
+            android:textSize="18dp"
+            android:textColor="@color/line_color_blue"
+            android:gravity="center"
+            android:layout_gravity="center"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#efefef"
+            />
+        <EditText
+            android:id="@+id/et_phone_number"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:inputType="number"
+            android:textSize="18dp"
+            android:hint="请输入您的手机号码"
+            android:ems="11"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:background="@null"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/but_fasong_duanxin"
+        android:layout_below="@+id/ll_phone"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="下一步"
+        android:background="@drawable/shape"/>
+
+
+</RelativeLayout>

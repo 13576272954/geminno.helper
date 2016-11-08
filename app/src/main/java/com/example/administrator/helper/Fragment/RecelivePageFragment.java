@@ -43,7 +43,7 @@ import com.example.administrator.helper.receive.TaskDetilsActivity;
 import com.example.administrator.helper.receive.custom.CustomViewPager;
 import com.example.administrator.helper.receive.custom.RadarView;
 import com.example.administrator.helper.receive.custom.RadarViewGroup;
-import com.example.administrator.helper.receive.homePage.XuexiFragment;
+
 import com.example.administrator.helper.receive.utils.CropCircleTransformation;
 import com.example.administrator.helper.receive.utils.FixedSpeedScroller;
 import com.example.administrator.helper.receive.utils.LogUtil;

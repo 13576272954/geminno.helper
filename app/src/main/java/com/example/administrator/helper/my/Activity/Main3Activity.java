@@ -29,8 +29,6 @@ public class Main3Activity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
-
-        initBomb();
         initView();
         initEvent();
 
@@ -52,9 +50,6 @@ public class Main3Activity extends Activity implements View.OnClickListener {
      * 不能为空，若验证码已填写，则判断用户填写所验证码与系统发送验证码是否一致，
      * 一致则提示登录成功，错误则提示验证码输入错误
      */
-    private void initBomb() {
-        BmobSMS.initialize(Main3Activity.this, "7832b9b403f06d581affa22f62c96214");
-    }
 
     @Override
     public void onClick(View v) {

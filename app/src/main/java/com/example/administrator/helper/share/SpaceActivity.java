@@ -78,7 +78,7 @@ public class SpaceActivity extends AppCompatActivity {
         requestParams.addQueryStringParameter("orderFlag", orderFlag + "");//排序标记
         requestParams.addQueryStringParameter("pageNo", pageNo + "");
         requestParams.addQueryStringParameter("pageSize", pageSize + "");
-        MyApplication myApplication=new MyApplication();
+        MyApplication myApplication= (MyApplication) getApplication();
         requestParams.addQueryStringParameter("thisuser",myApplication.getUser().getId()+"");
         //当前头像用户的id
         int touuserId=shareEntity1.getDynamic().getUserId();

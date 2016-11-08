@@ -10,12 +10,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageView
+        <com.example.administrator.helper.View.CircularImageView
             android:id="@+id/head_left"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="left"
-            android:src="@mipmap/user"/>
+            />
 
         <LinearLayout
             android:id="@+id/left_layout"
@@ -55,11 +55,11 @@
                 android:layout_margin="10dp"/>
 
         </LinearLayout>
-        <ImageView
+        <com.example.administrator.helper.View.CircularImageView
             android:id="@+id/head_right"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@mipmap/user"/>
+            />
     </LinearLayout>
 
 </LinearLayout>
